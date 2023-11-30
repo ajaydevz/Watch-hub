@@ -1,0 +1,39 @@
+/* custom_styles.css */
+
+.my-orders-heading {
+    color: rgb(49, 49, 49);
+    font-style: normal;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: 600;
+}
+
+.order-item-heading,
+.order-status-heading,
+.total-amount-heading {
+    color: black;
+}
+
+.product-name {
+    color: rgb(0, 0, 0);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.order-item-image {
+    /* Add your styles for the order item image */
+}
+
+.order-status {
+    color: rgb(7, 153, 102);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.total-price {
+    color: rgb(250, 1, 1);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.view-details-btn {
+    background-color: rgb(61, 86, 92);
+    color: rgba(236, 209, 7, 0.96);
+    /* Add any additional styles for the view details button */
+}

@@ -1,0 +1,274 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="zxx">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Watch Hub</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static "img/favicon.png" %}">
+
+    <!-- CSS here -->
+    <link rel="stylesheet" href="{% static "user/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="{% static "user/css/owl.carousel.min.css" %}">
+    <link rel="stylesheet" href="{% static "user/css/flaticon.css" %}">
+    <link rel="stylesheet" href="{% static "user/css/slicknav.css" %}">
+    <link rel="stylesheet" href="{% static "user/css/animate.min.css" %}">
+    <link rel="stylesheet" href="{% static "user/css/magnific-popup.css" %}">
+    <link rel="stylesheet" href="{% static "user/css/fontawesome-all.min.css" %}">
+    <link rel="stylesheet" href="{% static "user/css/themify-icons.css" %}">
+    <link rel="stylesheet" href="{% static "user/css/slick.css" %}">
+    <link rel="stylesheet" href="{% static "user/css/nice-select.css" %}">
+    <link rel="stylesheet" href="{% static "user/css/style.css" %}">
+
+  <link rel="stylesheet" type="text/css" href="{% static 'user/css/login.css' %}">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700,800&display=swap" rel="stylesheet">
+  {% block bootstraplink %}
+  
+  
+  
+  {% endblock bootstraplink %}
+</head>
+
+<body>
+    <!--? Preloader Start -->
+    <!--<div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-inner position-relative">
+                <div class="preloader-circle"></div>
+                <div class="preloader-img pere-text">
+                    <img src="{% static "img/logo/logo.png" %}" alt="">
+                </div>
+            </div>
+        </div>
+    </div>-->
+    <!-- Preloader Start -->
+    <header>
+        <!-- Header Start -->
+        <div class="header-area">
+            <div class="main-header header-sticky">
+                <div class="container-fluid">
+                    <div class="menu-wrapper">
+                        <!-- Logo -->
+                        <div class="logo">
+                            <a href="#"><img src="{% static "img/logo/logo4.png" %}" alt=""></a>
+                        </div>
+                        <!-- Main-menu -->
+                        <div class="main-menu d-none d-lg-block">
+                            <nav>                                                
+                                <ul id="navigation">  
+                                    <li><a href="{% url "home" %}">Home</a></li>
+                                    <li class="hot"><a href="{% url "shop_page" %}">shop</a></li>
+                                    <li><a href="#">about</a></li>
+                                    {% if user.is_authenticated %}
+                                        <li><a href="{% url 'user_logout' %}">Logout</a></li>
+                                    {% else %}
+                                        <li><a href="{% url 'user_login' %}">Login</a></li>
+                                    {% endif %}
+                                    <li><a href="#">Contact</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                        <!-- Header Right -->
+                        <div class="header-right">
+                            <ul>
+                                <li>
+                                    <div class="nav-search search-switch">
+                                        <span class="flaticon-search"></span>
+                                    </div>
+                                </li>
+                                <li><a  href="{% url 'user_profile' %}"><span class="flaticon-user"></span></a></li>
+                                <li><a  href="{% url 'cart_page' %}"><span class="flaticon-shopping-cart"></span></a> </li>
+                            </ul>
+                        </div>  
+                    </div>
+                    <!-- Mobile Menu -->
+                    <div class="col-12">
+                        <div class="mobile_menu d-block d-lg-none"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Header End -->
+    </header>
+
+
+
+
+{% block content %}
+
+
+
+
+{% endblock %}
+{% comment %} <div class="shop-method-area">
+            <div class="container">
+                <div class="method-wrapper">
+                    <div class="row d-flex justify-content-between">
+                        <div class="col-xl-4 col-lg-4 col-md-6">
+                            <div class="single-method mb-40">
+                                <i class="ti-package"></i>
+                                <h6>Free Shipping Method</h6>
+                                <p>aorem ixpsacdolor sit ameasecur adipisicing elitsf edasd.</p>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-6">
+                            <div class="single-method mb-40">
+                                <i class="ti-unlock"></i>
+                                <h6>Secure Payment System</h6>
+                                <p>aorem ixpsacdolor sit ameasecur adipisicing elitsf edasd.</p>
+                            </div>
+                        </div> 
+                        <div class="col-xl-4 col-lg-4 col-md-6">
+                            <div class="single-method mb-40">
+                                <i class="ti-reload"></i>
+                                <h6>Secure Payment System</h6>
+                                <p>aorem ixpsacdolor sit ameasecur adipisicing elitsf edasd.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> {% endcomment %}
+<footer>
+    <!-- Footer Start-->
+    {% comment %} <div class="footer-area footer-padding">
+        <div class="container">
+            <div class="row d-flex justify-content-between align-items-center">
+                <div class="col-xl-3 col-lg-3 col-md-5 col-sm-6">
+                    <div class="single-footer-caption mb-50">
+                        <!-- Logo and Description -->
+                        <div class="footer-logo">
+                            <a href="index.html"><img src="assets/img/logo/logo2_footer.png" alt="Luxury Watches"></a>
+                        </div>
+                        <div class="footer-tittle">
+                            <div class="footer-pera">
+                                <p>Elegance and precision crafted into every timepiece.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-2 col-lg-3 col-md-3 col-sm-5">
+                    <div class="single-footer-caption mb-50">
+                        <!-- Quick Links -->
+                        <div class="footer-tittle">
+                            <h4>Quick Links</h4>
+                            <ul>
+                                <li><a href="#">About Us</a></li>
+                                <li><a href="#">Collections</a></li>
+                                <li><a href="#">Limited Editions</a></li>
+                                <li><a href="#">Contact</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-4 col-sm-7">
+                    <div class="single-footer-caption mb-50">
+                        <!-- New Products -->
+                        <div class="footer-tittle">
+                            <h4>New Arrivals</h4>
+                            <ul>
+                                <li><a href="#">Men's Watches</a></li>
+                                <li><a href="#">Women's Watches</a></li>
+                                <li><a href="#">Luxury Straps</a></li>
+                                <li><a href="#">Limited Editions</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-5 col-sm-7">
+                    <div class="single-footer-caption mb-50">
+                        <!-- Support -->
+                        <div class="footer-tittle">
+                            <h4>Customer Support</h4>
+                            <ul>
+                                <li><a href="#">FAQs</a></li>
+                                <li><a href="#">Shipping & Returns</a></li>
+                                <li><a href="#">Warranty Information</a></li>
+                                <li><a href="#">Contact Us</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer Bottom -->
+            <div class="row align-items-center"> {% endcomment %}
+                <div class="col-xl-7 col-lg-8 col-md-7">
+                    <div class="footer-copy-right">
+                        <p>&copy; <script>document.write(new Date().getFullYear());</script> Watch hub. All rights reserved.</p>
+                    </div>
+                </div>
+                {% comment %} <div class="col-xl-5 col-lg-4 col-md-5">
+                    <div class="footer-copy-right f-right">
+                        <!-- Social Icons -->
+                        <div class="footer-social">
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="https://www.facebook.com/sai4ull"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fas fa-globe"></i></a>
+                        </div>
+                    </div>
+                </div> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+</footer>
+    <!-- Footer End-->
+
+<!--? Search model Begin -->
+<div class="search-model-box">
+    <div class="h-100 d-flex align-items-center justify-content-center">
+        <div class="search-close-btn">+</div>
+        <form class="search-model-form">
+            <input type="text" id="search-input" placeholder="Searching key.....">
+        </form>
+    </div>
+</div>
+<!-- Search model end -->
+
+<!-- JS here -->
+
+<script src="./assets/js/vendor/modernizr-3.5.0.min.js"></script>
+<!-- Jquery, Popper, Bootstrap -->
+<script src="./assets/js/vendor/jquery-1.12.4.min.js"></script>
+<script src="./assets/js/popper.min.js"></script>
+<script src="./assets/js/bootstrap.min.js"></script>
+<!-- Jquery Mobile Menu -->
+<script src="./assets/js/jquery.slicknav.min.js"></script>
+
+<!-- Jquery Slick , Owl-Carousel Plugins -->
+<script src="./assets/js/owl.carousel.min.js"></script>
+<script src="./assets/js/slick.min.js"></script>
+
+<!-- One Page, Animated-HeadLin -->
+<script src="./assets/js/wow.min.js"></script>
+<script src="./assets/js/animated.headline.js"></script>
+<script src="./assets/js/jquery.magnific-popup.js"></script>
+
+<!-- Scrollup, nice-select, sticky -->
+<script src="./assets/js/jquery.scrollUp.min.js"></script>
+<script src="./assets/js/jquery.nice-select.min.js"></script>
+<script src="./assets/js/jquery.sticky.js"></script>
+
+<!-- contact js -->
+<script src="./assets/js/contact.js"></script>
+<script src="./assets/js/jquery.form.js"></script>
+<script src="./assets/js/jquery.validate.min.js"></script>
+<script src="./assets/js/mail-script.js"></script>
+<script src="./assets/js/jquery.ajaxchimp.min.js"></script>
+
+<!-- Jquery Plugins, main Jquery -->	
+<script src="./assets/js/plugins.js"></script>
+<script src="./assets/js/main.js"></script>
+
+{% block script  %}
+
+{% endblock  %}
+
+
+
+</body>
+</html>

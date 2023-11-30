@@ -1,0 +1,77 @@
+{% extends 'home/base.html' %}
+
+
+{% block content %}
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>Checkout</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<form method="POST" action="{% url 'place_order' %}">
+    {% csrf_token %}
+    <div class="container">
+        <div class="row mb-5 d-flex justify-content-center">
+            <h2 class="h3 mb-2 mt-5 text-black" style="color: black;">Shipping address</h2>
+            <div class="card-body">
+                <h5 class="card-title" style="color:black;"><strong>{{ address.recipient_name }}</strong>
+                </h5>
+                <p class="card-text">
+                    {{ address.house_no }}/{{ address.street_name }}<br>
+                    {{ address.village_name }}<br>
+                    {{ address.postal_code }}/{{ address.district }}<br>
+                    {{ address.state }}/{{ address.country }}
+                </p>
+            </div>
+            <input type="hidden" name="selected_address" value="{{ address.id }}">
+        </div>
+        <div class="p-3 p-lg-5 border bg-white">
+            <table class="table site-block-order-table mb-5">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cart_item in cart_items %}
+                    <tr>
+                        <td>{{ cart_item.product.product.product_name }} <strong class="mx-2">x</strong>
+                            {{ cart_item.quantity }}</td>
+                        <td>₹ {{ cart_item.sub_total }}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td><strong class="mx-2">Tax</strong></td>
+                        <td>₹ {{ tax }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong class="mx-2">Grand Total</strong></td>
+                        <td>₹ {{ grand_total }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div>
+                 <button type="submit" class="btn btn-secondary">
+                    Cash on delivery
+                    </button>
+            </div>
+
+
+        </div>
+    </div>
+</form>
+
+{%endblock content%}
+
+{% block script%}
+
+
+{% endblock script %}

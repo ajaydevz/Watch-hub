@@ -1,0 +1,61 @@
+.icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px; /* Set the width and height as needed */
+    height: 24px;
+}
+
+.edit-icon,
+.delete-icon {
+    width: 20px;
+    height: 20px;
+    border: 2px solid black; /* Set the border thickness and color */
+    box-sizing: border-box;
+}
+
+.edit-icon::before {
+    content: "";
+    width: 8px; /* Adjust the size of the pencil's tip */
+    height: 2px;
+    background-color: black;
+    position: absolute;
+    top: 8px; /* Adjust the position of the pencil's tip */
+    left: 8px;
+    transform: rotate(-45deg);
+}
+
+.edit-icon::after {
+    content: "";
+    width: 8px; /* Adjust the size of the pencil's eraser */
+    height: 2px;
+    background-color: black;
+    position: absolute;
+    top: 14px; /* Adjust the position of the pencil's eraser */
+    left: 8px;
+    transform: rotate(45deg);
+}
+
+.delete-icon {
+    position: relative;
+}
+
+.delete-icon::before,
+.delete-icon::after {
+    content: "";
+    width: 16px; /* Adjust the size of the trash can's top */
+    height: 2px;
+    background-color: black;
+    position: absolute;
+    top: 6px; /* Adjust the position of the trash can's top */
+    left: 4px;
+}
+
+.delete-icon::before {
+    transform: rotate(-45deg);
+}
+
+.delete-icon::after {
+    transform: rotate(45deg);
+}
+

@@ -1,0 +1,204 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+{% block content %}
+<section class="d-flex-column">
+
+    <div>
+
+        <h4 class="d-flex justify-content-center mt-4" style="color: rgb(54, 93, 36); font-weight:bold;">SELECT THE
+            ADDRESS</h2>
+    </div>
+    <div class="alert alert-success d-flex justify-content-center mt-5 mx-5" role="alert">
+        *Default address handles all undesignated deliveries.
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-danger d-flex justify-content-center mt-5 mx-5" id="messageBox"  role="alert">
+            {{messages}}
+        </div>
+        {% endfor %}
+   
+    {% endif %}
+    <form id="addressSelectionForm" action="{% url 'checkout_page' %}" method="post">
+        {% csrf_token %}
+        <div class="row mt-5 mx-5 my-5 mb-5">
+            {% if default_address %}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 card md-5 mb-5 p-3 mx-3 display-address"
+                style="border: 2px solid rgb(81, 81, 81); max-width: 250px; max-height: fit-content">
+                <div class="card-body">
+                    <div>
+                        <input type="radio" id="address{{ default_address.id }}" name="selectedAddress"
+                            value="{{ default_address.id }}">
+                    </div>
+                    <label for="address{{ default_address.id }}" class="mt-2">
+                        <strong>{{ default_address.recipient_name }}</strong><br>
+                        {{ default_address.house_no }} {{ default_address.street_name }} {{ default_address.village_name }} <br>
+                        {{ default_address.district }}, {{ default_address.state }} {{default_address.postal_code }} {{ default_address.country }}
+                    </label>
+                </div>
+            </div>
+            {%endif%}
+            
+            {% for address in address %}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 card md-5 mb-5 p-3 mx-3 display-address"
+                style="border: 2px solid rgb(81, 81, 81); max-width: 250px; max-height: fit-content">
+                <div class="card-body">
+                    <div>
+                        <input type="radio" id="address{{ address.id }}" name="selectedAddress"
+                            value="{{ address.id }}">
+                    </div>
+                    <label for="address{{ address.id }}" class="mt-2">
+                        <strong>{{ address.recipient_name }}</strong><br>
+                        {{ address.house_no }} {{ address.street_name }} {{ address.village_name }} <br>
+                        {{ address.district }}, {{ address.state }} {{ address.postal_code }} {{ address.country }}
+                    </label>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="d-flex justify-content-center mb-5">
+            <button type="submit" class="btn btn-secondary">
+                GO TO CHECKOUT
+            </button>    
+        </div>
+    </form>
+
+ 
+    <h1 class="d-flex justify-content-center">OR</h1>
+    <div class="d-flex justify-content-center mt-3">
+        <h3 style="color:rgb(3, 22, 78); font-weight:bold;">ADD NEW ADDRESS HERE</h3>
+    </div>
+
+    <div class="d-flex justify-content-center">
+        <div class="my-4">
+            <form method="POST" action="{% url 'add_address_checkout'  user_id=user.id  %}">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="RecipientName" class="form-label">Recipient Name:</label>
+                            <input type="text" class="form-control" id="RecipientName" name="RecipientName" value=""
+                                required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="house_no" class="form-label">House No:</label>
+                            <input type="text" class="form-control" id="house_no" name="house_no" value="" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="street_name" class="form-label">Street Name:</label>
+                            <input type="text" class="form-control" id="street_name" name="street_name" value=""
+                                required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="Village" class="form-label">Village/City:</label>
+                            <input type="text" class="form-control" id="Village" name="Village" value="" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="postal_code" class="form-label">Postal Code:</label>
+                            <input type="text" class="form-control" id="postal_code" name="postal_code" value=""
+                                required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="district" class="form-label">District:</label>
+                            <input type="text" class="form-control" id="district" name="district" value="" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="state" class="form-label">State:</label>
+                            <input type="text" class="form-control" id="state" name="state" value="" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="country" class="form-label">Country:</label>
+                            <input type="text" class="form-control" id="country" name="country" value="" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center col-lg-12 mt-2">
+                    <button type="submit" class="btn btn-primary">
+                        Save the Address
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+</section>
+
+
+<!-- Modal for Default Address -->
+<div class="modal" id="defaultAddressModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" style="color: crimson;">WARNING!!!</h5>
+                <button type="btn" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">X</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Display the default address here -->
+                <!-- Replace this with the actual default address data -->
+                <H5 style="color: black;">No Address has been selected </H6>
+                <H6 style="color:rgb(255, 9, 62);border-bottom: black;" class="mt-3 mb-4">So The default address given below will be selected.</H6>
+                
+            </div>
+            <div class="modal-footer">
+                
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous">
+</script>
+<script>
+
+    // Hide the message box after 3 seconds (3000 milliseconds)
+    var messageBox=document.getElementById('messageBox')
+    messageBox.style.display='block'
+    setTimeout(function() {
+        messageBox.style.display = 'none'; // Hide the message box
+    }, 3000); // 3000 milliseconds = 3 seconds
+
+</script>
+{% endblock script %}

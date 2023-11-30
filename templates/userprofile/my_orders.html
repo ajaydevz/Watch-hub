@@ -1,0 +1,128 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% block style %}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="{% static 'css/userprofile/userprofile.css' %}" rel="stylesheet">
+    <link href="{% static 'css/userprofile/custom_styles.css' %}" rel="stylesheet">
+{% endblock style %}
+
+
+{% block content%}
+<style>
+    .blurred-card {
+        backdrop-filter: blur(10px); /* Adjust the blur value as needed */
+        background: rgba(255, 255, 255, 0.8); /* Adjust the background color and opacity */
+        border: 1px solid rgba(255, 255, 255, 0.3); /* Adjust the border color and opacity */
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Left Sidebar -->
+        <nav class="col-lg-2 d-md-block sidebar">
+            <div class="position-sticky">
+                <div class="d-flex justify-content-center">
+                    <h4 class="mt-4 ml-3" style="color: rgb(70, 43, 43); font-weight:1200;">Hi {{user.username}}</h4>
+                </div>
+
+                <ul class="nav flex-column">
+                    <div class="itemsdiv mx-2 my-2">
+                        <li class="nav-item">
+                            <a class="nav-link navitem" href="{% url 'user_profile'%}">
+                                My Profile
+                            </a>
+                        </li>
+                    </div>
+                    <div class="itemsdiv mx-2 my-2">
+                        <li class="nav-item">
+                            <a class="nav-link navitem" href="{% url 'my_orders'%}">
+                                My Orders
+                            </a>
+                        </li>
+                    </div>
+                </ul>
+            </div>
+        </nav>
+        <div class="col-lg-10 col-md-8">
+
+            <div class=" d-flex justify-content-center mt-4 heading">
+                <h2 class="Main-heading"
+                    style="color: rgb(49, 49, 49); font-style: normal; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;font-weight: 600;">
+                    MY ORDERS</h2>
+            </div>
+            <div class="col-lg-10 mt-5">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <h5 style="color: black;">Order Item</h4>
+                    </div>
+                    <div class="col-lg-3">
+                        <h5 style="color: black;">Order Status</h4>
+                    </div>
+                    <div class="col-lg-3">
+                        <h5 style="color: black;">Total Amount</h4>
+                    </div>
+
+                </div>
+
+                {% for orderitem in order_items %}
+                <form method="POST" action="{% url 'order_details' order_id=orderitem.order.id%}">
+                    {% csrf_token %}
+                    <div class="card mb-3 rounded border border-success blurred-card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <h6 style="color: rgb(0, 0, 0); font-family: Verdana, Geneva, Tahoma, sans-serif">
+                                        {{orderitem.product.product_name}}</h6>
+                                    <img src="/media/{{orderitem.variant.image1}}" width="30%">
+                                </div>
+                                {% if orderitem.order.status == 'Returned' %}
+                                    <div class="col-lg-3">
+                                        <p style="color: rgb(255, 0, 0); font-family: Verdana, Geneva, Tahoma, sans-serif">
+                                        {{orderitem.order.status}}
+                                        </p>
+                                    </div>
+                                {% else %}
+                                    <div class="col-lg-3">
+                                        <p style="color: rgb(7, 153, 102); font-family: Verdana, Geneva, Tahoma, sans-serif">
+                                            {{orderitem.order.status}}
+                                        </p>
+                                    </div>
+                                {% endif %}
+                            <div class="col-lg-3">
+                                <h6 style="color: rgb(250, 1, 1); font-family: Verdana, Geneva, Tahoma, sans-serif">
+                                    Rs.{{orderitem.order.total_price}}
+                                </h6>
+                            </div>
+                            
+                                <div class="col-lg-3">
+                                    <h6 style="color: rgb(250, 1, 1); font-family: Verdana, Geneva, Tahoma, sans-serif">
+                                        Rs.{{orderitem.order.total_price}}</h6>
+                                
+                                    <button type="submit" class="btn"style="background-color: #1465F2; color: white; padding: 10px 20px; border-radius: 0;">View more details</button>
+
+                                    {% if orderitem.order.status == 'Delivered' or orderitem.order.status == 'Cancelled' %}
+                                    <div>CANT CANCEL THE ORDER</div>
+                                    {% else %}
+                                    <a href="{% url 'order_cancellation' order_id=orderitem.order.id %}">
+                                        <button type="button" class="style="background-color: white ; color: red; padding: 10px 20px; border-radius: 0;"">cancel the order</button>
+                                    </a>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <p style="color: rgb(10, 10, 99);">* To view more details about this order please click the view more details button</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+            {% endfor %}
+                
+
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock content %}

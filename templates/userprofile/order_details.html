@@ -1,0 +1,158 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% block style %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+{% endblock style %}
+
+
+{% block content%}
+<style>
+    .blurred-card {
+        backdrop-filter: blur(10px); /* Adjust the blur value as needed */
+        background: rgba(255, 255, 255, 0.8); /* Adjust the background color and opacity */
+        border: 1px solid rgba(255, 255, 255, 0.3); /* Adjust the border color and opacity */
+    }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Left Sidebar -->
+        <nav class="col-lg-2 d-md-block sidebar">
+            <div class="position-sticky">
+                <div class="d-flex justify-content-center">
+                    <h4 class="mt-4 ml-3" style="color: rgb(70, 43, 43); font-weight:1200;">Hi {{user.username}}</h4>
+                </div>
+
+                <ul class="nav flex-column">
+                    <div class="itemsdiv mx-2 my-2">
+                        <li class="nav-item">
+                            <a class="nav-link navitem" href="{% url 'user_profile'%}">
+                                My Profile
+                            </a>
+                        </li>
+                    </div>
+                    <div class="itemsdiv mx-2 my-2">
+                        <li class="nav-item">
+                            <a class="nav-link navitem" href="{% url 'my_orders'%}">
+                                My Orders
+                            </a>
+                        </li>
+                    </div>
+                </ul>
+
+            </div>
+        </nav>
+        <div class="col-lg-10 col-md-8">
+
+            <div class=" d-flex justify-content-center mt-4 heading">
+                <h2 class="Main-heading"
+                    style="color: rgb(49, 49, 49); font-style: normal; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;font-weight: 600;">
+                    MY ORDERS</h2>
+            </div>
+            <div class="col-lg-10 mt-5">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <h5 style="color: black;"> Item</h4>
+                    </div>
+                    <div class="col-lg-3">
+                        <h5 style="color: black;">Order Status</h4>
+                    </div>
+                    <div class="col-lg-3">
+                        <h5 style="color: black;">Total Amount</h4>
+                    </div>
+
+                </div>
+
+                {% for orderitem in order_items %}
+                <form method="POST" action="{% url 'order_details' order_id=orderitem.order.id%}">
+                    {% csrf_token %}
+                    <div class="card mb-3 rounded border border-success blurred-card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <h6 style="color: rgb(0, 0, 0); font-family: Verdana, Geneva, Tahoma, sans-serif">
+                                        {{orderitem.product.product_name}}</h6>
+                                    <img src="/media/{{orderitem.variant.image1}}" width="30%">
+                                </div>
+                                <div class="col-lg-3">
+                                    <p
+                                        style="color: rgb(7, 153, 102); font-family: Verdana, Geneva, Tahoma, sans-serif">
+                                        {{orderitem.order.status}}</p>
+                                </div>
+                                <div class="col-lg-3">
+                                    <h6 style="color: rgb(250, 1, 1); font-family: Verdana, Geneva, Tahoma, sans-serif">
+                                        Rs.{{orderitem.order.total_price}}</h6>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </form>
+
+                {% endfor %}
+                {% if status == 'Delivered' %}
+                <div class="d-flex justify-content-center mt-5 mb-3">
+
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Return the products
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Reason of returning the order</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="checkbox" id="checkbox1" name="checkbox1" value="option1">
+                                    <label for="checkbox1">Bad product quality</label><br>
+
+                                    <input type="checkbox" id="checkbox2" name="checkbox2" value="option2">
+                                    <label for="checkbox2"> Incorrect product or size</label><br>
+
+                                    <input type="checkbox" id="checkbox3" name="checkbox3" value="option3">
+                                    <label for="checkbox3"> Late delivery</label><br>
+
+                                    <input type="checkbox" id="checkbox3" name="checkbox3" value="option3">
+                                    <label for="checkbox3"> Choose not to say</label><br>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <a href="{% url 'order_return' order_id=order.id %}" >
+                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="d-flex justify-content-center mt-5">
+                    <p>Feel free to return the products if you are not stastisfied with the product</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+{% block script%}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+{% endblock script %}

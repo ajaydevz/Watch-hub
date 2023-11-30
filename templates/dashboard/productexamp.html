@@ -1,0 +1,465 @@
+{% extends 'dashboard/adminhome.html' %}
+{% block bootstraplink %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+{% endblock %}
+{% block content %}
+<main class="ms-sm-auto col-lg-12">
+    <h2 class="mt-3">Product</h2>
+
+    <!-- Button to Open add product Modal -->
+    <button type="button" class="btn btn-primary mt-4" data-toggle="modal" data-target="#addproductModal">
+        Add Product
+    </button>
+
+    {% if messages %}
+    <div class="text-danger d-flex justify-content-center mt-2">
+        {% for message in messages %}
+        {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% for product in products %}
+    <!-- Edit Product Modal -->
+    <div class="modal fade" id="editProductModal-{{ forloop.counter }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Product</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span> 
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{% url 'edit_product' product_id=product.id %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            <div class="form-row">
+                                <!-- Sub Category Field -->
+                                <div class="form-group col-md-6">
+                                    <label for="category">Sub Category:</label>
+                                    <select class="form-control" name="subcategory_name" required>
+                                        {% for subcategories in sub_category %}
+                                        <option value="{{ subcategories.id }}">{{ subcategories.sub_category_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <!-- Product Name Field -->
+                                <div class="form-group col-md-6">
+                                    <label for="categoryName">Product Name:</label>
+                                    <input type="text" class="form-control" id="product_name" name="product_name"
+                                        value="{{ product.product_name }}" required>
+                                </div>
+                            </div>
+                            <!-- Description Field (Alone in its Row) -->
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label for="productDescription">Description:</label>
+                                    <textarea class="form-control" id="productDescription" name="product_description" rows="4" required>{{ product.description }}</textarea>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <!-- Product Price Field -->
+                                <div class="form-group col-md-6">
+                                    <label for="categoryName">Price:</label>
+                                    <input type="text" class="form-control" name="price" value="{{ product.price }}" required>
+                                </div>
+                                <!-- Product Stock Field -->
+                                <div class="form-group col-md-6">
+                                    <label for="categoryName">Stock:</label>
+                                    <input type="text" class="form-control" name="stock" value="{{ product.stock }}" required>
+                                </div>
+                            </div> 
+                            <div class="form-row">
+                                <!-- Product Image Field -->
+                                <div class="form-group col-md-6">
+                                    <label for="product_img">Product Image-1:</label>
+                                    <input type="file" class="form-control-file" id="product_img" name="product_img">
+                                </div>
+                                <!-- Product Image Fields 2, 3, and 4 -->
+                                <div class="form-group col-md-6">
+                                    <label for="product_img">Product Image-2:</label>
+                                    <input type="file" class="form-control-file" id="product_img" name="product_img1">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="product_img">Product Image-3:</label>
+                                    <input type="file" class="form-control-file" id="product_img" name="product_img2">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="product_img">Product Image-4:</label>
+                                    <input type="file" class="form-control-file" id="product_img" name="product_img3">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success" id="submitCategory">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <div class="table-responsive mt-4">
+        <table class="table table-striped table-sm">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Sub Category</th>
+                    <th>Product Name</th>
+                    <th>Image</th>
+                    <th>Product Description</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th colspan="2">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dynamically populate this table with product data from backend -->
+
+                {% for product in products %}
+                <tr class="table-rows">
+                    <td>{{ product.category }}</td>
+                    <td>{{ product.sub_category }}</td>
+                    <td>{{ product.product_name }}</td>
+                    <td><img src="/media/{{ product.images }}" width="60%"></td>
+                    <td>{{ product.description }}</td>
+                    <td>{{ product.price }}</td>
+                    <td>{{ product.stock }}</td>
+                    <td>
+                        <button class="btn btn-info toggle-btn" data-toggle="modal"
+                            data-target="#editProductModal-{{ forloop.counter }}">Edit</button>
+                    </td>
+                    <td>
+                        {% if product.is_activate %}
+                        <a href="{% url 'delete_product' product_id=product.id %}">
+                            <button class="btn btn-danger toggle-btn">Deactivate</button>
+                        </a>
+                        {% else %}
+                        <a href="{% url 'delete_product' product_id=product.id %}">
+                            <button class="btn btn-success toggle-btn">Activate</button>
+                        </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                <!-- Repeat this for each product -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Add Product Modal -->
+    <div class="modal fade" id="addproductModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Product</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="POST" action="{% url 'add_product' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <!-- Sub Category Field -->
+                            <div class="form-group col-md-6">
+                                <label for="category">Sub Category:</label>
+                                <select class="form-control" name="subcategory_name" required>
+                                    {% for subcategories in sub_category %}
+                                    <option value="{{ subcategories.id }}">{{ subcategories.sub_category_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <!-- Product Name Field -->
+                            <div class="form-group col-md-6">
+                                <label for="categoryName">Product Name:</label>
+                                <input type="text" class="form-control" id="product_name" name="product_name" required>
+                            </div>
+                        </div>
+                        <!-- Product Description Field -->
+                        <div class="form-group">
+                            <label for="productDescription"> Description:</label>
+                            <textarea class="form-control" id="productDescription" name="product_description" rows="4"
+                                required></textarea>
+                        </div>
+                        <!-- Product Price and Stock Fields -->
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="categoryName">Price:</label>
+                                <input type="text" class="form-control" name="price" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="categoryName">Stock:</label>
+                                <input type="text" class="form-control" name="stock" required>
+                            </div>
+                        </div>
+                        <!-- Product Image Fields -->
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="product_img">Product Image-1:</label>
+                                <input type="file" class="form-control-file" id="product_img" name="product_img">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="product_img">Product Image-2:</label>
+                                <input type="file" class="form-control-file" id="product_img" name="product_img1">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="product_img">Product Image-3:</label>
+                                <input type="file" class="form-control-file" id="product_img" name="product_img2">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="product_img">Product Image-4:</label>
+                                <input type="file" class="form-control-file" id="product_img" name="product_img3">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success" id="submitCategory">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+{% block script %}
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+{% endblock %}
+
+
+
+{% comment %} 
+
+{% extends 'dashboard/adminhome.html' %}
+{% comment %} {% extends "dashboard/adminhome.html" %}
+{% load static %}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+{% block content %} {% endcomment %}
+
+
+{% comment %} 
+{% block bootstraplink%}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+{% endblock %}
+
+{% block content %}
+<main class="ms-sm-auto col-lg-12">
+    <h2 class="mt-3">Product</h2>
+
+    <!-- Button to Open add categories Modal -->
+    <button type="button" class="btn btn-primary mt-4" data-toggle="modal" data-target="#addproductModal">
+        Add Product
+    </button>
+    {% if messages %}
+    <div class="text-danger d-flex justify-content-center mt-2">
+        {% for message in messages%}
+        {{message}}
+        {%endfor%}
+    </div>
+    {% endif %}
+
+    <div class="table-responsive mt-4">
+        <table class="table table-striped bordered table-sm">
+            <thead>
+                <tr>
+                    
+                    <th>category</th>
+                    <th>sub category</th>
+                    <th>Product Name</th>
+                    <th>Product description</th>
+
+
+                    <!-- <th>category image</th> -->
+                    <th colspan="3">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--dynamically populating this table with user data from backend-->
+
+                {% for product in products %}
+                <tr class="table-rows">
+                    <td>{{ product.category }}</td>
+                    <td>{{ product.subcategory.sub_category_name}}</td>
+                    <td>{{ product.product_name}}</td>
+                    <!-- <td><img src="/media/{{product.images}}" width="60%"></td> -->
+                    <td>{{ product.description}}</td>  {% endcomment %}
+                    <!-- <td>{{ product.price}}</td> -->
+                    {% comment %} <td>
+                        <a href="{% url 'variant_view' product_id=product.id %}">
+                            <button class="btn btn-dark">Variants</button>
+                        </a>
+
+                    </td> {% endcomment %}
+
+                    {% comment %} <td>
+                        <button class="btn btn-info toggle-btn" data-toggle="modal"
+                            data-target="#editProductModal-{{forloop.counter}}">Edit</button>
+
+                    </td>
+                    <td>
+                        {% if product.is_activate %}
+                        <a href="{% url 'delete_product' product_id=product.id %}">
+                            <button class="btn btn-danger toggle-btn">Deactivate</button>
+                        </a>
+                        {% else %}
+                        <a href="{% url 'delete_product' product_id=product.id %}">
+                            <button class="btn btn-success toggle-btn">Activate</button>
+                        </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                <!-- Repeating  this loop  for each user -->
+            </tbody>
+        </table>
+    </div>
+    {% for product in products %}
+    <!--Edit product Modal -->
+    <div class="modal fade" id="editProductModal-{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Product</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{% url 'edit_product' product_id=product.id %}"
+                        enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="modal-body">
+                            <div class="form-row">
+                                <!-- Sub Category Field -->
+                                <div class="form-group col-md-6">
+                                    <label for="category">Sub Category:</label>
+                                    <select class="form-control" name="subcategory_name" required>
+                                        {% for subcategories in sub_category %}
+                                        <option value="{{subcategories.id}}">{{subcategories.sub_category_name}}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <!-- Product Name Field -->
+                                <div class="form-group col-md-6">
+                                    <label for="categoryName">Product Name:</label>
+                                    <input type="text" class="form-control" id="product_name" name="product_name"
+                                        value="{{product.product_name}}" required>
+                                </div>
+                            </div>
+                            <!-- Description Field (Alone in its Row) -->
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label for="productDescription">Description:</label>
+                                    <textarea class="form-control" id="productDescription" name="product_description"
+                                        rows="4" required>{{product.description}}</textarea>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success" id="submitCategory">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <!-- Add products modal -->
+    <div class="modal fade" id="addproductModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-md modal-dialog-fixed" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Product</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="POST" action="{% url 'add_product' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+                        <div class="form-row">
+                            <!-- Sub Category Field -->
+                            <div class="form-group col-md-6">
+                                <label for="category">Sub Category:</label>
+                                <select class="form-control" name="subcategory_name" required>
+                                    {% for subcategories in subcategories %}
+                                    <option value="{{subcategories.id}}">{{subcategories.sub_category_name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <!-- Product Name Field -->
+                            <div class="form-group col-md-6">
+                                <label for="categoryName">Product Name:</label>
+                                <input type="text" class="form-control" id="product_name" name="product_name"
+                                    value="{{category.category_name}}" required>
+                            </div>
+                        </div>
+                        <!-- Product Description Field -->
+                        <div class="form-group">
+                            <label for="productDescription"> Description:</label>
+                            <textarea class="form-control" id="productDescription" name="product_description" rows="4"
+                                required></textarea>
+                        </div>
+                        <button>Add Product</button>
+                        <!-- Button to Add Variants -->
+                        {% comment %} <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success" id="submitCategory">Submit</button>
+                        {% comment %} </div> {% endcomment %}
+                {% comment %} </form>
+            </div>
+        </div>
+    </div>
+
+
+
+</main>
+{% endblock content %}
+
+
+{% block script%} {% endcomment %}
+
+{% comment %} <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> {% endcomment %}
+ {% comment %} <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+    </script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
+
+{% endblock %}  {% endcomment %}
+
+

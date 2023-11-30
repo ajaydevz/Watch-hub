@@ -1,0 +1,194 @@
+{% extends 'dashboard/adminhome.html' %}
+{% load static %}
+
+{% block bootstraplink %}
+
+{% endblock %}
+
+{% block content %}
+<main class="ms-sm-auto col-lg-12 ">
+    <div class="flex-row">
+        <div class="box col-lg-12 d-flex justify-content-center mt-3">
+            <!-- Content for the first div -->
+            <h2 class="head-main mx:5">ORDER ADDRESS &nbsp&nbsp&nbsp</h2>
+            <div class="inner-box">
+                <table>
+                    <tr>
+                        <td>Username</td>
+                        <td>: {{order.user.username}}</td>
+                    </tr>
+                    <tr>
+                        <td>Phone Number</td>
+                        <td>: {{order.user.phone}}</td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>: {{order.user.email}}</td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td>: {{order.address.house_no}} {{order.address.village_name}}</td>
+                    </tr>
+                    <tr>
+                        <td>City</td>
+                        <td>: {{order.address.village_name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Country</td>
+                        <td>: {{order.address.country}}</td>
+                    </tr>
+                    <tr>
+                        <td>State</td>
+                        <td>: {{order.address.state}}</td>
+                    </tr>
+                    <tr>
+                        <td>Pin Code</td>
+                        <td>: {{order.address.postal_code}}</td>
+                    </tr>
+                    <!-- <tr>
+                    <td>Order Note</td>
+                    <td>: {{order.message}}</td>
+                </tr> -->
+                </table>
+            </div>
+        </div>
+        <div class="box col-lg-12 d-flex justify-content-center mt-5 mb-4">
+            <!-- Content for the second div -->
+            <h2>ORDER DETAILS &nbsp&nbsp&nbsp</h2>
+            <div class="inner-box">
+                <table>
+                    <tr>
+                        <td>Order id</td>
+                        <td>: {{order.id}}</td>
+                    </tr>
+                    <tr>
+                        <td>Username</td>
+                        <td>:{{order.user.username}}</td>
+                    </tr>
+                    <tr>
+                        <td>Total Price</td>
+                        <td>: {{order.total_price}}</td>
+                    </tr>
+                    <tr>
+                        <td>Payment Methode</td>
+                        <td>: {{order.payment_mode}}</td>
+                    </tr>
+                    <tr>
+                        <td>Payment Id</td>
+                        <td>: {{order.payment_id}}</td>
+                    </tr>
+                    <tr>
+                        <td>Tracking No</td>
+                        <td>: {{order.tracking_no}}</td>
+                    </tr>
+                    <tr>
+                        <td>Ordered Date</td>
+                        <td>: {{order.created_at}}</td>
+                    </tr>
+                    <tr>
+                        <td>Order Status</td>
+                        <td>: {{order.status}}</td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="below-box">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class=" align-items-center">
+                <h3 style=" text-align: center;"> items</h3>
+            </div>
+            <form method="post" action="{% url 'order_status' %}">
+                {% csrf_token %}
+                <div class="d-flex">
+                    <div><select class="form-select m-2" id="status-dropdown" name="order_status"
+                            style="width: 200px; padding: 5px; border: 1px solid black; background-color:white;color:black;">
+                            <option selected>Order Status</option>
+                            <option value="Shipped">Shipped</option>
+                            <option value="Out for delivery">Out for delivery</option>
+                            <option value="Delivered">Delivered</option>
+                            <option value="Pre-Production">Pre-Production</option>
+                            <option value="In Production">In Production</option>
+                            <option value="Cancelled">Cancelled</option>
+                            <option value="Return processing">Return processing</option>
+                            <option value="Returned">Returned</option>
+                        </select></div>
+                    <div>
+                        <button class="btn btn-warning m-2" type="submit">update</button>
+                    </div>
+                </div>
+                <input type="text" hidden="hidden" name="order_id" value="{{order.id}}">
+            </form>
+        </div>
+
+
+        <table class="table text-start align-middle table-bordered table-hover mb-0">
+            <tr>
+                <th>IMAGE</th>
+                <th>PRODUCT NAME</th>
+                <th>CATEGORY</th>
+                <th>SUB CATEGORY</th>
+                <th>WEIGHT</th>
+                <th>QUANTITY</th>
+                <th>STATUS</th>
+                {% if order.status == 'Return requested' %}
+                <td>
+                    Return request
+                </td>
+                {% endif %}
+            </tr>
+            {% for item in orderitems %}
+            <tr>
+                <td><img src="/media/{{item.variant.image1}}" style="width:100px; height:200px;"></td>
+                <td>{{item.product.product_name}}</td>
+                <td>{{item.product.category.category_name}}</td>
+                <td>{{item.product.sub_category.sub_category_name}}</td>
+                <td>{{item.variant.color}}</td>
+                <td>{{item.quantity}}</td>
+                <td>{{order.status}}</td>
+                {% if order.status == 'Return requested' %}
+                <td>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Return requested.!
+                    </button>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
+
+
+    </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Dynamically increase the container's height
+    function setContainerHeight() {
+        const container = document.querySelector('.container');
+        const boxes = document.querySelectorAll('.box');
+        let maxHeight = 0;
+        boxes.forEach(box => {
+            const boxHeight = box.scrollHeight;
+            if (boxHeight > maxHeight) {
+                maxHeight = boxHeight;
+            }
+        });
+        container.style.height = ${ maxHeight } px;
+    }
+
+    // Call the function to set the initial height and on window resize
+    setContainerHeight();
+    window.addEventListener('resize', setContainerHeight);
+
+
+    <!--Edit order status-->
+
+
+
+
+</script>
+{% endblock %}

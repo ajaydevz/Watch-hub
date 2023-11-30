@@ -1,0 +1,53 @@
+{% extends 'dashboard/adminhome.html' %}
+{% block bootstraplink%}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+{% endblock %}
+{% block content%}
+<main class="ms-sm-auto col-lg-12">
+
+    <h2 class="mt-2 mb-4 d-flex justify-content-center">Total orders</h2>
+    <table id="example" class="table table-striped table-bordered table-hover table-success" style="width:100%">
+        <thead class="table-dark">
+            <tr>
+                <th>User Name</th>
+                <th>Order ID</th>
+                <th>Payment Mode</th>
+                <th>Order Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for orderitem in orderitems %}
+            <tr>
+                <td>{{ orderitem.order.user.username }}</td>
+                <td style="color:rgb(204, 35, 35)">{{ orderitem.order.tracking_no }}</td>
+                <td style="color:mediumblue">{{ orderitem.order.payment_mode }}</td>
+                <td style="color: rgb(5, 126, 15);">{{ orderitem.order.status }}</td>
+                <td>
+                    <a href="#" class="btn btn-primary">View</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</main>
+{% endblock %}
+
+{% block script %}
+
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable();
+    });
+</script>
+
+{% endblock %}

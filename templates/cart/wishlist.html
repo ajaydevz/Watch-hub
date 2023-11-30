@@ -1,0 +1,109 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+<!-- Start Header/Navigation -->
+{% block style %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+{% endblock style %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Left Sidebar -->
+        <nav class="col-lg-2 d-md-block sidebar">
+            <div class="position-sticky">
+                <div class="d-flex justify-content-center">
+                    <h4 class="mt-4 ml-3" style="color: rgb(102, 0, 0); font-weight: 1200;">Hi {{ user.username }}</h4>
+                </div>
+
+                <ul class="nav flex-column">
+                    <div class="itemsdiv mx-2 my-2">
+                        <li class="nav-item">
+                            <a class="nav-link navitem" href="{% url 'user_profile' %}">
+                                My Profile
+                            </a>
+                        </li>
+                    </div>
+                    <div class="itemsdiv mx-2 my-2">
+                        <li class="nav-item">
+                            <a class="nav-link navitem" href="{% url 'my_orders' %}">
+                                My Orders
+                            </a>
+                        </li>
+                    </div>
+                    <div class="itemsdiv mx-2 my-2">
+                        <li class="nav-item">
+                            <a class="nav-link navitem" href="{% url 'wishlist_view' %}">
+                                Wishlist
+                            </a>
+                        </li>
+                    </div>
+                    <div class="itemsdiv mx-2 my-2">
+                        <li class="nav-item">
+                            <a class="nav-link navitem" href="{% url 'user_wallet' %}">
+                                Wallet
+                            </a>
+                        </li>
+                    </div>
+                </ul>
+            </div>
+        </nav>
+        <div class="col-lg-10 col-md-8">
+
+            <div class="d-flex justify-content-center mt-4 heading">
+                <h2 class="Main-heading"
+                    style="color: rgb(49, 49, 49); font-style: normal; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; font-weight: 600;">
+                    MY &nbsp WISHLIST</h2>
+            </div>
+            {% if wishlist %}
+            <div class="col-lg-10 mt-5">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <h5 style="color: black;"> Item</h5>
+                    </div>
+                    <div class="col-lg-3">
+                        <h5 style="color: black;"> Amount</h5>
+                    </div>
+                </div>
+                {% for wishlist_item in wishlist %}
+                    <div class="card mb-3">
+                        <span class="border border-success"></span>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <h6 style="color: rgb(0, 0, 0); font-family: Verdana, Geneva, Tahoma, sans-serif">
+                                        {{ wishlist_item.product_name.product_name }}</h6>
+                                    <img src="/media/{{ wishlist_item.product_name.image1 }}" width="30%">
+                                </div>
+                                <div class="col-lg-3">
+                                    <h6 style="color: rgb(250, 1, 1); font-family: Verdana, Geneva, Tahoma, sans-serif">
+                                        Rs.{{ wishlist_item.product_name.selling_price }}</h6>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="d-flex flex-column">
+                                        <a href="{% url 'add_cart' product_id=wishlist_item.product_name.id %}">
+                                            <button class="btn btn-block" style="background-color: rgb(61, 86, 92); color: rgba(236, 209, 7, 0.96);">ADD TO CART</button>
+                                        </a>
+                                        <a href="{% url 'remove_wishlist' product_id=wishlist_item.product_name.id %}">
+                                            <button class="btn btn-block mt-2" style="background-color: rgb(61, 86, 92); color: white;">REMOVE FROM WISHLIST</button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="d-flex justify-content-center mt-5 mx-5">
+                <h2 style="color: red; padding-left: 20px; padding-top: 100px;"> (Wishlist is empty)</h2>
+            </div>
+        {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
