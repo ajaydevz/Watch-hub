@@ -34,8 +34,19 @@ def AdminLogin(request):
 
 
 def AdminHome (request):
+    user_acive = CustomUser.objects.filter(is_active=True).count()
+    user_blocked = CustomUser.objects.filter(is_active=False).count()
+    context={
+        'user_active':user_acive,
+        'user_blocked':user_blocked
+          
+       }
+    
+    return render(request, 'dashboard/admin_base.html',context)
 
-    return render(request, 'dashboard/adminhome.html')
+
+
+
 
 
 

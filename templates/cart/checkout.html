@@ -1,4 +1,4 @@
-{% extends 'home/base.html' %}
+{% extends 'layout/base.html' %}
 
 
 {% block content %}
@@ -17,7 +17,7 @@
 <form method="POST" action="{% url 'place_order' %}">
     {% csrf_token %}
     <div class="container">
-        <div class="row mb-5 d-flex justify-content-center">
+        <div class="row mb-5 d-flex justify-content-center" style="width: 22%;" >
             <h2 class="h3 mb-2 mt-5 text-black" style="color: black;">Shipping address</h2>
             <div class="card-body">
                 <h5 class="card-title" style="color:black;"><strong>{{ address.recipient_name }}</strong>

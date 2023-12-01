@@ -45,7 +45,9 @@
                     <h4><strong>Rs.</strong></h>
 
                     <h4 class="mx-2 mb-3" id="price" style="color:red" > {{ variant.selling_price }} </h4>
-                    <h6 ><del style="color:rgb(86, 85, 85)">{{ variant.actual_price }}</del></h6>
+                    {% if variant.selling_price < variant.actual_price  %}
+                        <h6 ><del style="color:rgb(86, 85, 85)">{{ variant.actual_price }}</del></h6>
+                    {% endif %}
                 </div>
 
 
