@@ -1,42 +1,194 @@
-{% extends "dashboard/adminhome.html" %}
-
-{% block bootstraplink  %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-{% endblock bootstraplink  %}
-{% block content %}
-<canvas id="myChart" style="width:100%;max-width:600px"></canvas>
-{% endblock content %}
-
-
-
-
-
-
-{% block script %}
-<script>
-    var xValues = ["USERS  ACTIVE", "USERS BLOCKEWD"];
-    var yValues = [ {{user_active}}, {{user_blocked}}];
-    var barColors = [
-      "#b91d47",
-      "#00aba9",
-    ];
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block bootstraplink %}
     
-    new Chart("myChart", {
-      type: "pie",
-      data: {
-        labels: xValues,
-        datasets: [{
-          backgroundColor: barColors,
-          data: yValues
-        }]
-      },
-      options: {
-        title: {
-          display: true,
-          text: "World Wide Wine Production 2018"
-        }
-      }
-    });
- </script>
+    {% endblock %}
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+    <!-- Icon Font Stylesheets -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <link href="{% static 'css/dashboard/base.css' %}" rel="stylesheet">
+    <title>Admin Home</title>
+</head>
 
-{% endblock %}
+<style>
+    /* Global Styles */
+    body {
+        background-color: #f4f4f4;
+        font-family: Arial, sans-serif;
+    }
+    @media (min-width: 1200px){
+
+    .container {
+            max-width: 1140em;
+            }
+    }
+    
+
+    /* Header Styles */
+    .header {
+        background-color: #1f4e79;
+        color: #fff;
+        padding: 10px 0;
+    }
+
+    .header h2 {
+        margin: 0;
+        
+    }
+
+    /* Search Container Styles */
+    .search-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+   
+
+    /* Logout Button Styles */
+    .logout-button {
+        position: absolute;
+        top: 20px;
+        right: 50px;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+        background-color: #fff;
+        border-right: 1px solid #ccc;
+    }
+
+    .sidebar h2 {
+        margin: 0;
+        padding: 15px;
+        background-color: #1f4e79;
+        color: #fff;
+    }
+
+    .nav-item {
+        padding: 10px 0;
+    }
+
+    .nav-link {
+        color: #333;
+        text-decoration: none;
+    }
+
+    .nav-link:hover {
+        background-color: #1f4e79;
+        color: #fff;
+    }
+
+    /* Content Area Styles */
+    .content {
+        padding: 20px;
+    }
+    .admin-footer {
+        background-color: #f4f4f4; /* Adjust the background color as needed */
+        padding: 20px 0; /* Adjust the padding as needed */
+        text-align: center;
+    }
+    
+    .admin-footer p {
+        margin: 0;
+        color: #333; /* Adjust the text color as needed */
+    }
+</style>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <h2>Admin Dashboard</h2>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <div class="logout-button" style="margin-top: -10px;">
+            <a href="{% url 'admin_logout' %}" class="btn btn-danger">Logout</a>
+        </div>
+
+        <div class="row">
+            <nav class="col-lg-2 d-flex d-md-block bg-light sidebar">
+       
+                <ul class="nav flex-column">
+                    {% block navlinks %}
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'admin_home' %}">
+                            <i class="fa fa-tachometer-alt me-2"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'users' %}">
+                            <i class="fa fa-user me-2"></i>
+                            User List
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'product_view' %}">
+                            <i class="fa fa-keyboard me-2"></i>
+                            Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'categories' %}">
+                            <i class="fa fa-chart-bar me-2"></i>
+                            Categories
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'sub_categories' %}">
+                            <i class="fa fa-chart-bar me-2 chart-icon"></i>
+                            Sub Categories
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'orders' %}">
+                            <i class="fas fa-file-invoice"></i> Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-flag me-2"></i>
+                             Banner
+                        </a>
+                    </li>
+
+
+                    {% endblock %}
+                </ul>
+            </nav>
+
+            <div class="col-lg-10 content">
+                {% block content %}
+
+
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+    <footer class="admin-footer">
+        <div class="container">
+            <p>&copy; 2023 Your Admin Dashboard. All rights reserved.</p>
+        </div>
+    </footer>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    {% block script %}
+
+    
+    {% endblock %}
+</body>
+</html>

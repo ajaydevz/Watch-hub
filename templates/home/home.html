@@ -22,7 +22,7 @@
                         </div>
                         <div class="col-xl-3 col-lg-3 col-md-4 col-sm-4 d-none d-sm-block">
                             <div class="hero__img" data-animation="bounceIn" data-delay=".4s">
-                                <img src="{% static "img/hero/watch.png" %}" alt="" class=" heartbeat">
+                                <img src="{% static "user/img/hero/watch.png" %}" alt="" class=" heartbeat">
                             </div>
                         </div>
                     </div>
@@ -45,10 +45,10 @@
                     <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
                         <div class="single-new-pro mb-30 text-center">
                             <div class="product-img">
-                                <img src="{% static "img/gallery/new_product1.png" %}" alt="">
+                                <img src="{% static "user/img/gallery/new_product1.png" %}" alt="">
                             </div>
                             <div class="product-caption">
-                                <h3><a href="product_details.html">Thermo Ball Etip Gloves</a></h3>
+                                <h3><a href="{% url 'shop_page' %}">Thermo Ball Etip Gloves</a></h3>
                                 <span>$ 45,743</span>
                             </div>
                         </div>
@@ -56,10 +56,10 @@
                     <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
                         <div class="single-new-pro mb-30 text-center">
                             <div class="product-img">
-                                <img src="{% static "img/gallery/new_product2.png" %}" alt="">
+                                <img src="{% static "user/img/gallery/new_product2.png" %}" alt="">
                             </div>
                             <div class="product-caption">
-                                <h3><a href="product_details.html">Thermo Ball Etip Gloves</a></h3>
+                                <h3><a href="{% url 'shop_page' %}">Thermo Ball Etip Gloves</a></h3>
                                 <span>$ 45,743</span>
                             </div>
                         </div>
@@ -67,10 +67,10 @@
                     <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
                         <div class="single-new-pro mb-30 text-center">
                             <div class="product-img">
-                                <img src="{% static "img/gallery/new_product3.png" %}" alt="">
+                                <img src="{% static "user/img/gallery/new_product3.png" %}" alt="">
                             </div>
                             <div class="product-caption">
-                                <h3><a href="product_details.html">Thermo Ball Etip Gloves</a></h3>
+                                <h3><a href="{% url 'shop_page' %}">Thermo Ball Etip Gloves</a></h3>
                                 <span>$ 45,743</span>
                             </div>
                         </div>
@@ -86,24 +86,24 @@
                 <div class="row">
                     <div class="col-xl-6 col-lg-4 col-md-6 col-sm-6">
                         <div class="single-gallery mb-30">
-                            <div class="gallery-img big-img"> <img src="{% static "img/gallery/gallery1.png" %}" ></div>
+                            <div class="gallery-img big-img"> <img src="{% static "user/img/gallery/gallery1.png" %}" ></div>
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
                         <div class="single-gallery mb-30">
-                            <div class="gallery-img big-img"> <img src="{% static "img/gallery/gallery2.png" %}" ></div>
+                            <div class="gallery-img big-img"> <img src="{% static "user/img/gallery/gallery2.png" %}" ></div>
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-4 col-md-12">
                         <div class="row">
                             <div class="col-xl-12 col-lg-12 col-md-6 col-sm-6">
                                 <div class="single-gallery mb-30">
-                                    <div class="gallery-img small-img"> <img src="{% static "img/gallery/gallery3.png" %}" ></div>
+                                    <div class="gallery-img small-img"> <img src="{% static "user/img/gallery/gallery3.png" %}" ></div>
                                 </div>
                             </div>
                             <div class="col-xl-12 col-lg-12  col-md-6 col-sm-6">
                                 <div class="single-gallery mb-30">
-                                    <div class="gallery-img small-img"> <img src="{% static "img/gallery/gallery4.png" %}" ></div>
+                                    <div class="gallery-img small-img"> <img src="{% static "user/img/gallery/gallery4.png" %}" ></div>
                                 </div>
                             </div>
                         </div>
@@ -266,26 +266,26 @@
                         <div class="watch-details mb-40">
                             <h2>Watch of Choice</h2>
                             <p>Discover watches that blend artistry with reliability. These pieces are an investment in quality and a statement of your personality. Choose from our handpicked selection to adorn your wrist with elegance and grace.</p>
-                            <a href="shop.html" class="btn">Show Watches</a>
+                            <a href="{% url 'shop_page' %}" class="btn">Show Watches</a>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-10">
                         <div class="choice-watch-img mb-40">
-                            <img src="{% static "img/gallery/choce_watch1.png" %}" alt="">
+                            <img src="{% static "user/img/gallery/choce_watch1.png" %}" alt="">
                         </div>
                     </div>
                 </div>
                 <div class="row align-items-center justify-content-between">
                     <div class="col-lg-6 col-md-6 col-sm-10">
                         <div class="choice-watch-img mb-40">
-                            <img src="{% static "img/gallery/choce_watch2.png" %}" alt="">
+                            <img src="{% static "user/img/gallery/choce_watch2.png" %}" alt="">
                         </div>
                     </div>
                     <div class="col-lg-5 col-md-6">
                         <div class="watch-details mb-40">
                             <h2>Watch of Choice</h2>
                             <p>Explore our curated watch collection, a fusion of elegance and precision. From classic to contemporary, find the perfect timepiece to elevate your style and make a lasting impression.</p>
-                            <a href="shop.html" class="btn">Show Watches</a>
+                            <a href="{% url 'shop_page' %}" class="btn">Show Watches</a>
                         </div>
                     </div>
                 </div>
@@ -293,7 +293,7 @@
         </div>
         <!-- Watch Choice  End-->
         <!--? Shop Method Start-->
-        <div class="shop-method-area">
+        {% comment %} <div class="shop-method-area">
             <div class="container">
                 <div class="method-wrapper">
                     <div class="row d-flex justify-content-between">
@@ -321,7 +321,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> {% endcomment %}
         <!-- Shop Method End-->
     </main>
 

@@ -48,8 +48,6 @@ def AdminHome (request):
 
 
 
-
-
 def AdminLogout(request):
 
     if 'adminmail' in request.session :
@@ -57,7 +55,10 @@ def AdminLogout(request):
         return redirect('admin_login')
     else:
         print('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk')
+        return redirect(request,'dashboard/admin_login.html')
 
+ 
+   
     
 #view function for going to user page 
 def Users(request):

@@ -65,6 +65,21 @@
         if (timeleft < 0) {
             clearInterval(timer);
             document.getElementById('timer').innerHTML = 'Time is up!';
+
+            function validateOTP() {
+                enteredOTP = document.getElementById('otp').value; // Get the entered OTP
+        
+                if (enteredOTP === validOTP) {
+                    clearInterval(timer); // Stop the timer on successful OTP validation
+                    document.getElementById('timer').innerHTML = 'OTP is valid. Access granted.';
+                    // Here you can perform additional actions on successful OTP validation
+                    // Add your custom actions here
+                } else {
+                    document.getElementById('timer').innerHTML = 'Incorrect OTP. Please try again.';
+                    // You may choose not to reset the timer here
+                    // Add your custom actions for incorrect attempts here
+                }
+            }
             // Here you can perform additional actions when the timer reaches 0
             // Add your custom actions here
         }

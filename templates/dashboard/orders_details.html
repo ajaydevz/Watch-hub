@@ -1,4 +1,4 @@
-{% extends 'dashboard/adminhome.html' %}
+{% extends 'dashboard/admin_base.html' %}
 {% load static %}
 
 {% block bootstraplink %}
@@ -10,7 +10,7 @@
     <div class="flex-row">
         <div class="box col-lg-12 d-flex justify-content-center mt-3">
             <!-- Content for the first div -->
-            <h2 class="head-main mx:5">ORDER ADDRESS &nbsp&nbsp&nbsp</h2>
+            <h4 class="head-main mx:5">ORDER ADDRESS &nbsp&nbsp&nbsp</h4>
             <div class="inner-box">
                 <table>
                     <tr>
@@ -54,7 +54,7 @@
         </div>
         <div class="box col-lg-12 d-flex justify-content-center mt-5 mb-4">
             <!-- Content for the second div -->
-            <h2>ORDER DETAILS &nbsp&nbsp&nbsp</h2>
+            <h4>ORDER DETAILS &nbsp&nbsp&nbsp</h4>
             <div class="inner-box">
                 <table>
                     <tr>
@@ -141,7 +141,7 @@
             </tr>
             {% for item in orderitems %}
             <tr>
-                <td><img src="/media/{{item.variant.image1}}" style="width:100px; height:200px;"></td>
+                <td><img src="/media/{{item.variant.image1}}" style="width:180px; height:200px;"></td>
                 <td>{{item.product.product_name}}</td>
                 <td>{{item.product.category.category_name}}</td>
                 <td>{{item.product.sub_category.sub_category_name}}</td>

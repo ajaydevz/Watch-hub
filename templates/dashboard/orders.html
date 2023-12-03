@@ -1,4 +1,4 @@
-{% extends 'dashboard/adminhome.html' %}
+{% extends 'dashboard/admin_base.html' %}
 {% block bootstraplink%}
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
@@ -19,7 +19,7 @@
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="table-light">
             {% for orderitem in orderitems %}
             <tr>
                 <td>{{ orderitem.order.user.username }}</td>
@@ -27,7 +27,7 @@
                 <td style="color:mediumblue">{{ orderitem.order.payment_mode }}</td>
                 <td style="color: rgb(5, 126, 15);">{{ orderitem.order.status }}</td>
                 <td>
-                    <a href="{% url "orders_details" order_id=orderitem.order.id  %}" class="btn btn-primary">View</a>
+                    <a href="{% url 'orders_details' order_id=orderitem.order.id%}" class="btn btn-primary">View</a>
                 </td>
             </tr>
             {% endfor %}

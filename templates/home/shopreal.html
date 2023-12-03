@@ -1,0 +1,103 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="d-flex justify-content-center mt-5">
+	<h2> SHOP BY CATEOGRIES</h2>
+</div>
+<div class="d-flex justify-content-center mt-5 ">
+	{% for categories in category %}
+	<div class="category-item mr-3 ml-3">
+		{% comment %} <a href="{% url 'sub_category_page' category_id=categories.id %}"> {% endcomment %}
+			
+            <a href="#">
+                <div>
+				<img src="/media/{{categories.category_image}}"    style=" height: 71%;
+				width: 200px;">
+				<h5 class="mt-3 ml-5">{{categories.category_name}}</h5>
+			</div>
+		</a>
+
+	</div>
+	{% endfor %}
+</div>
+<div class="d-flex justify-content-center">
+	<a href="">
+	<P class="mt-5">Know more about our categories </P>
+	</a>
+</div>
+
+
+<section class="popular-items latest-padding">
+	<div class="container">
+		<div class="row product-btn justify-content-between mb-40">
+			<div class="properties__button">
+				<!--Nav Button  -->
+				<nav>                                                      
+					<div class="nav nav-tabs" id="nav-tab" role="tablist">
+						<a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">NewestArrivals</a>
+						<a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false"> Price high to low</a>
+					</div>
+				</nav>
+				<!--End Nav Button  -->
+			</div>
+			<!-- Grid and List view -->
+			<div class="grid-list-view">
+			</div>
+			<!-- Select items -->
+			{% comment %} <div class="select-this">
+				<form action="#">
+					<div class="select-itms">
+						<select name="select" id="select1">
+							<option value="">40 per page</option>
+							<option value="">50 per page</option>
+							<option value="">60 per page</option>
+							<option value="">70 per page</option>
+						</select>
+					</div>
+				</form>
+			</div> {% endcomment %}
+		</div>
+		<!-- Nav Card -->
+		<div class="tab-content" id="nav-tabContent">
+			<!-- card one -->
+			<div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+				<div class="row">
+					{% if variants %}
+						{% for variant in variants %}
+							<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+								<div class="single-popular-items mb-50 text-center">
+									<a href="{% url 'product_details' variant_id=variant.id %}" class="popular-item">
+										<div class="popular-img">
+											<img src="/media/{{variant.image1}}" alt="{{variant.product.product_name}}">
+											<div class="img-cap">
+												<span>Add to Cart</span>
+											</div>
+											<div class="favorit-items">
+												<span class="flaticon-heart"></span>
+											</div>
+										</div>
+										<div class="popular-caption">
+											<h3>{{variant.product.product_name}}</h3>
+											<span>${{variant.selling_price}}</span>
+										</div>
+									</a>
+								</div>
+							</div>
+						{% endfor %}
+					{% else %}
+						<div class="col-12">
+							<h1>No variants to show</h1>
+						</div>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+		<!-- End Nav Card -->
+	</div>
+</section>
+
+
+{% endblock %}
+
+

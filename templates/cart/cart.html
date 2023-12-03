@@ -57,32 +57,34 @@
 								<td class="product-name">
 									<h2 class="h5 text-black">{{cart_item.product.product.product_name}}</h2>
 								</td>
-								<td>{{cart_item.product.selling_price}}</td>
+								<td id="cart_item_price">{{cart_item.product.selling_price}}</td>
 
 								<td>
 									<div class="input-group mb-3 d-flex justify-content-center align-items-center quantity-container"
 										style="max-width: 120px;">
 										<div class="input-group-prepend">
-											<a href="{% url 'decrement_cartitem' product_id=cart_item.product.id %}">
-												<button class="btn btn-outline-black decrease"
+											<!-- <a href="{% url 'decrement_cartitem' product_id=cart_item.product.id %}"> -->
+												<button class="btn btn-outline-black decrease" id="decrease" data-id="{{ cart_item.product.id }}" 
 													type="button">&minus;</button>
-											</a>
+											<!-- </a> -->
 										</div>
 										<input type="text" class="form-control text-center quantity-amount"
 											value="{{cart_item.quantity}}" placeholder=""
+											id="quantity-{{cart_item.product.id}}"
 											aria-label="Example text with button addon"
 											aria-describedby="button-addon1">
 										<div class="input-group-append">
-											<a href="{% url 'increment_cartitem' product_id=cart_item.product.id %}">
-												<button class="btn btn-outline-black increase" data-id="{{ cart_item.product.id }}" id="increase"
-													type="button">&plus;</button>
-											</a>
+											<!-- <a href="{% url 'increment_cartitem' product_id=cart_item.product.id %}"> -->
+											<button class="btn btn-outline-black increase"
+												data-id="{{ cart_item.product.id }}" id="increase"
+												type="button">&plus;</button>
+											<!-- </a> -->
 
 										</div>
 									</div>
 
 								</td>
-								<td>{{ cart_item.sub_total }}</td>
+								<td id="cart_item_total-{{cart_item.product.id}}">{{ cart_item.sub_total }}</td>
 								<td><a href="{% url 'remove_cartitem' product_id=cart_item.product.id %}"
 										class="btn btn-black btn-sm">X</a></td>
 							</tr>
@@ -129,7 +131,7 @@
 								<span class="text-black">Subtotal</span>
 							</div>
 							<div class="col-md-6 text-right">
-								<strong class="text-black">₹ {{total}}</strong>
+								<strong class="text-black" id="total">₹ {{total}}</strong>
 							</div>
 						</div>
 						<div class="row mb-3">
@@ -137,7 +139,7 @@
 								<span class="text-black">Tax</span>
 							</div>
 							<div class="col-md-6 text-right">
-								<strong class="text-black">₹ {{tax}}</strong>
+								<strong class="text-black" id="tax">₹ {{tax}}</strong>
 							</div>
 						</div>
 						<div class="row mb-5">
@@ -145,7 +147,7 @@
 								<span class="text-black">Grand Total</span>
 							</div>
 							<div class="col-md-6 text-right">
-								<strong class="text-black">₹ {{grand_total}}</strong>
+								<p class="text-black" id="grand_total" value="{{ grand_total }}">₹ {{grand_total}}</p>
 							</div>
 						</div>
 
@@ -178,25 +180,97 @@
 {% endblock %}
 <!-- Start Footer Section -->
 
-{% block scripts %}
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-	$(document).ready(function() {
-		$("#increase").on("click", function() {
+	$(document).ready(function () {
+		$('body').on("click", "#increase", function () {
 			var variant_id = $(this).data("id");
+			console.log(variant_id);
+			var url = "/cart/increment-cart/" + variant_id + "/";
+			console.log('hihihi')
 			$.ajax({
-				url: "cart/increment_cart/",  // Replace this with your Django endpoint URL
+
+				url: url,  // Replace this with your Django endpoint URL
 				method: "GET",  // Use GET or POST based on your backend logic
-				success: function(data) {
+				success: function (data) {
+
+					if (data.messages == "error") {
+						Swal.fire({
+							position: "top-end",
+							icon: "error",
+							title: "Product is out of stock",
+							showConfirmButton: false,
+							timer: 1500
+						});
+					}
 					// Assuming the response contains HTML for the frame
-					$("#frameContainer").html(data);
+					document.getElementById('quantity-' + variant_id).value = data.quantity
+					
+					document.getElementById('tax').innerHTML = data.tax
+					document.getElementById('total').innerHTML = data.total
+					document.getElementById('grand_total').innerHTML = data.grand_total
+					console.log(data.grand_total)
+					console.log(typeof data.grand_total)
+					document.getElementById('cart_item_total-' + variant_id).innerHTML = data.cart_item_total
+
 				},
-				error: function(xhr, status, error) {
+				error: function (xhr, status, error) {
 					console.error("Error occurred: ", error);
 				}
 			});
 		});
 	});
 </script>
+<script>
+	$(document).ready(function () {
+		$('body').on("click", "#decrease", function () {
+			var variant_id = $(this).data("id");
+			console.log(variant_id);
+			var url = "/cart/decrement-cart/" + variant_id + "/";
+			console.log('hihihi')
+			$.ajax({
+
+				url: url,  // Replace this with your Django endpoint URL
+				method: "GET",  // Use GET or POST based on your backend logic
+				success: function (data) {
+
+					/*if (data.messages == "error") {
+						Swal.fire({
+							position: "top-end",
+							icon: "error",
+							title: "Product is out of stock",
+							showConfirmButton: false,
+							timer: 1500
+						});
+					}*/
+					if (data.status==='error'){
+						//redirecting to the cart page
+						window.location.href = "{% url 'cart_page' %}";
+					}
+					else{
+
+					document.getElementById('quantity-' + variant_id).value = data.quantity
+					document.getElementById('tax').innerHTML = data.tax
+					document.getElementById('total').innerHTML = data.total
+					document.getElementById('grand_total').innerHTML = data.grand_total
+					console.log(data.grand_total)
+					console.log(typeof data.grand_total)
+					document.getElementById('cart_item_total-' + variant_id).innerHTML = data.cart_item_total
+					}
+					// Assuming the response contains HTML for the frame
+					
+
+				},
+				error: function (xhr, status, error) {
+					console.error("Error occurred: ", error);
+				}
+			});
+		});
+	});
+</script>
+
+
 
 {% endblock %}
