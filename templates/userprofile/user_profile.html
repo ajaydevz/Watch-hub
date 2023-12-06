@@ -1,70 +1,15 @@
 {% extends 'layout/base.html' %}
 {% load static %}
 <!-- Start Header/Navigation -->
-{% block bootstraplink %}
+{% block style %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<link href="{% static 'css/userprofile/custom_styles.css' %}" rel="stylesheet">
 <link href="{% static 'css/userprofile/userprofile.css' %}" rel="stylesheet">
-{% endblock %}
+{% endblock style %}
 
 
 {% block content %}
-<style>
-    .icon-wrapper {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 24px;
-        height: 24px;
-    }
-
-    .edit-icon,
-    .delete-icon {
-        width: 100%;
-        height: 100%;
-        fill: none;
-        stroke: black;
-        stroke-width: 2;
-    }
-
-    .address-card {
-        background-color: #f0f0f0;
-        border: 1px solid #ccc;
-        padding: 10px;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-    }
-
-    .address-card h5 {
-        margin-bottom: 5px;
-    }
-
-    .address-card p {
-        margin-bottom: 8px;
-    }
-
-    .address-card a {
-        color: #3498db;
-        text-decoration: none;
-    }
-
-    .address-card a:hover {
-        text-decoration: underline;
-    }
-
-    .icons-edit-delete {
-        background-color: #EEEEEE;
-        color: #fff;
-        border: none;
-        padding: 5px;
-        margin-right: 5px;
-        cursor: pointer;
-    }
-</style>
 
 <div class="container-fluid">
     <div class="row">
@@ -78,18 +23,27 @@
                 <ul class="nav flex-column">
                     <div class="itemsdiv mx-2 my-2">
                         <li class="nav-item">
-                            <a class="nav-link navitem" href="{% url "user_profile" %}">
+                            <a class="nav-link navitem" href="{% url 'user_profile'%}">
                                 My Profile
                             </a>
                         </li>
                     </div>
                     <div class="itemsdiv mx-2 my-2">
                         <li class="nav-item">
-                            <a class="nav-link navitem" href="{% url "my_orders" %}">
+                            <a class="nav-link navitem" href="{% url 'my_orders'%}">
                                 My Orders
                             </a>
                         </li>
                     </div>
+                    <div class="itemsdiv mx-2 my-2">
+                        <li class="nav-item">
+                            <a class="nav-link navitem" href="{% url 'wishlist_view'%}">
+                                Wishlist
+                            </a>
+                        </li>
+                    </div>
+                    
+                    
                 </ul>
             </div>
         </nav>
@@ -106,52 +60,63 @@
                 <div class="d-flex justify-content-center col-lg-6">
                     <h4>User Info</h4>
                 </div>
-
+                <p class="text-danger" id="alert_tag"></p>
                 <div class="card col-lg-12">
                     <div class="card-body">
-                        <form method="POST" action="{% url 'edit_user_profile' user_id=user.id %}">
+                        {% if user.id%}
+                        <form method="POST" action="{% url 'edit_user_profile' user_id=user.id %}" id="userDetailsForm">
                             {% csrf_token %}
                             <div class="mb-3">
                                 <label for="username" class="form-label">Username</label>
                                 <input type="text" class="form-control" id="username" name="username"
-                                    value="{{user.username}}">
+                                    value="{{users.username}}">
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
                                 <input type="email" readonly class="form-control" id="email" name="email"
-                                    value="{{user.email}}">
+                                    value="{{users.email}}">
                             </div>
                             <div class="mb-3">
                                 <label for="phone" class="form-label">Phone Number</label>
-                                <input type="tel" class="form-control" id="phone_no" name="phone" value="{{user.phone}}">
+                                <input type="tel" class="form-control" id="phone" name="phone" value="{{users.phone}}"
+                                    readonly>
                             </div>
                             <div class="d-flex justify-content-center col-lg-6 mt-2">
                                 <button type="submit" class="btn btn-primary">
-                                    SUBMIT
+                                    submit
+                                </button>
+                                <button type="button" class="btn btn-success ml-3" data-toggle="modal" data-target="#passwordChangeModal" style="background-color: green; border: 0px;">
+                                    Change Password
                                 </button>
 
                             </div>
                         </form>
+                        {%endif%}
                     </div>
+
                 </div>
+                
+
 
             </div>
         </div>
+        <!-- 7777777777777777777777777777777777777777777777777777777777777777777 -->
         <div class="card mt-5 col-lg-4">
             <div class="card-body">
                 <div class="d-flex justify-content-center">
                     <h5>ADD YOUR ADDRESS HERE</h5>
                 </div>
-
+                <p class="text-danger" id="alert_tags"></p>
                 <p class="card-text">
-                <form method="POST" action="{% url 'add_address' user_id=user.id %}">
+                <form method="POST" action="{% url 'add_address' user_id=user.id %}" id="UserAddressForm">
                     {% csrf_token %}
 
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="RecipientName" class="form-label">Recipient Name:</label>
-                                <input type="text" class="form-control" id="RecipientName" name="RecipientName" value="" required>
+                                <input type="text" class="form-control" id="RecipientName" name="RecipientName" value=""
+                                    required>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -182,7 +147,8 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="postal_code" class="form-label">Postal Code:</label>
-                                <input type="text" class="form-control" id="postal_code" name="postal_code" value=""required>
+                                <input type="text" class="form-control" id="postal_code" name="postal_code" value=""
+                                    required>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -217,46 +183,58 @@
             </div>
         </div>
 
-        <div class="d-flex justify-content-center">
-            <h2 class="card-title mt-5">Address Details</h2>
+      
+        {% if not address %}
+        <div class=" d-flex justify-content-center mt-4">
+            <h6>Add an address using above form</h6>
         </div>
-
+        {% else %}
+        <!-- <div class=" d-flex justify-content-center mt-4 ">
+            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#myModal"  style="height: 70px; margin-left:17em ">
+                Select default address
+            </button>
+        </div> -->
         
-        
-        
 
 
-        {% comment %} <div class="row justify-content-around">
+        <div class="row justify-content-around">
+
+            <div class="d-flex justify-content-center">
+                <h2 class="card-title mt-5">Address Details</h2>
+            </div>
 
             <div class="mt-5 d-flex row mx-5">
-                {% for addres in address %}
+                {% for address in address %}
                 <div class="col-lg-2 col-md-1  mx-3">
                     <div>
-                      
-                        {% if addres.is_default is True %}
-                        <h5>Address-{{ forloop.counter }}</h5><p>( default address)</p>
-                        
+
+                        {% if address.is_default is True %}
+                        <h5>Address-{{ forloop.counter }}</h5>
+                        <p>( default address)</p>
+
                         {% else %}
                         <h5>Address-{{ forloop.counter }}</h5>
                         <div class="mb-5"></div>
                         {% endif %}
                     </div>
 
-                    <div class="mt-2 card coloumn col-md-12">
-                        <div class="card-body">
+                    <div class="mt-2 card coloumn col-md-12" style="width:86em" >
+                        <div class="card-body>
                             <h5 class="card-title" style="color:black;"><strong>{{ address.recipient_name }}</strong>
                             </h5>
                             <p class="card-text">
-                                {{ addres.house_no }}/{{ addres.street_name }}<br>
-                                {{ addres.village_name }}<br>
-                                {{ addres.postal_code }}/{{ addres.district }}<br>
-                                {{ addres.state }}/{{ addres.country }}
+                                {{ address.house_no }}/{{ address.street_name }}<br>
+                                {{ address.village_name }}<br>
+                                {{ address.postal_code }}<br>
+                                {{ address.district }}<br>
+                                {{ address.state }}/{{ address.country }}
                             </p>
                         </div>
                         <div class="justify-content-evenly">
-                            {% comment %} <a href="{% url 'edit_address' address_id=address.id %}"> 
+                            <!-- <a href="{% url 'edit_address' address_id=address.id %}"> -->
                             <button class="toggle-btn icons-edit-delete" data-toggle="modal"
-                                data-target="#editAddressModal-{{forloop.counter}}">
+                                data-target="#editAddressModal-{{forloop.counter}}"
+                                style="border:none; border-radius:20px; outline:none; ">
                                 <svg id="editIcon" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20"
                                     height="50" viewBox="0 0 24 24">
                                     <path
@@ -264,11 +242,20 @@
                                     </path>
                                 </svg>
                             </button>
-                            <button>
-                                <a href="{% url 'delete_address' address_id=addres.id %}">
-
+                            {% comment %} <button style="border-radius:20px; border:none;">
+                                <a href="{% url 'delete_address' address_id=address.id %}">
                                     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="50"
                                         viewBox="0 0 24 24">
+                                        <path
+                                            d="M 10.806641 2 C 10.289641 2 9.7956875 2.2043125 9.4296875 2.5703125 L 9 3 L 4 3 A 1.0001 1.0001 0 1 0 4 5 L 20 5 A 1.0001 1.0001 0 1 0 20 3 L 15 3 L 14.570312 2.5703125 C 14.205312 2.2043125 13.710359 2 13.193359 2 L 10.806641 2 z M 4.3652344 7 L 5.8925781 20.263672 C 6.0245781 21.253672 6.877 22 7.875 22 L 16.123047 22 C 17.121047 22 17.974422 21.254859 18.107422 20.255859 L 19.634766 7 L 4.3652344 7 z">
+                                        </path>
+                                    </svg>
+                                </a>
+                            </button> {% endcomment %}
+                            <button style="border-radius:20px; border:none;" onclick="confirmDelete({{ address.id }})">
+                                <a href="#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="50" viewBox="0 0 24 24">
+                                        <!-- SVG path -->
                                         <path
                                             d="M 10.806641 2 C 10.289641 2 9.7956875 2.2043125 9.4296875 2.5703125 L 9 3 L 4 3 A 1.0001 1.0001 0 1 0 4 5 L 20 5 A 1.0001 1.0001 0 1 0 20 3 L 15 3 L 14.570312 2.5703125 C 14.205312 2.2043125 13.710359 2 13.193359 2 L 10.806641 2 z M 4.3652344 7 L 5.8925781 20.263672 C 6.0245781 21.253672 6.877 22 7.875 22 L 16.123047 22 C 17.121047 22 17.974422 21.254859 18.107422 20.255859 L 19.634766 7 L 4.3652344 7 z">
                                         </path>
@@ -281,61 +268,9 @@
                 </div>
                 {% endfor %}
             </div>
-        </div> {% endcomment %}
-
-        <div class="row justify-content-around">
-            <div class="mt-5 d-flex row mx-5">
-                {% for addres in address %}
-                <div class="" style="width: 300px; padding-right: 10px;">
-                    <div>
-                        {% if addres.is_default is True %}
-                        <h5>Address-{{ forloop.counter }}</h5>
-                        <p>( default address)</p>
-                        {% else %}
-                        <h5>Address-{{ forloop.counter }}</h5>
-                        <div class="mb-5"></div>
-                        {% endif %}
-                    </div>
-        
-                    <div class="mt-2 card coloumn col-md-12 address-card" style=" width: 600px;"> <!-- Add the address-card class -->
-                        <div class="card-body">
-                            <h5 class="card-title" style="color:black;"><strong>{{ addres.recipient_name }}</strong></h5>
-                            <p class="card-text">
-                                {{ addres.house_no }}/{{ addres.street_name }}<br>
-                                {{ addres.village_name }}<br>
-                                {{ addres.postal_code }}/{{ addres.district }}<br>
-                                {{ addres.state }}/{{ addres.country }}
-                            </p>
-                        </div>
-                        <div class="justify-content-evenly">
-                            <button class="toggle-btn icons-edit-delete" data-toggle="modal" data-target="#editAddressModal-{{forloop.counter}}">
-                                <!-- Edit icon -->
-                                <div class="icon-wrapper">
-                                    <svg class="edit-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                        <path d="M14.5 5.5L3 17 3 21 7 21 18.5 9.5zM21.2 2.8c-1.1-1.1-2.9-1.1-4 0L16 4l4 4 1.2-1.2C22.3 5.7 22.3 3.9 21.2 2.8z"/>
-                                    </svg>
-                                </div>
-                            </button>
-                            <button>
-                                <a href="{% url 'delete_address' address_id=addres.id %}">
-                                    <!-- Delete icon -->
-                                    <div class="icon-wrapper">
-                                        <svg class="delete-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                            <path d="M 10.806641 2 C 10.289641 2 9.7956875 2.2043125 9.4296875 2.5703125 L 9 3 L 4 3 A 1.0001 1.0001 0 1 0 4 5 L 20 5 A 1.0001 1.0001 0 1 0 20 3 L 15 3 L 14.570312 2.5703125 C 14.205312 2.2043125 13.710359 2 13.193359 2 L 10.806641 2 z M 4.3652344 7 L 5.8925781 20.263672 C 6.0245781 21.253672 6.877 22 7.875 22 L 16.123047 22 C 17.121047 22 17.974422 21.254859 18.107422 20.255859 L 19.634766 7 L 4.3652344 7 z"/>
-                                        </svg>
-                                    </div>
-                                </a>
-                            </button>
-                        </div>
-                        
-                        
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
         </div>
         <!--Address Edit Modal -->
-        {% for addres in address %}
+        {% for address in address %}
         <div class="modal fade" id="editAddressModal-{{forloop.counter}}" tabindex="-1"
             aria-labelledby="editAddressModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -346,24 +281,25 @@
                     </div>
                     <div class="modal-body">
                         <!-- Address Edit Form -->
-                        <form method="POST" action="{% url 'edit_address' address_id=addres.id%}">
+                        <p class="text-danger" id="alert_message-{{address.id}}"></p>
+                        <form method="POST" action="{% url 'edit_address' address_id=address.id%}" id="editAddressForm">
                             {% csrf_token %}
 
-
+                                
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="RecipientName" class="form-label">Recipient
                                             Name:</label>
-                                        <input type="text" class="form-control" id="RecipientName" name="RecipientName"
-                                            value="{{ addres.recipient_name }}" required>
+                                        <input type="text" class="form-control" id="RecipientName-{{ address.id }}" name="RecipientName"
+                                            value="{{ address.recipient_name }}" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="house_no" class="form-label">House No:</label>
-                                        <input type="text" class="form-control" id="house_no" name="house_no"
-                                            value="{{ addres.house_no }}" required>
+                                        <input type="text" class="form-control" id="house_no-{{ address.id }}" name="house_no"
+                                            value="{{ address.house_no }}" required>
                                     </div>
                                 </div>
                             </div>
@@ -372,15 +308,15 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="street_name" class="form-label">Street Name:</label>
-                                        <input type="text" class="form-control" id="street_name" name="street_name"
-                                            value="{{ addres.street_name }}" required>
+                                        <input type="text" class="form-control" id="street_name-{{ address.id }}" name="street_name"
+                                            value="{{ address.street_name }}" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="Village" class="form-label">Village/City:</label>
-                                        <input type="text" class="form-control" id="Village" name="Village"
-                                            value="{{ addres.village_name }}" required>
+                                        <input type="text" class="form-control" id="Village-{{ address.id }}" name="Village"
+                                            value="{{ address.village_name }}" required>
                                     </div>
                                 </div>
                             </div>
@@ -389,15 +325,15 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="postal_code" class="form-label">Postal Code:</label>
-                                        <input type="text" class="form-control" id="postal_code" name="postal_code"
-                                            value="{{ addres.postal_code }}" required>
+                                        <input type="text" class="form-control" id="postal_code-{{ address.id }}" name="postal_code"
+                                            value="{{ address.postal_code }}" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="district" class="form-label">District:</label>
-                                        <input type="text" class="form-control" id="district" name="district"
-                                            value="{{ addres.district }}" required>
+                                        <input type="text" class="form-control" id="district-{{ address.id }}" name="district"
+                                            value="{{ address.district }}" required>
                                     </div>
                                 </div>
                             </div>
@@ -406,20 +342,20 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="state" class="form-label">State:</label>
-                                        <input type="text" class="form-control" id="state" name="state"
-                                            value="{{ addres.state }}" required>
+                                        <input type="text" class="form-control" id="state-{{ address.id }}" name="state"
+                                            value="{{ address.state }}" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="country" class="form-label">Country:</label>
-                                        <input type="text" class="form-control" id="country" name="country"
-                                            value="{{ addres.country }}" required>
+                                        <input type="text" class="form-control" id="country-{{ address.id }}" name="country"
+                                            value="{{ address.country }}" required>
                                     </div>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-center mt-2">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary" data-id="{{address.id}}">
                                     Save Changes
                                 </button>
                             </div>
@@ -429,6 +365,8 @@
             </div>
         </div>
         {%endfor%}
+        {% endif %}
+
 
 
 
@@ -436,6 +374,40 @@
         <!-- </main> -->
     </div>
 </div>
+
+
+<!-- change password  -->
+
+<!-- Modal -->
+{% comment %} <div class="modal fade" id="passwordChangeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title" id="exampleModalLabel">Change Password</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form action="{% url "change-password" %}" method="POST">
+                {%csrf_token%}
+                <div class="form-group">
+                    <label for="password">New Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter new password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+</div> {% endcomment %}
+
+<!-- change password  -->
 
 <!-- this modal is for selecting default address for user -->
 <div class="modal" id="myModal">
@@ -450,7 +422,7 @@
 
             <!-- Modal body -->
             <div class="modal-body">
-
+                <
                 <form method="POST" action="{% url 'default_address'%}">
                     {% csrf_token %}
                     <div class="mt-2">
@@ -459,9 +431,9 @@
 
                             <option selected disabled>Select an address</option>
 
-                            {% for addres in address%}
-                            <option value="{{addres.id}}">
-                                {{addres.recipient_name}}/{{addres.house_no}}/{{addres.street_name}}/{{addres.village_name}}/{{addres.postal_code}}/{{addres.district}}/{{addres.state}}/{{addres.country}}
+                            {% for address in address%}
+                            <option value="{{address.id}}">
+                                {{address.recipient_name}}/{{address.house_no}}/{{address.street_name}}/{{address.village_name}}/{{address.postal_code}}/{{address.district}}/{{address.state}}/{{address.country}}
                             </option>
                             {% endfor %}
                         </select>
@@ -472,19 +444,375 @@
                     </div>
                 </form>
             </div>
-
             <!-- Modal footer -->
-
-
         </div>
     </div>
 </div>
 
 {% endblock %}
 {% block script %}
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function confirmDelete(addressId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You will not be able to recover this address!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If the user clicks "Yes, delete it!", redirect to the delete URL
+                window.location.href = `/user_profile/user-delete-address/${addressId}/`;
+
+            }
+        });
+
+        // Prevent the default behavior of the anchor (following the link)
+        return false;
+    }
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
+<script>
+    $(document).ready(function () {
+        document.getElementById('alert_tag');
+
+        $("#userDetailsForm").submit(function (event) {
+            // Prevent the form from submitting
+            event.preventDefault();
+
+            // Perform your validation here
+            if (validateForm()) {
+                // If the form is valid, you can submit it
+                console.log("Form is valid. Submitting...");
+
+
+                $(this).unbind('submit').submit();
+            } else {
+                console.log("Form is not valid. Please check your inputs.");
+            }
+        });
+
+        function validateForm() {
+            // Implement your validation logic here
+            var username = $("#username").val();
+            // Match the ID here
+
+            // Example validation - You should customize this based on your requirements
+            if (username.length < 5) {
+                console.log("username");
+                document.getElementById('alert_tag').innerHTML = "Username must be at least 5 characters long."
+                //alert("Username must be at least 3 characters long.");
+                return false;
+            }
+            if (!isValidUsername(username)) {
+                document.getElementById('alert_tag').innerHTML = "Invalid username"
+                return false;
+            }
+
+
+            return true;
+        }
+        function isValidUsername(username) {
+            //Basic username validation using a regular expression
+            var usernameregex = /^\S*$/
+            return usernameregex.test(username);
+        }
+
+
+
+    });
+
+</script>
+
+<script>
+    $(document).ready(function () {
+        document.getElementById('alert_tag');
+
+        $("#UserAddressForm").submit(function (event) {
+            // Prevent the form from submitting
+            event.preventDefault();
+
+            // Perform your validation here
+            if (validateForm()) {
+                // If the form is valid, you can submit it
+                console.log("Form is valid. Submitting...");
+
+
+                $(this).unbind('submit').submit();
+            } else {
+                console.log("Form is not valid. Please check your inputs.");
+            }
+        });
+
+        function validateForm() {
+            // Implement your validation logic here
+            var RecipientName = $("#RecipientName").val();
+            var house_no = $("#house_no").val();
+            var street_name = $("#street_name").val();
+            var Village = $("#Village").val();
+            var postal_code = $("#postal_code").val();
+            var district = $("#district").val();
+            var state = $("#state").val();
+            var country = $("#country").val();
+            // Match the ID here
+
+            // Example validation - You should customize this based on your requirements
+            if (RecipientName.length < 5) {
+                console.log("username");
+                document.getElementById('alert_tags').innerHTML = "Recipient name must be at least 5 characters long."
+                //alert("Username must be at least 3 characters long.");
+                return false;
+            }
+            if (!isValidname(RecipientName)) {
+                document.getElementById('alert_tags').innerHTML = "Invalid name"
+                return false;
+            }
+            if (!isValidHouseno(house_no)) {
+                document.getElementById('alert_tags').innerHTML = "Invalid house no"
+                return false;
+            }
+            if (!isValidstreet_name(street_name)) {
+                document.getElementById('alert_tags').innerHTML = "Invalid street name"
+                return false;
+            }
+            if (!isValidVillage(Village)) {
+                document.getElementById('alert_tags').innerHTML = "Invalid Village name"
+                return false;
+            }
+
+            if (!isValidpostal_code(postal_code)) {
+                document.getElementById('alert_tags').innerHTML = "Invalid Postal Code"
+                return false;
+            }
+            if (!isValiddistrict(district)) {
+                document.getElementById('alert_tags').innerHTML = "Invalid district."
+                return false;
+            }
+
+            if (!isValidstate(state)) {
+                document.getElementById('alert_tags').innerHTML = "Invalid State"
+                return false;
+            }
+            if (!isValidcountry(country)) {
+                document.getElementById('alert_tags').innerHTML = "Invalid Country"
+                return false;
+            }
+
+            console.log('hihihihiji')
+
+            return true;
+        }
+        function isValidname(RecipientName) {
+            //Basic username validation using a regular expression
+            var usernameregex = /^[A-Za-z]+\S*$/
+            return usernameregex.test(RecipientName);
+        }
+        function isValidstreet_name(street_name) {
+            //Basic username validation using a regular expression
+            var usernameregex = /^[A-Za-z]+\S*$/
+            return usernameregex.test(street_name);
+        }
+        function isValidVillage(Village) {
+            //Basic username validation using a regular expression
+            var usernameregex = /^[A-Za-z]+\S*$/
+            return usernameregex.test(Village);
+        }
+        function isValidpostal_code(postal_code) {
+            //Basic username validation using a regular expression
+            var usernameregex = /^[0-9]{6}\S*$/
+            return usernameregex.test(postal_code);
+        }
+
+        function isValiddistrict(district) {
+            //Basic username validation using a regular expression
+            var usernameregex = /^[A-Za-z]+\S*$/
+            return usernameregex.test(district);
+        }
+        function isValidstate(state) {
+            //Basic username validation using a regular expression
+            var usernameregex = /^[A-Za-z]+\S*$/
+            return usernameregex.test(state);
+        }
+        function isValidcountry(country) {
+            //Basic username validation using a regular expression
+            var usernameregex = /^[A-Za-z]+\S*$/
+            return usernameregex.test(country);
+        }
+
+
+        function isValidHouseno(house_no) {
+            // Basic phone number validation using a regular expression
+            var house_noregex = /^[0-9]\S*$/;
+            return house_noregex.test(house_no);
+        }
+
+
+    });
+
+</script>
+<script>
+    $(document).ready(function () {
+        document.getElementById('alert_message');
+        console.log('hii')
+        $('form[id^="editAddressForm"]').submit(function (event) {
+            var form = $(this);
+            var address_id = form.find("button[type='submit']").data("id");
+        /*$("#editAddressForm").submit(function (event) {
+            // Prevent the form from submitting
+            var address_id = $(this).find("button[type='submit']").data("id");*/
+            console.log(address_id)
+            event.preventDefault();
+            
+            
+            // Perform your validation here
+            if (validateForm(form,address_id)) {
+                // If the form is valid, you can submit it
+                console.log("Form is valid. Submitting...");
+
+
+                $(this).unbind('submit').submit();
+            } else {
+                console.log("Form is not valid. Please check your inputs.");
+            }
+        });
+    
+
+        function validateForm(form,address_id) {
+            // Implement your validation logic here
+            
+
+            //var RecipientName = $("#RecipientName-"+address_id).val();
+            var RecipientName = form.find("#RecipientName-" + address_id).val()
+            var house_no = form.find("#house_no-" + address_id).val()
+            var street_name = form.find("#street_name-" + address_id).val()
+            var Village = form.find("#Village-" + address_id).val()
+            var postal_code = form.find("#postal_code-" + address_id).val()
+            var district = form.find("#district-" + address_id).val()
+            var state = form.find("#state-" + address_id).val()
+            var country = form.find("#country-" + address_id).val()
+            /*var house_no = $("#house_no-"+address_id).val();
+            var street_name = $("#street_name-"+address_id).val();
+            var Village = $("#Village-"+address_id).val();
+            var postal_code = $("#postal_code-"+address_id).val();
+            var district = $("#district-"+address_id).val();
+            var state = $("#state-"+address_id).val();
+            var country = $("#country-"+address_id).val();*/
+            console.log(country)
+            // Match the ID here
+
+            // Example validation - You should customize this based on your requirements
+            if (RecipientName.length < 5) {
+                console.log("username");
+                document.getElementById('alert_message-'+address_id).innerHTML = "Recipient name must be at least 5 characters long."
+                //alert("Username must be at least 3 characters long.");
+                return false;
+            }
+            if (!isValidname(RecipientName)) {
+                document.getElementById('alert_message-'+address_id).innerHTML = "Invalid name"
+                return false;
+            }
+            if (!isValidHouseno(house_no)) {
+                document.getElementById('alert_message-'+address_id).innerHTML = "Invalid house no"
+                return false;
+            }
+            if (!isValidstreet_name(street_name)) {
+                document.getElementById('alert_message-'+address_id).innerHTML = "Invalid street name"
+                return false;
+            }
+            if (!isValidVillage(Village)) {
+                document.getElementById('alert_message-'+address_id).innerHTML = "Invalid Village name"
+                return false;
+            }
+
+            if (!isValidpostal_code(postal_code)) {
+                document.getElementById('alert_message-'+address_id).innerHTML = "Invalid Postal Code"
+                return false;
+            }
+            if (!isValiddistrict(district)) {
+                document.getElementById('alert_message-'+address_id).innerHTML = "Invalid district."
+                return false;
+            }
+
+            if (!isValidstate(state)) {
+                document.getElementById('alert_message-'+address_id).innerHTML = "Invalid State"
+                return false;
+            }
+            if (!isValidcountry(country)) {
+                document.getElementById('alert_message-'+address_id).innerHTML = "Invalid Country"
+                return false;
+            }
+
+            console.log('hihihihiji')
+
+            return true;
+        }
+        function isValidname(RecipientName) {
+            //Basic username validation using a regular expression
+            var usernameregex = /^[A-Za-z]+\S*$/
+            return usernameregex.test(RecipientName);
+        }
+        function isValidstreet_name(street_name) {
+            //Basic username validation using a regular expression
+            var usernameregex = /^[A-Za-z]+\S*$/
+            return usernameregex.test(street_name);
+        }
+        function isValidVillage(Village) {
+            //Basic username validation using a regular expression
+            var usernameregex = /^[A-Za-z]+\S*$/
+            return usernameregex.test(Village);
+        }
+        function isValidpostal_code(postal_code) {
+            //Basic username validation using a regular expression
+            var usernameregex = /^[0-9]{6}\S*$/
+            return usernameregex.test(postal_code);
+        }
+
+        function isValiddistrict(district) {
+            //Basic username validation using a regular expression
+            var usernameregex = /^[A-Za-z]+\S*$/
+            return usernameregex.test(district);
+        }
+        function isValidstate(state) {
+            //Basic username validation using a regular expression
+            var usernameregex = /^[A-Za-z]+\S*$/
+            return usernameregex.test(state);
+        }
+        function isValidcountry(country) {
+            //Basic username validation using a regular expression
+            var usernameregex = /^[A-Za-z]+\S*$/
+            return usernameregex.test(country);
+        }
+
+
+        function isValidHouseno(house_no) {
+            // Basic phone number validation using a regular expression
+            var house_noregex = /^[0-9]\S*$/;
+            return house_noregex.test(house_no);
+        }
+
+
+    });
+
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"
+        integrity="sha384-d4rRJz0K98v4uMsOSBudtAxZBE9PBYAz/ZU2tRXFMe3G3NO1LuhF1NOquU9bN6tY"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+Wy6xqjiJTQUOhc3lu5LZu6CEwY7px8Hzfs"
+        crossorigin="anonymous"></script>
+
+
 
 {% endblock %}

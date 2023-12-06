@@ -1,0 +1,78 @@
+<!-- this page is for choosing the products based on the sub category -->
+
+{% extends 'layout/base.html' %}
+
+{% load static %}
+<!-- Start Header/Navigation -->
+{% block bootstraplink %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-center mt-5">
+	<h2> Shop By Brand</h2>
+</div>
+<div class="d-flex justify-content-evenly mt-5">
+	{% for categories in subcategory %}
+	<div>
+		<a href="{% url 'display_product' sub_category_id=categories.id %}"> 
+			<div>
+				<img src="/media/{{categories.sub_Category_image}}"    style=" height: 71%; width: 200px;">
+				<p>{{categories.sub_category_name}}</p>
+			</div>
+		</a>
+
+	</div>
+	{% endfor %}
+</div>
+<div class="d-flex justify-content-center">
+	<a href="">
+	<P>Know more about our categories </P>
+</a>
+</div>
+
+<div class="untree_co-section product-section before-footer-section">
+	<div class="container">
+		<div class="row">
+
+			<!-- Start Column 1 -->
+			{% for base_variants in base_variant %}
+			<div class="col-12 col-md-4 col-lg-3 mb-5 mt-5">
+				
+				<a class="product-item" href="{% url 'product_details' variant_id=base_variants.id %}">
+					<img src="/media/{{base_variants.image1}}" class="img-fluid product-thumbnail" width="60%" height="60%">
+					<h3 class="product-title">{{base_variants.product.product_name}}</h3>
+					<strong class="product-price">Rs.{{base_variants.selling_price}}</strong>
+					<div class="d-flex justify-content-center"> 
+						<span class="icon-cross">
+						
+							<img src="{% static 'images/icons8-love.png' %}" class="img-fluid">
+							
+							
+						</span>
+						<div class="d-flex justify-content-center mt-1 mb-5">
+							<a href="{% url 'add_cart' product_id=base_variants.id %}">
+							<button class="btn btn-sm button-addtocart">Add to Cart</button>
+							</a>
+						</div>
+						<div class="d-flex justify-content-center mt-1 mb-5">
+							<button class="btn btn-primary btn-sm">Buy Now</button>
+						</div>
+					
+					</div>
+					
+				</a>
+				
+			</div>
+			{% endfor %}
+			<!-- End Column 1 -->
+
+			<!-- Start Column 2 -->
+
+{% endblock %}
+
+{% block script %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

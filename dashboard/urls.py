@@ -6,7 +6,7 @@ urlpatterns = [
 
 
        path('',views.AdminLogin,name='admin_login'),
-       path('admin_Home/',views.AdminHome,name='admin_home'),
+       path('admin_home/',views.AdminHome,name='admin_home'),
        path('admin_logout/',views.AdminLogout,name='admin_logout'),
        path('users/',views.Users,name='users'),
        path('block/<int:user_id>/',views.BlockUser,name='block_user'),

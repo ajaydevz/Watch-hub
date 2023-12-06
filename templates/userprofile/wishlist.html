@@ -78,10 +78,10 @@
                                 <div class="col-lg-3">
                                     <div class="d-flex flex-column">
                                         <a href="{% url 'add_cart' product_id=wishlist_item.product_name.id %}">
-                                            <button class="btn btn-block" style="background-color: rgb(61, 86, 92); color: rgba(236, 209, 7, 0.96);">ADD TO CART</button>
+                                            <button class="btn btn-block" style="background-color:red;">ADD TO CART</button>
                                         </a>
                                         <a href="{% url 'remove_wishlist' product_id=wishlist_item.product_name.id %}">
-                                            <button class="btn btn-block mt-2" style="background-color: rgb(61, 86, 92); color: white;">REMOVE FROM WISHLIST</button>
+                                            <button class="btn btn-block mt-2" style="background-color: rgb(61, 86, 92); color: white; height:70px;">REMOVE</button>
                                         </a>
                                     </div>
                                 </div>

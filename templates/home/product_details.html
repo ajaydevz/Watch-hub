@@ -34,15 +34,15 @@
                 <h2 style="color:black; font-weight:bolder">{{ variant.product.product_name }}</h2>
                 <div class="d-flex align-items-center mt-3">
                     <h4><strong>Rs.</strong></h>
-                    <h4 class="mx-2 mb-3" id="price" style="color:red">{{ variant.selling_price }}</h4>
+                    <h4 class="" id="price" style="color:red">{{ variant.selling_price }}</h4>
                     {% if variant.selling_price < variant.actual_price %}
-                        <h6><del style="color:rgb(86, 85, 85)">{{ variant.actual_price }}</del></h6>
+                        <h6><del style="color:rgb(86, 85, 85); margin-left: 10px; " >{{ variant.actual_price }}</del></h6>
                     {% endif %}
                 </div>
                 {% if messages %}
-<div class="text-danger d-flex justify-content-center mt-2">
+<div class="text-danger d-flex justify-content-evenly mt-2">
 	{% for message in messages%}
-	<h3>{{message}}</h3>
+	<h6>{{message}}</h6>
 	{%endfor%}
 </div>
 {% endif %}
@@ -58,19 +58,15 @@
                 {% else %}
                     <!-- In Stock -->
                     <div class="d-flex mt-3">
-                        <h5 style="color: black" id="stock">
-                            {{ product.stock }}
-                        </h5>
-                        <h5 style="padding-left: 10px; padding-right: 6px; color:red;">
-                             Items In <span style="color: blue">Stock</span>
-                        </h5>
                     </div>
                     <!-- Buttons -->
                     <div class="mt-3">
                         <a href="{% url 'add_cart' product_id=variant.id %}">
                             <button class="btn btn-primary" class="btn btn-sm button-addtocart">Add to Cart</button>
                         </a>
-                        <button class="btn btn-primary">Buy Now</button>
+                        <a href="{% url 'add_to_wishlist' product_id=variant.id %}">
+                            <button class="btn" id="wishlist">Add to wishlist</button>
+                        </a>
                     </div>
                     <!-- Add your "Add to Cart" button or any other relevant content here -->
                 {% endif %}

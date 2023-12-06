@@ -1,20 +1,17 @@
 import pyotp
 from datetime import datetime, timedelta
-
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate,login,logout
 import pyotp
 from .models import CustomUser, CustomUserManager
 from django.contrib import messages
 from django.views.decorators.cache import cache_control
-from .utils import  send_otp
+# from .utils import  send_otp
 from django.core.mail import send_mail
 from django.conf import settings
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.hashers import make_password
 # Create your views here.
-import re
-
 # view function for user login
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 @never_cache

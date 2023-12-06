@@ -12,7 +12,6 @@ from categories.models import Category,Sub_Category
 # Create your views here.
 
 @cache_control(no_store=True, no_cache=True)
-
 def AdminLogin(request):
     if 'adminmail' in request.session :
         return redirect ('admin_home')
@@ -55,7 +54,7 @@ def AdminLogout(request):
         return redirect('admin_login')
     else:
         print('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk')
-        return redirect(request,'dashboard/admin_login.html')
+        return redirect(request,'dashboard/adminlogin.html')
 
  
    

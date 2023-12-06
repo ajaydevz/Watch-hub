@@ -7,6 +7,7 @@ from django.core.paginator import Paginator, EmptyPage
 from accounts.models import CustomUser
 from django.shortcuts import render, get_object_or_404
 from cart.models import Order, OrderItem
+from django.contrib.auth.hashers import make_password
 import os
 from io import BytesIO
 # Create your views here.
@@ -233,3 +234,34 @@ def OrderReturn(request,order_id):
     }
     return render(request,"userprofile/order_details.html",context)
 
+def ChangePassword(request):
+    print('its reaching here')
+    if 'useremail' in request.session:
+
+        try:
+            if request.method =='POST':
+                password = request.POST.get('password')
+                confirmPassword = request.POST.get('confirmPassword')
+                if password == confirmPassword:
+                        email = request.session['useremail']
+                        user = CustomUser.objects.get(email=email)
+                        user.set_password(password)
+
+                        user.save()
+                        print("-------------------------------------")
+                        print("-------------------------------------")
+                        print(user.password)
+                        print("-------------------------------------")
+                        print("-------------------------------------")
+                        messages.success(request, "Password changed successfully")
+                        print('Password changed successfully')
+                        return redirect('user_profile')
+        except:
+            print('The above code is not working')
+            messages.error(request, "Sorry, the password is not changed")
+            return redirect('user_profile')
+
+    # Handle the case when 'useremail' is not in the session
+    else:
+        messages.error(request, "User email not found in session")
+        return redirect('user_profile')
