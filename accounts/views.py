@@ -1,21 +1,28 @@
-import pyotp
-from datetime import datetime, timedelta
-from django.shortcuts import render,redirect
-from django.contrib.auth import authenticate,login,logout
-import pyotp
-from .models import CustomUser, CustomUserManager
-from django.contrib import messages
+from django.shortcuts import render,HttpResponse,redirect
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate,login
+from django.contrib.auth import logout
 from django.views.decorators.cache import cache_control
-# from .utils import  send_otp
-from django.core.mail import send_mail
+from django.contrib import messages
+from .models import CustomUser, CustomUserManager
+import pyotp
+import random 
+import json
+import string
+from .utils import send_otp
 from django.conf import settings
+from django.core.mail import send_mail
+from datetime import datetime, timedelta
+
+from datetime import datetime
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.hashers import make_password
-# Create your views here.
-# view function for user login
+
+
+
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 @never_cache
-def user_login(request):
+def UserLogin(request):
     # Check if a user or admin is already logged in
     if 'useremail' in request.session:
         return redirect('home')
@@ -60,29 +67,24 @@ def user_login(request):
     return render(request, 'accounts/login.html')
 
 
-# view function for user to signup   
-def user_signup(request):
-
+def UserSignup(request):
     if request.method == "POST":
-        print(request.POST.get('mobile'))
         username = request.POST.get('username')
         user_email = request.POST.get('email')
         phone = request.POST.get('phone_no')
-        print("phone_no")
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirmpassword')
         
        
+   
+    #checking the email is valid or not
         email_checking = CustomUser.objects.filter(email = user_email)
         if  email_checking.exists():
             messages.error(request,"email is already taken") 
             return redirect('user_signup')
-
+    
         
         elif password == confirm_password:
-            # otp=send_otp(request,user_email)
-            # print(otp,type(otp))
 
             my_User=CustomUser.objects.create_user(email=user_email,password=password,username=username,phone=phone)
             my_User.save()
@@ -95,29 +97,32 @@ def user_signup(request):
 
     return render(request,'accounts/signup.html')
 
-# view function for user to logout
-# @cache_control(no_cache=True,must_revalidate=True,no_store=True)
-# @never_cache
-def user_logout(request):
-    
+
+
+
+@cache_control(no_cache=True ,must_revalidate=True , no_store=True)
+def UserLogout(request):
     if 'useremail' in request.session:
-         
+        # Log out the user and flush the session.
         logout(request)
-        
+        # Debugging output
+        print("User has been logged out")
+
+        # Flush the session to ensure the user is logged out and clear any stored session data.
+        request.session.flush()
+
     return redirect('home')
 
-def send_otp(request):
+def SendOtp(request):
     if 'user-email' in request.session:
         email=request.session['user-email']
-        print(email)
-    print(',<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
     totp=pyotp.TOTP(pyotp.random_base32(), interval=60)
     otp=totp.now()
     request.session['otp_secret_key']= totp.secret
     valid_date=datetime.now() + timedelta(minutes=1)
     request.session['otp_valid_date']=str(valid_date)
     
-    subject = 'verify your email to continue to create an account at watchhub'
+    subject = 'verify your email to continue to create an account '
     message = otp
     from_email = settings.EMAIL_HOST_USER   
     recipient_list = [ email ] 
@@ -129,16 +134,14 @@ def send_otp(request):
     print(otp,type(otp))
     return redirect('user_otp')
 
-
-# view function for otp verification of the user after signing up 
-@never_cache
-def otp_verification(request):
+def OtpVerification(request):
     if 'useremail' in request.session:
-        return redirect('homepage')
+        return redirect('home')
     if request.method=='POST':
         otp=request.POST.get('otp')
         print(otp)
 
+        user_mail = None
         
         if 'user-email' in request.session:
             user_email=request.session['user-email']
@@ -156,28 +159,21 @@ def otp_verification(request):
 
                if actual_otp == int(otp) :
 
-                    # my_User=CustomUser.objects.create_user(email=user_email,password=password,username=username,phone=phone)
-                    # my_User.save()
+                    
                     user.is_verified=True
                     user.save()
                     
                     del request.session['user-email'] 
                     del request.session['otp_secret_key']
                     del request.session['otp_valid_date']
-
-
-                    messages.success(request, 'Account created successfully.')
+                    
 
                     return redirect('user_login')
                else:
                     messages.error(request,"entered otp is not correct!!!")
-                    # return redirect('')
                    
             else:
                 del request.session['user-email'] 
-                # del request.session['username']
-                # del request.session['phoneno']
-                # del request.session['password']
                 del request.session['otp_secret_key']
                 del request.session['otp_valid_date']
                 messages.error(request,"time expired for otp validation!!!!")
@@ -187,13 +183,120 @@ def otp_verification(request):
 
     return render(request,'accounts/verify.html')
 
-
-# view function for resending the otp  
-def otp_resend(request):
-    if 'otp_secret_key' in request.session:
-        del request.session['otp_secret_key']
-    if 'otp_valid_date' in request.session:
-        del request.session['otp_valid_date']
-
+#view function for resending the otp
+def OtpResend(request):
+     # deleting the session of existing one time password
+    del request.session['otp_secret_key']
+    del request.session['otp_valid_date']
     return redirect('send_otp')
 
+
+def ForgotPass(request):
+    if request.method=='POST':
+        email=request.POST.get('email')
+        print(email)
+        if CustomUser.objects.filter(email=email).exists():
+            # user=CustomUser.objects.get(email=email)
+            totp=pyotp.TOTP(pyotp.random_base32(), interval=60)
+            otp=totp.now()
+            request.session['otp_secret_key']= totp.secret
+            valid_date=datetime.now() + timedelta(minutes=1)
+            request.session['otp_valid_date']=str(valid_date)
+            
+            subject = 'verify your email to continue to create an account at Furnics.4U'
+            message = otp
+            from_email = settings.EMAIL_HOST_USER   
+            recipient_list = [ email ] 
+            send_mail(subject, message, from_email, recipient_list)  
+
+            user=CustomUser.objects.get(email=email)
+            user.otp=otp
+            user.save()
+            request.session['check_mail']=email
+            return redirect('forgot_pass_otp')
+        else:
+            messages.error(request,"There is no account linked with this email")
+            return redirect('forgot_pass')
+
+    return render(request,'accounts/forgotpass.html')
+
+# function for validating the otp 
+
+def ForgotPassOtp(request):
+
+    if request.method=='POST':
+        otp=request.POST.get('otp')
+        if 'check_mail' in request.session:
+            email=request.session['check_mail']
+        user=CustomUser.objects.get(email=email)
+        actual_otp=user.otp
+        otp_secret_key=request.session['otp_secret_key']
+        otp_valid_date=request.session['otp_valid_date']
+
+        if otp_secret_key and otp_valid_date is not None:
+            valid_until =datetime.fromisoformat(otp_valid_date)
+
+            if valid_until > datetime.now():
+               totp=pyotp.TOTP(otp_secret_key,interval=60)
+
+               if actual_otp==int(otp):
+                   
+                #    del request.session['check_mail']
+                   del request.session['otp_valid_date']
+                   del request.session['otp_secret_key']
+
+                   return redirect('reset_pass')
+               else:
+                   messages.error(request,"OTP you have enterd is incorrect")
+                   return redirect('forgot_pass_otp')
+            else:
+                messages.error(request,"Time limit exceeded")
+
+                del request.session['check_mail']
+                del request.session['otp_valid_date']
+                del request.session['otp_secret_key']
+                return redirect('forgot_pass_otp')
+
+
+    return render(request,'accounts/forgotpass_verify.html')
+
+
+
+# function for reseting the password
+
+def ResetPass(request):
+    if request.method=='POST':
+        otp=request.POST.get('otp')
+        if 'check_mail' in request.session:
+            email=request.session['check_mail']
+        user=CustomUser.objects.get(email=email)
+        actual_otp=user.otp
+        otp_secret_key=request.session['otp_secret_key']
+        otp_valid_date=request.session['otp_valid_date']
+
+        if otp_secret_key and otp_valid_date is not None:
+            valid_until =datetime.fromisoformat(otp_valid_date)
+
+            if valid_until > datetime.now():
+               totp=pyotp.TOTP(otp_secret_key,interval=60)
+
+               if actual_otp==int(otp):
+                   
+                #    del request.session['check_mail']
+                   del request.session['otp_valid_date']
+                   del request.session['otp_secret_key']
+
+                   return redirect('reset_pass')
+               else:
+                   messages.error(request,"OTP you have enterd is incorrect")
+                   return redirect('forgot_pass_otp')
+            else:
+                messages.error(request,"Time limit exceeded")
+
+                del request.session['check_mail']
+                del request.session['otp_valid_date']
+                del request.session['otp_secret_key']
+                return redirect('forgot_pass_otp')
+
+
+    return render(request,'accounts/forgotpass_verify.html')

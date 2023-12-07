@@ -42,6 +42,13 @@
                             </a>
                         </li>
                     </div>
+                    <div class="itemsdiv mx-2 my-2">
+                        <li class="nav-item">
+                            <a class="nav-link navitem" href="{% url 'change_password' %}">
+                                change password
+                            </a>
+                        </li>
+                    </div>
                     
                     
                 </ul>
@@ -68,7 +75,7 @@
                             {% csrf_token %}
                             <div class="mb-3">
                                 <label for="username" class="form-label">Username</label>
-                                <input type="text" class="form-control" id="username" name="username"
+                                <input type="text" class="form-control" id="username" name="username" pattern="[A-Za-z]+"
                                     value="{{users.username}}">
                             </div>
                             <div class="mb-3">
@@ -78,15 +85,11 @@
                             </div>
                             <div class="mb-3">
                                 <label for="phone" class="form-label">Phone Number</label>
-                                <input type="tel" class="form-control" id="phone" name="phone" value="{{users.phone}}"
-                                    readonly>
+                                <input type="tel" class="form-control" id="phone" name="phone"  pattern="[0-9]{10}" value="{{users.phone}}">
                             </div>
                             <div class="d-flex justify-content-center col-lg-6 mt-2">
                                 <button type="submit" class="btn btn-primary">
                                     submit
-                                </button>
-                                <button type="button" class="btn btn-success ml-3" data-toggle="modal" data-target="#passwordChangeModal" style="background-color: green; border: 0px;">
-                                    Change Password
                                 </button>
 
                             </div>
@@ -407,47 +410,7 @@ aria-hidden="true">
 </div>
 </div> {% endcomment %}
 
-<!-- change password  -->
 
-<!-- this modal is for selecting default address for user -->
-<div class="modal" id="myModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">Select the default address</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-
-            <!-- Modal body -->
-            <div class="modal-body">
-                <
-                <form method="POST" action="{% url 'default_address'%}">
-                    {% csrf_token %}
-                    <div class="mt-2">
-
-                        <select class="form-select" id="default_address_select" name="default_address">
-
-                            <option selected disabled>Select an address</option>
-
-                            {% for address in address%}
-                            <option value="{{address.id}}">
-                                {{address.recipient_name}}/{{address.house_no}}/{{address.street_name}}/{{address.village_name}}/{{address.postal_code}}/{{address.district}}/{{address.state}}/{{address.country}}
-                            </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-secondary">Submit</button>
-                    </div>
-                </form>
-            </div>
-            <!-- Modal footer -->
-        </div>
-    </div>
-</div>
 
 {% endblock %}
 {% block script %}

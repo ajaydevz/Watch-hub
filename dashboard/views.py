@@ -330,7 +330,7 @@ def OrderStatus(request):
             # Print order details for debugging
             print(order.total_price)
             print("order_status")
-
+            
             # Redirect to the previous page
             return redirect(url)
          

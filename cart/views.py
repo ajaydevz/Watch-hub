@@ -394,35 +394,24 @@ def checkout_page(request):
     #     return redirect('user_login')
 
 def address_checkout(request):
-    
     if 'useremail' in request.session:
         email=request.session['useremail']
-        # getting the user associated with this username
         user = CustomUser.objects.get(email=email)
-        try:
-            address = Address.objects.filter(user_id=user.id,is_default=False)
-        except:
-            address=None
-        cart = Cart.objects.get(user=user)
-        cart_items = CartItem.objects.filter(cart=cart,is_active=True).order_by('id')
-        for cartitem in cart_items:
-            if cartitem.quantity>cartitem.product.stock:
-                messages.error(request,'one of the product is out of stock ')
-                return redirect('cart_page')
+        address = Address.objects.filter(user_id=user.id,is_default=False)
+
         for i in address:
             print(i.recipient_name)
         try:
             default_address =Address.objects.get(is_default=True)  
         except:
-            default_address=None
+            default_address = None
         context={
             'address':address,
-            'default_address': default_address
+            'default_address':default_address,
         }
-        print('checking recipient name is working or not')
         return render(request,'cart/address_selection.html',context)
-    
-def add_address_checkout(request):
+
+def add_address_checkout(request,user_id):
 
     if request.method=='POST':
         if request.user:
@@ -445,37 +434,21 @@ def add_address_checkout(request):
             messages.error(request,'An address with this recipient name already exists.')
             return redirect('address_checkout')
 
-        exists = Address.objects.filter(user_id=customer).exists()
-        print(exists)
-        if exists == False:
+        address = Address(    
+            user_id = customer,
+            house_no = house_no,
+            recipient_name = recipient_name,
+            street_name = street_name,
+            village_name = village_name,
+            postal_code = postal_code,
+            district = district,
+            state = state,
+            country = country
+            )
+        address_exists = Address.objects.filter(user_id=customer).exists()
         
-            address=Address(    
-                            user_id = customer,
-                            house_no = house_no,
-                            recipient_name = recipient_name,
-                            street_name = street_name,
-                            village_name =  village_name,
-                            postal_code = postal_code,
-                            district =  district,
-                            state =  state,
-                            country =  country,
-                            is_default = True
-                        )
-
-        else:
-             address=Address(
-                            user_id = customer,
-                            house_no = house_no,
-                            recipient_name = recipient_name,
-                            street_name = street_name,
-                            village_name =  village_name,
-                            postal_code = postal_code,
-                            district =  district,
-                            state =  state,
-                            country =  country,
-                            
-                        )
-
+        if address_exists is None:
+            address.is_default=True
 
         address.save()
         return redirect('address_checkout')
@@ -534,6 +507,29 @@ def place_order(request):
         cart_items.delete()  # Remove cart items after placing the order
         return redirect('order_success')
         # return JsonResponse({'status': 'Your order has been placed successfully'})
+
+
+# views.py
+
+def cancel_order(request, order_id):
+    order = Order.objects.get(id=order_id)
+    order.status = 'Cancelled'
+    order.save()
+
+    # Now, you can handle the product quantity update
+    update_product_quantity(order)
+
+    # ... rest of the code
+
+def update_product_quantity(order):
+    # Retrieve the order items and increment the product quantities in stock
+    order_items = OrderItem.objects.filter(order=order)
+    for order_item in order_items:
+        product_variant = order_item.variant
+        product_variant.stock += order_item.quantity
+        product_variant.save()
+
+
 
 
 def OrderSuccess(request):

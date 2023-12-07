@@ -1,57 +1,37 @@
-
-{% load static %}
-
+{% extends "layout/base.html" %}
 {% block content %}
-
-  <div class="container py-5 h-100">
-    <div class="row d-flex justify-content-center align-items-center h-100">
-      <div class="col col-xl-10">
-        <div class="card" style="border-radius: 1rem;">
-          <div class="row g-0">
-            <div class="col-md-6 col-lg-5 d-none d-md-block">
-              <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-              <img src="{% static "user\img\logo\login1.jpg" %}"
-                alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
-            </div>
-            <div class="col-md-6 col-lg-7 d-flex align-items-center">
-              <div class="card-body p-4 p-lg-5 text-black">
-
-                <div class="login-form">
-                  {% if messages %}
-                  <div class="alert alert-danger text-center mt-2" role="alert">
-                      {% for message in messages %}
-                          {{ message }}
-                      {% endfor %}
-                  </div>
-                  {% endif %}
+<div class="container">
+  <div class="row">
+      <div class="col-md-6 mx-auto mt-5">
+          <div class="card border-0 shadow-lg">
+              <div class="card-body p-5">
                   <h2 class="text-center mb-4">Login</h2>
                   <form method="POST">
                       {% csrf_token %}
+                      {% if messages %}
+                          <div class="alert alert-danger text-center" role="alert">
+                              {% for message in messages %}
+                                  {{ message }}
+                              {% endfor %}
+                          </div>
+                      {% endif %}
                       <div class="form-group">
-                          <label for="email"></label>
                           <input type="email" class="form-control" id="email" placeholder="Email" name="email" required>
                       </div>
                       <div class="form-group">
-                          <label for="password"></label>
-                          <input type="password" class="form-control" placeholder="password" id="password" name="password" required>
-                          <a href="#" class="mt-4 text text-success">Forgot password?</a>
-    
+                          <input type="password" class="form-control" placeholder="Password" id="password" name="password" required>
+                          <a href="{% url 'forgot_pass' %}" class="mt-3 d-block text-success">Forgot password?</a>
                       </div>
-                      <div class="d-flex justify-content-center">
-                          <button type="submit" class="btn btn-primary  login-button">Login</button>
+                      <div class="text-center">
+                          <button type="submit" class="btn btn-primary btn-block">Login</button>
                       </div>
-                      
                   </form>
-                  <div class="d-flex justify-content-center">
-                      <p class="mt-4 text-success">Not registered? <a href="{% url 'user_signup'%}" class="text text-primary">Create an account</a></p>
+                  <div class="text-center mt-3">
+                      <p class="text-success">Not registered? <a href="{% url 'user_signup' %}" class="text-primary">Create an account</a></p>
                   </div>
-                </div>
               </div>
-            </div>
           </div>
-        </div>
       </div>
-    </div>
   </div>
-
+</div>
 {% endblock %}

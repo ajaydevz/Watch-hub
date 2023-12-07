@@ -16,6 +16,9 @@ urlpatterns = [
     path('user-orders/', views.MyOrders, name='my_orders'),
     path('order-details/<int:order_id>/', views.OrderDetails, name='order_details'),
     path("order-cancellation/<int:order_id>/", views.OrderCancellation, name="order_cancellation"),
+    
+    path('change-password/', views.ChangePassword, name="change_password"),
+
+
     path('',views.UserProfile,name="user_profile"),
-    path('change-password',views.ChangePassword , name='change_password')
 ]

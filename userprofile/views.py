@@ -10,6 +10,8 @@ from cart.models import Order, OrderItem
 from django.contrib.auth.hashers import make_password
 import os
 from io import BytesIO
+from django.contrib.auth.decorators import login_required
+from .models import CustomUser
 # Create your views here.
 
 def UserProfile(request):
@@ -127,6 +129,7 @@ def DeleteAddress(request,address_id):
     return redirect('user_profile')
 
 
+
 def DefaultAddress(request):
     if request.method =='POST':
         try:
@@ -153,6 +156,8 @@ def DefaultAddress(request):
 
     return redirect('user_profile')
 
+
+@login_required(login_url='/login/')
 def MyOrders(request):
     if request.user:
         order_items = None
@@ -184,6 +189,7 @@ def MyOrders(request):
     
 
 
+@login_required(login_url='/login/')
 def OrderDetails(request,order_id):
     
     order=Order.objects.get(id=order_id)
@@ -195,6 +201,8 @@ def OrderDetails(request,order_id):
         "status":status
     }
     return render(request,"userprofile/order_details.html",context)
+
+
 
 
 
@@ -218,6 +226,7 @@ def OrderCancellation(request, order_id):
 
 
 
+
     
 def OrderReturn(request,order_id):
 
@@ -234,34 +243,30 @@ def OrderReturn(request,order_id):
     }
     return render(request,"userprofile/order_details.html",context)
 
+
+
+@login_required(login_url='/login/')
 def ChangePassword(request):
-    print('its reaching here')
-    if 'useremail' in request.session:
+    if request.method == 'POST':
+        current_password = request.POST['current_password']
+        new_password = request.POST['new_password']
+        confirm_password = request.POST['confirm_password']
 
-        try:
-            if request.method =='POST':
-                password = request.POST.get('password')
-                confirmPassword = request.POST.get('confirmPassword')
-                if password == confirmPassword:
-                        email = request.session['useremail']
-                        user = CustomUser.objects.get(email=email)
-                        user.set_password(password)
 
-                        user.save()
-                        print("-------------------------------------")
-                        print("-------------------------------------")
-                        print(user.password)
-                        print("-------------------------------------")
-                        print("-------------------------------------")
-                        messages.success(request, "Password changed successfully")
-                        print('Password changed successfully')
-                        return redirect('user_profile')
-        except:
-            print('The above code is not working')
-            messages.error(request, "Sorry, the password is not changed")
-            return redirect('user_profile')
+        user  = CustomUser.objects.get(username_exact = request.users.username)
 
-    # Handle the case when 'useremail' is not in the session
+        if new_password == confirm_password:
+            success = user.check_password(current_password)
+            if success:
+                user.set_password(new_password)
+                user.save()
+                messages.success(request,'password updated succesfully')
+                return redirect('change_password')
+            else:
+                messages.error(request,'password enter valid current password ')
+                return redirect('change_password')
     else:
-        messages.error(request, "User email not found in session")
-        return redirect('user_profile')
+        messages.error(request,'password does not match')
+        return redirect('change_password')
+    
+    return render(request,"userprofile/user_profile.html")

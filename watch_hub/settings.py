@@ -157,3 +157,4 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "codewithdev3368@gmail.com"
 EMAIL_HOST_PASSWORD = "yuax kwvp gvqx czqf"
+ 
