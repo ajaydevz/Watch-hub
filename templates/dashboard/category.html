@@ -30,18 +30,18 @@
                         <!-- Category Name Field -->
                         <div class="form-group">
                             <label for="categoryName">Category Name:</label>
-                            <input type="text" class="form-control" id="categoryName" name="categoryName" required>
+                            <input type="text" class="form-control" id="categoryName" name="categoryName" pattern="^[A-Za-z]+(?: [A-Za-z]+)*$" required>
                         </div>
 
                         <!-- Category Description Field -->
                         <div class="form-group">
                             <label for="categoryDescription">Category Description:</label>
-                            <textarea class="form-control" id="categoryDescription" name="categoryDescription" rows="4"
+                            <textarea class="form-control" id="categoryDescription" name="categoryDescription" oninput="validateDescription(this)" rows="4"
                                 required></textarea>
                         </div>
                         <div class="form-group">
                             <label for="cat_img">Category Image:</label>
-                            <input type="file" class="form-control-file" id="category_img" name="category_img">
+                            <input type="file" class="form-control-file" id="category_img" name="category_img" accept="image/*">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -73,18 +73,18 @@
                         <!-- Category Name Field -->
                         <div class="form-group">
                             <label for="categoryName">Category Name:</label>
-                            <input type="text" class="form-control" id="categoryName" name="categoryName"
+                            <input type="text" class="form-control" id="categoryName" name="categoryName" pattern="^[A-Za-z]+(?: [A-Za-z]+)*$"
                                 value="{{category.category_name}}" required>
                         </div>
                         <!-- Category Description Field -->
                         <div class="form-group">
                             <label for="categoryDescription">Category Description:</label>
-                            <textarea class="form-control" id="categoryDescription" name="categoryDescription" rows="4"
+                            <textarea class="form-control" id="categoryDescription" name="categoryDescription" rows="4" oninput="validateDescription(this)"
                                 required>{{category.description}}</textarea>
                         </div>
                         <div class="form-group">
                             <label for="cat_img">Category Image:</label>
-                            <input type="file" class="form-control-file" id="category_img" name="category_img">
+                            <input type="file" class="form-control-file" id="category_img" name="category_img" accept="image/*">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -150,6 +150,36 @@
     $(document).ready(function () {
         $('#example').DataTable();
     });
+
+    
+    function validateDescription(textarea) {
+        const pattern = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
+        const isValid = pattern.test(textarea.value);
+        
+        if (!isValid) {
+            textarea.setCustomValidity("Only letters and spaces are allowed.");
+        } else {
+            textarea.setCustomValidity("");
+        }
+    }
+   
+    function validateDescription(textarea) {
+        const pattern = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
+        const isValid = pattern.test(textarea.value);
+
+        if (!isValid) {
+            textarea.setCustomValidity("Only letters and spaces are allowed.");
+        } else {
+            textarea.setCustomValidity("");
+        }
+    }
+   
+
+
+
+
+
+
 </script>
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -158,6 +188,9 @@
 <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"crossorigin="anonymous"></script>
+
+
+
 
 {% endblock %}
 

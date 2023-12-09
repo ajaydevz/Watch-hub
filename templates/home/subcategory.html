@@ -13,10 +13,10 @@
 <div class="d-flex justify-content-center mt-5">
 	<h2> Shop By Brand</h2>
 </div>
-<div class="d-flex justify-content-evenly mt-5">
+<div class="d-flex justify-content-center mt-5">
 	{% for categories in subcategory %}
-	<div>
-		<a href="{% url 'display_product' sub_category_id=categories.id %}"> 
+	<div style=" margin-left: 20px; margin-right: 20px;">
+		{% comment %} <a href="{% url 'display_product' sub_category_id=categories.id %}">  {% endcomment %}
 			<div>
 				<img src="/media/{{categories.sub_Category_image}}"    style=" height: 71%; width: 200px;">
 				<p>{{categories.sub_category_name}}</p>

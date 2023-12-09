@@ -1,92 +1,219 @@
-{% extends "layout/base.html" %}
+{% extends 'layout/base.html' %}
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'user\custom\css\accounts\signup.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="d-flex justify-content-center">
-    <section class="vh-100">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-sm-12 text-black">
-            <div class="px-5 ms-xl-4">
-              <i class="fas fa-2x me-3 pt-5 mt-xl-4" style="color: #709085;"></i>
-              <span class="h1 fw-bold mb-0"></span>
-            </div>
-            <div class="d-flex align-items-center h-custom-2 px-5 ms-xl-4 mt-5 pt-5 pt-xl-0 mt-xl-n5">
-              <form method='POST' style="width: 23rem;">
 
-            {% csrf_token %}
-					  {% if messages %}
-					    <div class="text-danger d-flex justify-content-center mt-2">
+
+<div class="container d-flex justify-content-center">
+	<div class="row signup-container ">
+			<div class="signup-form">
+				<h2 class="text-center mb-4 text-danager">Signup to Watchhub</h2>
+			
+				<form method="POST" id="registrationForm" >
+					{% csrf_token %}
+					{% if messages %}
+					<div class="text-danger d-flex justify-content-center mt-2" id="message">
 						{% for message in messages%}
-						  {{message}}
-						  {%endfor%}
-					</div>
-					{% endif %}
-	
-                <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Register</h3>
-               
-                
-                <!-- Name Field -->
-                <div class="form-group">
-                  <label for="username"></label>
-                  <input type="text" class="form-control"  
-                  title="Please use only alphabets, numerals, and spaces. If entering a second name, separate it with a space."          
-                  id="username" name="username" placeholder="What's your name?"
-							    required>
-                </div>
-                
-                <!-- Email Field -->
-                <div class="form-group">
-                  <label for="email"></label>
-                  <input type="email" class="form-control"  pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" 
-                  title="Please enter a valid email address."
-                   id="email" name="email" placeholder="what's your email?" required>
-                </div>
-                
-                <!-- Mobile No Field -->
-                <div class="form-group">
-                  <label for="number"></label>
-                  <input type="tel" class="form-control" pattern="^(?:(\+91)?[7896]\d{9})?$" title="Please enter a valid mobile number." id="phone_no" name="phone_no" placeholder="what's your Phone number?"
-                    required>
-                </div>
-                
-                <!-- Password Field -->
-                <div class="form-group">
-                  <label for="password"></label>
-        
-                  <input type="password" class="form-control" pattern="^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" 
-                   title="Please enter a valid password with at least 8 characters, including numbers, alphabets, and special characters." 
-                   id="password" name="password" placeholder="Password" required>
-        
-                </div>
+						{{message}}
+						{%endfor%}
+						
 
-                 <!-- Password Field -->
-                 <div class="form-group">
-                  <label for="password"></label>
-        
-                  <input type="password" class="form-control" pattern="^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" 
-                  title=" Confirm password and password do not match " 
-                  id="confirmpassword" name="confirmpassword"
-                    placeholder="confirm" required>
-        
-                </div>
-    
-    
-              </div>
-              <div class="d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary btn-block signup_button mt-3">Sign up</button>
-              </div>
-      
-    
-                <p>Already have an account? <a href="{% url "user_login" %}" class="link-info">Login here</a></p>
-    
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-  
+					</div>
+
+					{% endif %}
+					<div class="text-danger d-flex justify-content-center mt-2">
+						
+						<p class="text-danger alert_tag" id="alert_tag"></p>
+
+					</div>
+					
+	
+					<div class="form-group">
+						<label for="username"></label>
+						<input type="text" class="form-control" id="username" name="username" placeholder="Enter a user name for you?"
+							required autocomplete="new-password">
+					</div>
+					<div class="form-group">
+						<label for="email"></label>
+						<input type="email" class="form-control" id="email" name="email" placeholder="what's your email?" required autocomplete="new-password">
+					</div>
+					<div class="form-group">
+						<label for="number"></label>
+						<input type="tel" class="form-control" id="phone" name="phone_no" placeholder="what's your Phone number?"
+							required autocomplete="new-password">
+					</div>
+					<div class="form-group">
+						<label for="password"></label>
+	
+						<input type="password" class="form-control" id="password" name="password" placeholder="Password"
+							required autocomplete="new-password">
+						<input type="checkbox" id="showPassword" onclick="togglePasswordVisibility()">
+						<label for="showPassword">Show Password</label>
+					</div>
+					<div class="form-group">
+						<label for="password"></label>
+	
+						<input type="password" class="form-control" id="confirmpassword" name="confirmpassword"
+							placeholder="confirm" autocomplete="new-password">
+						<input type="checkbox" id="showConfirmPassword" onclick="toggleConfirmPasswordVisibility()">
+						<label for="showConfirmPassword">Show Password</label>
+	
+					</div>
+					<div class="d-flex justify-content-center">
+						<button id="test" type="submit" class="btn btn-primary btn-block signup_button mt-3">Verify otp</button>
+					</div>
+	
+				</form>
+				<div class="d-flex justify-content-center">	
+					<p class="mt-4 ">Already an user? <a href="{% url 'user_login'%}">Click here to login</a></p>
+				</div>
+				
+			</div>
+
+		
+	</div>
 </div>
+
+
+{% endblock %}
+
+
+<!-- block is for validating the data user submiting and checking if that meets the standard we are expecting -->
+{% block script %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    setTimeout(function(){
+        $('#message').fadeOut('slow')
+    },4000)
+</script>
+
+<script>
+		$(document).ready(function () {
+			document.getElementById('alert_tag');
+
+			$("#registrationForm").submit(function (event) {
+				// Prevent the form from submitting
+				event.preventDefault();
+		
+				// Perform your validation here
+				if (validateForm()) {
+					// If the form is valid, you can submit it
+					console.log("Form is valid. Submitting...");
+
+
+					$(this).unbind('submit').submit();
+				} else {
+					console.log("Form is not valid. Please check your inputs.");
+				}
+			});
+		
+			function validateForm() {
+				// Implement your validation logic here
+				var username = $("#username").val();
+				var email = $("#email").val();
+				var phone = $("#phone").val();
+				var password = $("#password").val();
+				var confirmPassword = $("#confirmpassword").val(); // Match the ID here
+		
+				// Example validation - You should customize this based on your requirements
+				if (username.length < 5) {
+					console.log("username");
+					document.getElementById('alert_tag').innerHTML="Username must be at least 5 characters long."
+					//alert("Username must be at least 3 characters long.");
+					return false;
+				}
+				if (!isValidUsername(username)) {
+					document.getElementById('alert_tag').innerHTML="Invalid username"
+					return false;
+				}
+
+				if (!isValidEmail(email)) {
+					document.getElementById('alert_tag').innerHTML="Invalid email address"
+					return false;
+				}
+		
+				if (password.length < 8){
+					document.getElementById('alert_tag').innerHTML="Password must be at least 8 characters long."
+
+				}
+		
+				if (!isValidPhoneNumber(phone)) {
+					document.getElementById('alert_tag').innerHTML="Invalid phone number. Please enter a 10-digit phone number"
+					return false;
+				}
+
+				if (!isValidPasswords(password)) {
+					document.getElementById('alert_tag').innerHTML="Invalid password"
+					return false;
+				}
+		
+				if (password !== confirmPassword) {
+					document.getElementById('alert_tag').innerHTML="Passwords do not match"
+					return false;
+				}
+
+
+				console.log('hehehehehehhe')
+		
+				return true;
+			}
+			function isValidUsername(username){
+				//Basic username validation using a regular expression
+				var usernameregex=/^\S*$/
+				return usernameregex.test(username);
+			}
+		
+			function isValidEmail(email) {
+				// Basic email validation using a regular expression
+				var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+				return emailRegex.test(email);
+			}
+		
+			function isValidPhoneNumber(phone) {
+				// Basic phone number validation using a regular expression
+				var phoneRegex = /^[0-9]{10}\S*$/;
+				return phoneRegex.test(phone);
+			}
+			function isValidPasswords(password) {
+				console.log("password validation")
+				// Basic phone number validation using a regular expression
+				var passwordregex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+				return passwordregex.test(password);
+			}
+		
+		});
+		
+</script>
+<script>
+    function togglePasswordVisibility() {
+        var passwordInput = document.getElementById("password");
+        var showPasswordCheckbox = document.getElementById("showPassword");
+
+        if (showPasswordCheckbox.checked) {
+            passwordInput.type = "text";
+        } else {
+            passwordInput.type = "password";
+        }
+    }
+</script>
+<script>
+    function toggleConfirmPasswordVisibility() {
+        var passwordInput = document.getElementById("confirmpassword");
+        var showPasswordCheckbox = document.getElementById("showConfirmPassword");
+
+        if (showPasswordCheckbox.checked) {
+            passwordInput.type = "text";
+        } else {
+            passwordInput.type = "password";
+        }
+    }
+</script>
+
 
 
 {% endblock %}

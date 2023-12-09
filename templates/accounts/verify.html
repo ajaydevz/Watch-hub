@@ -15,7 +15,7 @@
             <div class="col-md-12 text-center mt-5">
                 <h1>OTP Verification</h1>
                 <p>Enter the 6-digit OTP sent to your email .</p>
-                Time remaining: <p id="timer" class="text-danger">one minute</p>
+                {% comment %} Time remaining: <p id="timer" class="text-danger">one minute</p> {% endcomment %}
                 {% if messages %}
                 <div class="text-danger d-flex justify-content-center mt-2">
                     {% for message in messages%}

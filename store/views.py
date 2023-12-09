@@ -5,6 +5,9 @@ from store.models import Product,Variation
 from categories.models import Category,Sub_Category
 from django.contrib import messages
 # Create your views here.
+
+
+
 def ProductView(request):
     if 'adminmail' in request.session:
         products = Product.objects.all()

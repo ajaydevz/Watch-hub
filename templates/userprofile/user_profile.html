@@ -44,11 +44,11 @@
                     </div>
                     <div class="itemsdiv mx-2 my-2">
                         <li class="nav-item">
-                            <a class="nav-link navitem" href="{% url 'change_password' %}">
+                            <a class="nav-link navitem" href="{% url 'change_password' user_id=user.id %}">
                                 change password
                             </a>
                         </li>
-                    </div>
+                    </div> 
                     
                     
                 </ul>

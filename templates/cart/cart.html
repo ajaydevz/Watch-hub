@@ -58,7 +58,7 @@
 						<div class="input-group-prepend">
 							<button class="btn btn-outline-black decrease" id="decrease" data-id="{{ cart_item.product.id }}" type="button">&minus;</button>
 						</div>
-						<input type="text" class="form-control text-center quantity-amount" value="{{ cart_item.quantity }}" placeholder="" id="quantity-{{ cart_item.product.id }}" aria-label="Example text with button addon" aria-describedby="button-addon1">
+						<input  readonly   type="text" class="form-control text-center quantity-amount" value="{{ cart_item.quantity }}" placeholder="" id="quantity-{{ cart_item.product.id }}" aria-label="Example text with button addon" aria-describedby="button-addon1">
 						<div class="input-group-append">
 							<button class="btn btn-outline-black increase" data-id="{{ cart_item.product.id }}" id="increase" type="button">&plus;</button>
 						</div>

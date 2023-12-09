@@ -89,7 +89,7 @@
 
                         <div class="form-group">
                             <label for="category">Category:</label>
-                            <select class="form-control" name="category_name" required>
+                            <select class="form-control" name="category_name"  required>
                                 {% for category in categories %}
                                 <option value="{{category.id}}">{{category.category_name}}</option>
                                 {% endfor %}
@@ -98,17 +98,17 @@
                         <!-- Category Name Field -->
                         <div class="form-group">
                             <label for="categoryName">SubCategory Name:</label>
-                            <input type="text" class="form-control" id="categoryName" name="categoryName" required>
+                            <input type="text" class="form-control" id="categoryName" name="categoryName" pattern="^[A-Za-z]+(?: [A-Za-z]+)*$" required>
                         </div>
 
                         <!-- Category Description Field -->
                         <div class="form-group">
                             <label for="categoryDescription">SubCategory Description:</label>
-                            <textarea class="form-control" id="categoryDescription" name="categoryDescription" rows="4"
+                            <textarea class="form-control" id="categoryDescription" name="categoryDescription" oninput="validateDescription(this)" rows="4"
                                 required></textarea>
                             <div class="form-group">
                                 <label for="cat_img">SubCategory Image:</label>
-                                <input type="file" class="form-control-file" id="cat_img" name="cat_img">
+                                <input type="file" class="form-control-file" id="cat_img" name="cat_img" accept="image/*">
                             </div>
                         </div>
 
@@ -151,20 +151,20 @@
                         <!-- subCategory Name Field -->
                         <div class="form-group">
                             <label for="categoryName">SubCategory Name:</label>
-                            <input type="text" class="form-control" id="categoryName" name="categoryName" value="{{subcategory.sub_category_name}}" required>
+                            <input type="text" class="form-control" id="categoryName" name="categoryName" pattern="^[A-Za-z]+(?: [A-Za-z]+)*$" value="{{subcategory.sub_category_name}}" required>
                         </div>
 
                         <!--sub Category Description Field -->
                         <div class="form-group">
                             <label for="categoryDescription">SubCategory Description:</label>
-                            <textarea class="form-control" id="categoryDescription" name="categoryDescription" rows="4"
+                            <textarea class="form-control" id="categoryDescription" name="categoryDescription" oninput="validateDescription(this)" rows="4"
                                 required>{{subcategory.sub_category_description}}</textarea>
                             
                         </div>
                         <!--sub Category Image Field -->
                         <div class="form-group">
                             <label for="cat_img">SubCategory Image:</label>
-                            <input type="file" class="form-control-file" id="cat_img" name="cat_img">
+                            <input type="file" class="form-control-file" id="cat_img" name="cat_img" accept="image/*"  >
                         </div>
 
                     </div>
@@ -197,7 +197,56 @@
 <script>
     $(document).ready(function () {
         $('#example').DataTable();
+
     });
+
+
+    // Add validation script for Add SubCategory modal
+    $(document).ready(function () {
+        $('#submitCategory').on('click', function (event) {
+            var nameInput = $('#categoryName').val();
+            var descriptionInput = $('#categoryDescription').val();
+            var imageInput = $('#cat_img').val();
+
+            // Validate name and description
+            if (!/^[a-zA-Z]+$/.test(nameInput) || !/^[a-zA-Z]+$/.test(descriptionInput)) {
+                alert('Name and description should only contain small and capital letters.');
+                event.preventDefault();
+                return;
+            }
+
+            // Validate image file type
+           
+        });
+    });
+
+    function validateDescription(textarea) {
+        const pattern = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
+        const isValid = pattern.test(textarea.value);
+        
+        if (!isValid) {
+            textarea.setCustomValidity("Only letters and spaces are allowed.");
+        } else {
+            textarea.setCustomValidity("");
+        }
+    }
+   
+    function validateDescription(textarea) {
+        const pattern = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
+        const isValid = pattern.test(textarea.value);
+
+        if (!isValid) {
+            textarea.setCustomValidity("Only letters and spaces are allowed.");
+        } else {
+            textarea.setCustomValidity("");
+        }
+    }
+    
+    
+
+    
+    
+    
 </script>
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>

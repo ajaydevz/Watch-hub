@@ -108,7 +108,7 @@
                                 <!-- Product Name Field -->
                                 <div class="form-group col-md-6">
                                     <label for="categoryName">Product Name:</label>
-                                    <input type="text" class="form-control" id="product_name" name="product_name"
+                                    <input type="text" class="form-control" id="product_name" name="product_name" pattern="^[A-Za-z]+(?: [A-Za-z]+)*$"
                                         value="{{product.product_name}}" required>
                                 </div>
                             </div>
@@ -116,7 +116,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="productDescription">Description:</label>
-                                    <textarea class="form-control" id="productDescription" name="product_description"
+                                    <textarea class="form-control" id="productDescription" name="product_description" oninput="validateDescription(this)"
                                         rows="4" required>{{product.description}}</textarea>
                                 </div>
                             </div>
@@ -140,7 +140,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Add Product</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -160,14 +160,14 @@
                             <!-- Product Name Field -->
                             <div class="form-group col-md-6">
                                 <label for="categoryName">Product Name:</label>
-                                <input type="text" class="form-control" id="product_name" name="product_name"
+                                <input type="text" class="form-control" id="product_name" name="product_name" pattern="^[A-Za-z]+(?: [A-Za-z]+)*$" 
                                     value="{{category.category_name}}" required>
                             </div>
                         </div>
                         <!-- Product Description Field -->
                         <div class="form-group">
                             <label for="productDescription"> Description:</label>
-                            <textarea class="form-control" id="productDescription" name="product_description" rows="4"
+                            <textarea class="form-control" id="productDescription" name="product_description" oninput="validateDescription(this)" rows="4"
                                 required></textarea>
                         </div>
                         <!-- Button to Add Variants -->
@@ -187,6 +187,31 @@
 {% endblock %}
 
 {% block script %}
+
+<script>
+    function validateDescription(textarea) {
+        const pattern = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
+        const isValid = pattern.test(textarea.value);
+        
+        if (!isValid) {
+            textarea.setCustomValidity("Only letters and spaces are allowed.");
+        } else {
+            textarea.setCustomValidity("");
+        }
+    }
+   
+    function validateDescription(textarea) {
+        const pattern = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
+        const isValid = pattern.test(textarea.value);
+
+        if (!isValid) {
+            textarea.setCustomValidity("Only letters and spaces are allowed.");
+        } else {
+            textarea.setCustomValidity("");
+        }
+    }
+</script>
+
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
     integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
     crossorigin="anonymous"></script>

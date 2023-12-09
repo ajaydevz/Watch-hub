@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render
 from django.contrib import messages
+from django.contrib.auth import authenticate,login
 from django.http import Http404, HttpResponse, JsonResponse
 from accounts.models import CustomUser
 from .models import Address
@@ -10,8 +11,10 @@ from cart.models import Order, OrderItem
 from django.contrib.auth.hashers import make_password
 import os
 from io import BytesIO
+from django.views.decorators.cache import cache_control
 from django.contrib.auth.decorators import login_required
 from .models import CustomUser
+from store.models import *
 # Create your views here.
 
 def UserProfile(request):
@@ -208,6 +211,23 @@ def OrderDetails(request,order_id):
 
 def OrderCancellation(request, order_id):
     order = get_object_or_404(Order, id=order_id)
+
+    orderItems = OrderItem.objects.filter(order = order)
+
+
+    print("This all are my order items for a undestandngs-----------------",orderItems)
+    print("This all are my order items for a undestandngs-----------------",orderItems)
+
+    for i in orderItems:
+        print(i)
+        print("This is my Stock as per the varient--------",i.variant.stock)
+        print("This is my Stock as per the varient--------",i.variant.stock)
+        i.variant.stock +=  i.quantity
+        varient = Variation.objects.get(id = i.variant.id)
+        varient.stock +=  i.quantity
+        varient.save()
+        print("This is my stock after the cancel request ",i.variant.stock)
+    print(order)
     
     # Update order status to 'Cancelled'
     order.status = 'Cancelled'
@@ -227,7 +247,6 @@ def OrderCancellation(request, order_id):
 
 
 
-    
 def OrderReturn(request,order_id):
 
     order=Order.objects.get(id=order_id)
@@ -245,28 +264,34 @@ def OrderReturn(request,order_id):
 
 
 
-@login_required(login_url='/login/')
-def ChangePassword(request):
-    if request.method == 'POST':
-        current_password = request.POST['current_password']
-        new_password = request.POST['new_password']
-        confirm_password = request.POST['confirm_password']
+def change_password(request, user_id):
+    user = CustomUser.objects.get(id=user_id)
+    print("heyyyyy")
+    if request.method == "POST":
+        password = request.POST.get("password")
+        confirm_password = request.POST.get("c_password")
+        user_email =  request.session['useremail']
+
+        if password == confirm_password:
+            user.set_password(password)
+            print("=================================")
+            user.save()
+            
+            print("=================================")
+            user = authenticate(request, email=user.email, password=password)
+            print("=================================")
+            if user:
+                login(request, user)
+                request.session['useremail'] = user_email
+                
+            print("=================================")
+            print("hey its working")
+            messages.success(request, "Password changed successfully")
+            return redirect("user_profile")
+        else:
+            messages.error(request, "Passwords don't match")
+            return redirect("change_password", user_id=user_id)  # Provide the user_id parameter
+
+    return render(request, "userprofile\change_password")
 
 
-        user  = CustomUser.objects.get(username_exact = request.users.username)
-
-        if new_password == confirm_password:
-            success = user.check_password(current_password)
-            if success:
-                user.set_password(new_password)
-                user.save()
-                messages.success(request,'password updated succesfully')
-                return redirect('change_password')
-            else:
-                messages.error(request,'password enter valid current password ')
-                return redirect('change_password')
-    else:
-        messages.error(request,'password does not match')
-        return redirect('change_password')
-    
-    return render(request,"userprofile/user_profile.html")

@@ -19,7 +19,6 @@ from django.views.decorators.cache import never_cache
 from django.contrib.auth.hashers import make_password
 
 
-
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 @never_cache
 def UserLogin(request):
@@ -66,7 +65,6 @@ def UserLogin(request):
 
     return render(request, 'accounts/login.html')
 
-
 def UserSignup(request):
     if request.method == "POST":
         username = request.POST.get('username')
@@ -75,7 +73,6 @@ def UserSignup(request):
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirmpassword')
         
-       
    
     #checking the email is valid or not
         email_checking = CustomUser.objects.filter(email = user_email)
@@ -100,6 +97,7 @@ def UserSignup(request):
 
 
 
+
 @cache_control(no_cache=True ,must_revalidate=True , no_store=True)
 def UserLogout(request):
     if 'useremail' in request.session:
@@ -109,7 +107,7 @@ def UserLogout(request):
         print("User has been logged out")
 
         # Flush the session to ensure the user is logged out and clear any stored session data.
-        request.session.flush()
+    request.session.flush()
 
     return redirect('home')
 
@@ -141,7 +139,6 @@ def OtpVerification(request):
         otp=request.POST.get('otp')
         print(otp)
 
-        user_mail = None
         
         if 'user-email' in request.session:
             user_email=request.session['user-email']
@@ -183,6 +180,7 @@ def OtpVerification(request):
 
     return render(request,'accounts/verify.html')
 
+
 #view function for resending the otp
 def OtpResend(request):
      # deleting the session of existing one time password
@@ -203,7 +201,7 @@ def ForgotPass(request):
             valid_date=datetime.now() + timedelta(minutes=1)
             request.session['otp_valid_date']=str(valid_date)
             
-            subject = 'verify your email to continue to create an account at Furnics.4U'
+            subject = 'verify your email to continue to create an account at watchhub'
             message = otp
             from_email = settings.EMAIL_HOST_USER   
             recipient_list = [ email ] 
@@ -265,38 +263,25 @@ def ForgotPassOtp(request):
 # function for reseting the password
 
 def ResetPass(request):
-    if request.method=='POST':
-        otp=request.POST.get('otp')
-        if 'check_mail' in request.session:
-            email=request.session['check_mail']
-        user=CustomUser.objects.get(email=email)
-        actual_otp=user.otp
-        otp_secret_key=request.session['otp_secret_key']
-        otp_valid_date=request.session['otp_valid_date']
+    if request.method == "POST":
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
 
-        if otp_secret_key and otp_valid_date is not None:
-            valid_until =datetime.fromisoformat(otp_valid_date)
-
-            if valid_until > datetime.now():
-               totp=pyotp.TOTP(otp_secret_key,interval=60)
-
-               if actual_otp==int(otp):
-                   
-                #    del request.session['check_mail']
-                   del request.session['otp_valid_date']
-                   del request.session['otp_secret_key']
-
-                   return redirect('reset_pass')
-               else:
-                   messages.error(request,"OTP you have enterd is incorrect")
-                   return redirect('forgot_pass_otp')
-            else:
-                messages.error(request,"Time limit exceeded")
-
+        if password1 == password2:
+            email = request.session['check_mail']
+            try:
+                user = CustomUser.objects.get(email=email)
+                user.set_password(password1)  # Use set_password to hash and set the password
+                user.save()
                 del request.session['check_mail']
-                del request.session['otp_valid_date']
-                del request.session['otp_secret_key']
-                return redirect('forgot_pass_otp')
+                return redirect('user_login')
+            except CustomUser.DoesNotExist:
+                messages.error(request, "There is no account linked with this email")
+                del request.session['check_mail']
+                return redirect('reset_pass')
+        else:
+            messages.error(request, "Passwords do not match")
+
+    return render(request, 'accounts/reset_pass.html')
 
 
-    return render(request,'accounts/forgotpass_verify.html')

@@ -14,6 +14,7 @@
             <tr>
                 <th>User Name</th>
                 <th>Order ID</th>
+                <th>Created At</th>
                 <th>Payment Mode</th>
                 <th>Order Status</th>
                 <th>Action</th>
@@ -24,6 +25,7 @@
             <tr>
                 <td>{{ orderitem.order.user.username }}</td>
                 <td style="color:rgb(204, 35, 35)">{{ orderitem.order.tracking_no }}</td>
+                <td style="color:rgb(204, 35, 35)">{{ orderitem.order.created_at }}</td>
                 <td style="color:mediumblue">{{ orderitem.order.payment_mode }}</td>
                 <td style="color: rgb(5, 126, 15);">{{ orderitem.order.status }}</td>
                 <td>

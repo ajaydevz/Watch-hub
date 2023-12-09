@@ -75,3 +75,4 @@ class OrderItem(models.Model):
 
     def str(self):
         return f"{self.order.id, self.order.tracking_no}"
+    

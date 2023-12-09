@@ -7,63 +7,66 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <title>Forgot Password</title>
     <style>
-        body {
-            background-color: #f8f9fa;
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: beige;
+            background-size: cover;
+            filter: blur(5px); /* Adjust the blur amount as needed */
+            z-index: -1;
         }
 
-        .container {
-            margin-top: 5%;
+        .card-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
-        form {
-            background-color: #ffffff;
+        .card {
+            background-color: rgba(211, 255, 225, 0.604);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        label {
-            font-weight: bold;
-        }
-
-        button {
-            width: 100%;
-        }
-
-        a {
-            color: #007bff;
+            backdrop-filter: blur(5px); /* Adjust the blur amount to match the body blur */
         }
     </style>
-    <title>Forgot Password</title>
 </head>
 
-<body class="d-flex justify-content-center">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <form method="POST">
-                    
-                    <div class="text-danger d-flex justify-content-center">
-                       
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" class="form-control" id="email" placeholder="Enter your Email" name="email"
-                            required>
-                    </div>
-                    <div class="d-flex justify-content-center mt-4">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                    <div class="text-center mt-3">
-                        <h6>OR</h6>
-                    </div>
-                    <div class="d-flex justify-content-center mt-3">
-                        <a href="{% url 'user_login' %}">Go back to login</a>
-                    </div>
-                </form>
-            </div>
+<body>
+    <div class="card-container">
+        <div class="card">
+            <form method="POST">
+                {% csrf_token %}
+                {% if messages %}
+                <div class="text-danger d-flex justify-content-center">
+                    {% for message in messages %}
+                    {{ message }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" placeholder="What's your Email?" name="email"
+                        required>
+                </div>
+                <div class="d-flex justify-content-center mt-4">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+                <div class="text-center mt-3">
+                    <h6>OR</h6>
+                </div>
+
+                <div class="d-flex justify-content-center mt-3">
+                    <a href="{% url 'user_login' %}" class="btn btn-secondary">Go back to login</a>
+                </div>
+            </form>
         </div>
     </div>
     <script src="js/bootstrap.bundle.min.js"></script>

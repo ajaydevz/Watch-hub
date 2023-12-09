@@ -402,7 +402,7 @@ def address_checkout(request):
         for i in address:
             print(i.recipient_name)
         try:
-            default_address =Address.objects.get(is_default=True)  
+            default_address =Address.objects.get(user_id=user.id,is_default=True)  
         except:
             default_address = None
         context={
@@ -410,6 +410,7 @@ def address_checkout(request):
             'default_address':default_address,
         }
         return render(request,'cart/address_selection.html',context)
+    
 
 def add_address_checkout(request,user_id):
 

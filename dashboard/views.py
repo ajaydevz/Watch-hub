@@ -10,9 +10,12 @@ from categories.models import Category,Sub_Category
 
 
 # Create your views here.
-
 @cache_control(no_store=True, no_cache=True)
 def AdminLogin(request):
+    if 'useremail' in request.session:
+        return redirect('user_login')
+    
+    
     if 'adminmail' in request.session :
         return redirect ('admin_home')
     
@@ -32,6 +35,8 @@ def AdminLogin(request):
     return render(request,"dashboard/adminlogin.html")
 
 
+@staff_member_required(login_url='admin_login')
+@cache_control(no_store=True, no_cache=True)
 def AdminHome (request):
     user_acive = CustomUser.objects.filter(is_active=True).count()
     user_blocked = CustomUser.objects.filter(is_active=False).count()
@@ -60,6 +65,7 @@ def AdminLogout(request):
    
     
 #view function for going to user page 
+@staff_member_required(login_url='admin_login')
 def Users(request):
     user = CustomUser.objects.filter(is_superuser= False).order_by('id')
 
@@ -98,7 +104,7 @@ def BlockUser(request, user_id):
 
 
 
-
+@staff_member_required(login_url='admin_login')
 def Categories(request):
 
     category = Category.objects.all().order_by('id')
@@ -174,7 +180,9 @@ def DeleteCategories(request,category_id):
         return render(request,'dashboard/category.html',context)
     
 
-# View for displaying subcategories
+ # View for displaying subcategories   
+
+@staff_member_required(login_url='admin_login')
 def SubCategories(request):
     # Fetch active categories from the database
     category = Category.objects.filter(is_activate=True)
@@ -260,10 +268,11 @@ def DeleteSubCategories(request, subcategory_id):
 
 
 
-
+@staff_member_required(login_url='admin_login')
 def Orders(request):
 
-    orders = Order.objects.all()
+    orders = Order.objects.all().order_by('created_at')
+
     order_items = OrderItem.objects.order_by('order').distinct('order')
     
     for order in orders:

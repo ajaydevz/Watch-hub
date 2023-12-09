@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-
+from userprofile.views import *
 
 
 urlpatterns = [
@@ -17,8 +17,9 @@ urlpatterns = [
     path('order-details/<int:order_id>/', views.OrderDetails, name='order_details'),
     path("order-cancellation/<int:order_id>/", views.OrderCancellation, name="order_cancellation"),
     
-    path('change-password/', views.ChangePassword, name="change_password"),
+    path('change_password/<int:user_id>/', views.change_password, name='change_password'),
 
+    path('order-return/<int:order_id>/',views.OrderReturn,name="order_return"),
 
     path('',views.UserProfile,name="user_profile"),
 ]
