@@ -42,6 +42,7 @@
                         <div class="form-group">
                             <label for="cat_img">Category Image:</label>
                             <input type="file" class="form-control-file" id="category_img" name="category_img" accept="image/*">
+                            <canvas id="imageCanvas" width="400" height="300"></canvas>  
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -80,11 +81,11 @@
                         <div class="form-group">
                             <label for="categoryDescription">Category Description:</label>
                             <textarea class="form-control" id="categoryDescription" name="categoryDescription" rows="4" oninput="validateDescription(this)"
-                                required>{{category.description}}</textarea>
+                                required>{{category.description}} </textarea>
                         </div>
                         <div class="form-group">
                             <label for="cat_img">Category Image:</label>
-                            <input type="file" class="form-control-file" id="category_img" name="category_img" accept="image/*">
+                            <input type="file" class="form-control-file" id="category_img" name="category_img" accept="image/*" required>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -173,10 +174,61 @@
             textarea.setCustomValidity("");
         }
     }
+    
+    document.addEventListener('DOMContentLoaded', function () {
+        var canvas = document.getElementById('imageCanvas');
+        var ctx = canvas.getContext('2d');
+        var imgInput = document.getElementById('category_img');
+    
+        imgInput.addEventListener('change', function (e) {
+            var img = new Image();
+            img.src = URL.createObjectURL(e.target.files[0]);
+    
+            img.onload = function () {
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            };
+        });
+    
+        var startX, startY, endX, endY;
+        var isDragging = false;
+    
+        canvas.addEventListener('mousedown', function (e) {
+            isDragging = true;
+            startX = e.clientX - canvas.getBoundingClientRect().left;
+            startY = e.clientY - canvas.getBoundingClientRect().top;
+        });
+    
+        canvas.addEventListener('mousemove', function (e) {
+            if (isDragging) {
+                endX = e.clientX - canvas.getBoundingClientRect().left;
+                endY = e.clientY - canvas.getBoundingClientRect().top;
+                // Draw a selection box or highlight the cropping area as the user drags
+            }
+        });
+    
+        canvas.addEventListener('mouseup', function () {
+            isDragging = false;
+            // Perform the actual cropping based on the coordinates
+            var croppedImageData = ctx.getImageData(startX, startY, endX - startX, endY - startY);
+            // Use the croppedImageData as needed (e.g., save, display, etc.)
+            // You can send this data to the server using Ajax or other methods
+        });
+    });
+
    
+    document.addEventListener('DOMContentLoaded', function () {
+        var form = document.getElementById('category_img');  // Replace 'yourFormId' with the actual ID of your form
+        var fileInput = document.getElementById('category_img');  // Replace 'category_img' with the actual ID of your file input
 
+        form.addEventListener('submit', function (event) {
+            if (!fileInput.files.length) {
+                event.preventDefault();  // Prevent form submission
+                alert('Category Image is required.');  // You can customize this alert or display an error message in a more user-friendly way
+            }
+        });
+    });
 
-
+    
 
 
 

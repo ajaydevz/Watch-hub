@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
-
 from categories.models import Category, Sub_Category
+
 
 # Create your models here.
 class Product(models.Model):

@@ -21,21 +21,38 @@ def Home(request):
     
     return render(request,'home\home.html',context)
 
-def ViewShop(request):
-    categories=Category.objects.filter(is_activate=True)
-    products=Product.objects.filter(is_activate=True)
-    variants = Variation.objects.filter(is_available=True).order_by('product').distinct('product')
+# def ViewShop(request):
+#     categories=Category.objects.filter(is_activate=True)
+#     products=Product.objects.filter(is_activate=True)
+#     variants = Variation.objects.filter(is_available=True).order_by('product').distinct('product')
 
+
+#     available_colors = Variation.objects.filter(is_available=True).values('color').distinct()
+#     context={
+#         'category':categories,
+#         'product':products,
+#         'variants':variants,
+#         "color":available_colors,
+#     }
+
+#     return render(request,'home\shop.html',context)
+
+def ViewShop(request):
+    categories = Category.objects.filter(is_activate=True)
+    active_products = Product.objects.filter(is_activate=True)
+
+    # Filter variants for only active products
+    active_variants = Variation.objects.filter(product__in=active_products, is_available=True).order_by('product').distinct('product')
 
     available_colors = Variation.objects.filter(is_available=True).values('color').distinct()
-    context={
-        'category':categories,
-        'product':products,
-        'variants':variants,
-        "color":available_colors,
+    context = {
+        'category': categories,
+        'product': active_products,
+        'variants': active_variants,
+        "color": available_colors,
     }
 
-    return render(request,'home\shop.html',context)
+    return render(request, 'home\shop.html', context)
 
 def ViewSubcategory(request,category_id):
     variants={}

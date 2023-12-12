@@ -51,5 +51,15 @@
         $('#example').DataTable();
     });
 </script>
+<script>
+    function formatToIST(dateString) {
+      const date = new Date(dateString);
+      date.setHours(date.getHours() + 5.5);
+      return date.toLocaleString();
+    }
+  
+    // In your template:
+
+</script>
 
 {% endblock %}

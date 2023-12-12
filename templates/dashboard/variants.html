@@ -58,12 +58,12 @@
 
                     </td>
                     <td>
-                        {% if product.is_available %}
-                        <a href="{% url 'delete_product' product_id=product.id %}">
+                        {% if variant.is_available %}
+                        <a href="{% url 'delete_variants' variant_id=variant.id %}">
                             <button class="btn btn-danger toggle-btn">Deactivate</button>
                         </a>
                         {% else %}
-                        <a href="{% url 'delete_product' product_id=product.id %}">
+                        <a href="{% url 'delete_variants' variant_id=variant.id %}">
                             <button class="btn btn-success toggle-btn">Activate</button>
                         </a>
                         {% endif %}
@@ -175,19 +175,19 @@
                             <!-- Variant stock  Field -->
                             <div class="form-group col-md-6">
                                 <label for="VariantStock">Stock</label>
-                                <input type="number" class="form-control" id="stock" name="stock" required>
+                                <input type="number" class="form-control" id="stock" name="stock" min="0" required>
                             </div>
                         </div>
                     </div>
                         <!-- Variant Actual Price Field -->
                         <div class="form-group col">
                             <label for="VariantActualPrice">Actual Price</label>
-                            <input type="number" class="form-control" id="ActualPrice" name="ActualPrice"
+                            <input type="number" class="form-control" id="ActualPrice" name="ActualPrice" min="0"
                             required>
                         </div>
                         <div class="form-group col">
                             <label for="VariantSellingPrice">Selling Price</label>
-                            <input type="number" class="form-control" id="SellingPrice" name="SellingPrice"
+                            <input type="number" class="form-control" id="SellingPrice" name="SellingPrice" min="0"
                             required>
                         </div>  
                     <div class="form-group col">

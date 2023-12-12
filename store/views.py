@@ -1,6 +1,7 @@
 from decimal import Decimal
 import os
 from django.shortcuts import get_object_or_404, render,redirect
+from django.contrib.admin.views.decorators import staff_member_required
 from store.models import Product,Variation
 from categories.models import Category,Sub_Category
 from django.contrib import messages
@@ -23,6 +24,7 @@ def ProductView(request):
         return render(request,'dashboard/products.html',context)
     else:
         return redirect('admin_login')
+    
 def AddProduct(request):
      product = Product()
      if request.method == 'POST':
@@ -94,6 +96,7 @@ def DeleteProduct(request,product_id):
         }
         return render(request,'dashboard/products.html',context)
 
+@staff_member_required(login_url='admin_login')
 def VariantView(request,product_id):
 
     variants = Variation.objects.filter(product=product_id)
@@ -174,3 +177,12 @@ def EditVariants(request, variant_id):
         return redirect('variant_view',product_id)
 
 
+def DeleteVariant(request,variant_id):
+    variant = get_object_or_404(Variation, pk=variant_id)
+    product_id = variant.product.id
+    if variant.is_available == True:
+        variant.is_available = False
+    else:
+        variant.is_available = True
+    variant.save()
+    return redirect('variant_view',product_id)

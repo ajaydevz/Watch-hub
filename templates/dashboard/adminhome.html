@@ -1,132 +1,129 @@
-{% extends 'dashboard/base.html' %}
+{% extends 'dashboard/admin_base.html' %}
+{% load static %}
 
 {% block bootstraplink%}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 {% endblock %}
 {% block content %}
-
-<div class="container col-lg-8 mt-5 justify-content-evenly">
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card shadow mb-4" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
-                <div class="card-body">
-                    <h5 class="card-title">Users</h5>
-                    <p class="card-text text-primary">{{ users }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card shadow mb-4">
-                <div class="card-body">
-                    <h5 class="card-title">Revenue</h5>
-                    <p class="card-text text-danger">{{total}}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card shadow mb-4">
-                <div class="card-body">
-                    <h5 class="card-title"> orders</h5>
-                    <p class="card-text text-success">{{ total_order }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
+<Style>
+  .vl{
+    border-left: 6px solid grey;
+    margin-left: 4rem;
+    height: 19rem;
+  }
+</Style>
+<!-- This part shows the admin panel upper side div of the whold details -->
+<div class="custom-container col-lg-12 my-4 d-flex justify-content-center">
+  <div class="d-flex">
+      <div class="custom-col-md-4 mb-4 p-3">
+          <div class="custom-card shadow-lg p-3 mb-5 bg-white rounded">
+              <div class="custom-card-body">
+                  <h5 class="custom-card-title">User Count</h5>
+                  <p class="custom-card-text text-primary ">{{ users_active }}</p>
+              </div>
+          </div>
+      </div>
+      <div class="custom-col-md-4 mb-4 p-3">
+          <div class="custom-card shadow-lg p-3 mb-5 bg-white rounded">
+              <div class="custom-card-body">
+                  <h5 class="custom-card-title">Revenue</h5>
+                  <p class="custom-card-text text-danger">{{ total_sales }}</p>
+              </div>
+          </div>
+      </div>
+      <div class="custom-col-md-4 mb-4 p-3">
+          <div class="custom-card shadow-lg p-3 mb-5 bg-white rounded">
+              <div class="custom-card-body">
+                  <h5 class="custom-card-title">Order Count</h5>
+                  <p class="custom-card-text text-success">{{ orders_count }}</p>
+              </div>
+          </div>
+      </div>
+  </div>
 </div>
-<div class="d-flex justify-content-center">
-    <canvas id="myChart" style="width:50%; max-width:800px; padding-left:20px"></canvas>
-    <!-- <canvas id="myChart2" style="width:100%;max-width:700px"></canvas> -->
+
+
+
+
+<!-- end of the div -->
+
+
+
+<!-- The Charts -->
+
+<hr>
+<div class="d-flex">
+    <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+    <div class="vl"></div>
+    <canvas id="myChart2" style="width:100%;max-width:600px"></canvas>
 </div>
-<!-- <div class="d-flex justify-content-center">
-    <canvas id="myChart2" style="width:100%;max-width:700px"></canvas>
-</div> -->
+<hr>
 
-<div class="container-fluid pt-4 px-4 col-lg-8">
-    <div class="row b-5">
-        <div class="col-md-12">
-            <h2>Sales Report</h2>
-        </div>
-    </div>
-    <form method="post">
-        {% csrf_token %}
-        <div class="d-flex justify-content-around m-4">
-            <div class="mr-5"><label>Start Date</label><input type="date" name="start_date"></div>
-            <div class="ml-5"><label>End Date</label><input type="date" name="end_date"></div>
-            <div>
-                <button class="btn btn-primary" type="submit">Generate Report</button>
-            </div>
-        </div>
-    </form>
+<!-- End of the Charts -->
 
-    <div class="d-flex justify-content-around m-2">
-        <div class="d-flex"><label>Total Sales : </label><h5>{{total_sales}}</h5></div>
-        <div class="d-flex"><label>Total Order : </label><h5>{{total_order}}</h5></div>
-    </div>
-    <div class="col-md-12 d-flex justify-content-center ">
-        <h2>Sales By Status</h2>
 
-    </div>
-    <div class="d-flex flex-wrap justify-content-between m-2 col-sm-12 ">
-        <div class="d-flex flex-column mb-2 ">
-            <div><label>Pending:</label></div>
-            <div><h5>{{Pending}}</h5></div>
-        </div>
-        <div class="d-flex flex-column mb-2">
-            <label>Processing:</label>
-            <h5>{{Processing}}</h5>
-        </div>
-        <div class="d-flex flex-column mb-2">
-            <label>Shipped:</label>
-            <h5>{{Shipped}}</h5>
-        </div>
-        <div class="d-flex flex-column mb-2">
-            <label>Delivered:</label>
-            <h5>{{Delivered}}</h5>
-        </div>
-        <div class="d-flex flex-column mb-2">
-            <label>Cancelled:</label>
-            <h5>{{cancelled}}</h5>
-        </div>
-        <div class="d-flex flex-column mb-2">
-            <label>Return:</label>
-            <h5>{{Return}}</h5>
-        </div>
-    </div>
 
-    <div class="bg-light text-center rounded p-4">
-        <div class="d-flex align-items-center justify-content-between mb-4">
-            <h6 class="mb-0">Sales report</h6>
-            <a class="btn btn-warning" href="{% url 'sales_report_pdf' %}">Download Sales Report</a>
-        </div>
-        <div class="table-responsive">
-            <table class="table text-start align-middle table-bordered table-hover mb-0" id="example">
-                <thead>
-                <tr class="text-dark">
-                    <th scope="col">Order Id</th>
-                    <th scope="col">Tracking No</th>
-                    <th scope="col">Total Price</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Crated At</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for order in orders %}
-                <tr>
-                    <td>{{order.id}}</td>
-                    <td>{{order.tracking_no}}</td>
-                    <td>{{order.total_price}}</td>
-                    <td>{{order.status}}</td>
-                    <td>{{order.created_at}}</td>
-                </tr>
-                {% endfor %}
 
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
 
 {% endblock content %}
 
+{% block script %}
+<script>
+    var xValues = ["Delevered", "Confirmed", "Cancelled", "Returned" ];
+    var yValues = [{{orders_delevered}} , {{orders_confirmed}}, {{orders_cancelled}}, {{orders_returned}} ];
+    var barColors = [
+      "#b91d47",
+      "#00aba9",
+      "#2b5797",
+      "#e8c3b9"
+    ];
+    
+    new Chart("myChart", {
+      type: "bar",
+      data: {
+        labels: xValues,
+        datasets: [{
+          backgroundColor: barColors,
+          data: yValues
+        }]
+      },
+      options: {
+        title: {
+          display: true,
+          text: "Orders Status"
+        }
+      }
+    });
+    </script>
+<!-- mychart 2-->
+<script>
+    var xValues = ["Users Active", "Users Blocked"];
+    var yValues = [{{users_active}},{{users_block}}];
+    var barColors = [
+    "#00aba9",
+    "#b91d47",
+      
+    ];
+    
+    new Chart("myChart2", {
+      type: "pie",
+      data: {
+        labels: xValues,
+        datasets: [{
+          backgroundColor: barColors,
+          data: yValues
+        }]
+      },
+      options: {
+        title: {
+          display: true,
+          text: "Users"
+        }
+      }
+    });
+    </script>
+
+{% endblock script %}

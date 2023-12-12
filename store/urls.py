@@ -24,5 +24,6 @@ urlpatterns = [
     path('view-varirants/<int:product_id>/',views.VariantView,name="variant_view"),
     path('add-varirants/<int:product_id>/',views.AddVariant,name="add_variant"),
     path('edit-varirants/<int:variant_id>/',views.EditVariants,name="edit_variants"),
+    path('delete-varirants/<int:variant_id>/',views.DeleteVariant,name="delete_variants"),
 
 ]

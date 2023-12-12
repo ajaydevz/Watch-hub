@@ -38,15 +38,40 @@ def AdminLogin(request):
 @staff_member_required(login_url='admin_login')
 @cache_control(no_store=True, no_cache=True)
 def AdminHome (request):
-    user_acive = CustomUser.objects.filter(is_active=True).count()
-    user_blocked = CustomUser.objects.filter(is_active=False).count()
-    context={
-        'user_active':user_acive,
-        'user_blocked':user_blocked
-          
-       }
-    
-    return render(request, 'dashboard/admin_base.html',context)
+    if 'adminmail' in request.session:
+        users_active = CustomUser.objects.filter(is_active=True).count()
+        users_block = CustomUser.objects.filter(is_active=False).count()
+        orders_delevered  = Order.objects.filter(status = 'Delevered').count()
+        orders_confirmed=Order.objects.filter(status='Order confirmed').count()
+        orders_cancelled=Order.objects.filter(status='Cancelled').count()
+        orders_returned=Order.objects.filter(status='Returned').count()
+        orders = Order.objects.all()
+        orders_count= Order.objects.all().count()
+        total_sales = 0
+        for order in orders:
+            total_sales = total_sales + order.total_price
+        print(total_sales)
+        print(total_sales)
+        print(int(total_sales))
+
+        print(total_sales)
+        print(total_sales)
+        revenue = 0
+
+        
+        context ={
+
+            'orders_delevered':orders_delevered,
+            'orders_confirmed' : orders_confirmed,
+            'orders_cancelled':orders_cancelled,
+            'orders_returned':orders_returned,
+            'users_active':users_active,
+            'users_block':users_block,
+            'total_sales':total_sales,
+            'orders_count':orders_count,
+        
+        }
+        return render(request, 'dashboard/adminhome.html',context)
 
 
 
@@ -284,7 +309,7 @@ def Orders(request):
     return render(request,"dashboard/orders.html",context)
 
 
-
+@staff_member_required(login_url='admin_login')
 def OrdersDetails(request,order_id):
     
     order=Order.objects.get(id=order_id)
