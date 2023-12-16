@@ -40,10 +40,10 @@
                                 required></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="cat_img">Category Image:</label>
-                            <input type="file" class="form-control-file" id="category_img" name="category_img" accept="image/*">
-                            <canvas id="imageCanvas" width="400" height="300"></canvas>  
-                        </div>
+                            <label for="category_img">Category Image:</label>
+                            <input type="file" class="form-control-file" id="category_img" name="category_img" accept="image/*" onchange="validateImageType()" required>
+                            <div id="error-message"></div>
+                        </div>                        
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -227,7 +227,50 @@
             }
         });
     });
+    
+    
+    function validateImageType() {
+        var fileInput = document.getElementById('category_img');
+        var errorMessage = document.getElementById('error-message');
 
+        if (fileInput.files.length > 0) {
+            var allowedExtensions = ['png', 'jpg', 'jpeg'];
+            var fileName = fileInput.files[0].name;
+            var fileExtension = fileName.split('.').pop().toLowerCase();
+
+            if (allowedExtensions.indexOf(fileExtension) === -1) {
+                errorMessage.innerHTML = 'Invalid file extension. Only PNG, JPG, and JPEG files are allowed.';
+                fileInput.value = ''; // Clear the file input
+            } else {
+                errorMessage.innerHTML = '';
+            }
+        }
+    }
+
+    function validateImageType() {
+        var fileInput = document.getElementById('category_img');
+        var errorMessageContainer = document.getElementById('error-message');
+    
+        // Remove any existing error message
+        errorMessageContainer.innerHTML = '';
+    
+        if (fileInput.files.length > 0) {
+            var allowedExtensions = ['png', 'jpg', 'jpeg'];
+            var fileName = fileInput.files[0].name;
+            var fileExtension = fileName.split('.').pop().toLowerCase();
+    
+            if (allowedExtensions.indexOf(fileExtension) === -1) {
+                var errorMessage = document.createElement('span');
+                errorMessage.textContent = 'Invalid file extension. Only PNG, JPG, and JPEG files are allowed.';
+                errorMessage.style.color = 'red';
+                errorMessageContainer.appendChild(errorMessage);
+                fileInput.value = ''; // Clear the file input
+            }
+        }
+    }
+    
+    
+    
     
 
 

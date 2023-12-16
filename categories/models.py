@@ -86,3 +86,4 @@ class Sub_Category(models.Model):
     def __str__(self):
         return self.sub_category_name
     
+    

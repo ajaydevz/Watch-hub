@@ -24,10 +24,10 @@ $(document).ready(function () {
                     console.log(data);
                     // Callback function to handle the successful response
                     var options = {
-                        "key": "rzp_test_Rfp1v8lrP3e3e1",
+                        "key": "rzp_test_DfOAxgoZNZanRb",
                         "amount": data.total_price * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
                         "currency": "INR",
-                        "name":  'ASWIN',
+                        "name":  'Ajay Dev',
                         "description": "Thank you",
                         "image": "https://example.com/your_logo",
                         //                    "order_id": "order_9A33XWu170gUtm", //This is a sample Order ID. Pass the id obtained in the response of Step 1

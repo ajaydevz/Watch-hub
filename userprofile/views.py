@@ -264,25 +264,60 @@ def OrderReturn(request,order_id):
 
 
 
+# def change_password(request, user_id):
+#     user = CustomUser.objects.get(id=user_id)
+#     print("heyyyyy")
+#     if request.method == "POST":
+#         password = request.POST.get("password")
+#         confirm_password = request.POST.get("c_password")
+#         user_email =  request.session['useremail']
+
+#         if password == confirm_password:
+#             user.set_password(password)
+#             print("=================================")
+#             user.save()
+            
+#             print("=================================")
+#             user = authenticate(request, email=user.email, password=password)
+#             print("=================================")
+#             if user:
+#                 login(request, user)
+#                 request.session['useremail'] = user_email
+                
+#             print("=================================")
+#             print("hey its working")
+#             messages.success(request, "Password changed successfully")
+#             return redirect("user_profile")
+#         else:
+#             messages.error(request, "Passwords don't match")
+#             return redirect("change_password", user_id=user_id)  # Provide the user_id parameter
+
+#     return render(request, "userprofile\change_password")
+
+
 def change_password(request, user_id):
     user = CustomUser.objects.get(id=user_id)
     print("heyyyyy")
     if request.method == "POST":
+        current_password = request.POST.get("current_password")
         password = request.POST.get("password")
         confirm_password = request.POST.get("c_password")
-        user_email =  request.session['useremail']
+        user_email = request.session['useremail']
+
+        # Verify the current password before allowing a change
+        if not user.check_password(current_password):
+            messages.error(request, "Incorrect current password")
+            return redirect("change_password", user_id=user_id)
 
         if password == confirm_password:
             user.set_password(password)
             print("=================================")
             user.save()
-            
-            print("=================================")
+
+            # Re-authenticate the user with the new password
             user = authenticate(request, email=user.email, password=password)
-            print("=================================")
             if user:
-                login(request, user)
-                request.session['useremail'] = user_email
+               login(request, user)
                 
             print("=================================")
             print("hey its working")
@@ -293,5 +328,4 @@ def change_password(request, user_id):
             return redirect("change_password", user_id=user_id)  # Provide the user_id parameter
 
     return render(request, "userprofile\change_password")
-
-
+            

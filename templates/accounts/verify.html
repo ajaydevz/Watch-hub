@@ -5,7 +5,7 @@
     <!-- Include Bootstrap CSS -->
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous"> -->
-    <link href=" {% static 'css/accounts/verify.css' %}" rel="stylesheet">
+    {% comment %} <link href=" {% static 'css/accounts/verify.css' %}" rel="stylesheet"> {% endcomment %}
     <!-- Custom CSS for Styling -->
 {% endblock %}
 
@@ -15,7 +15,7 @@
             <div class="col-md-12 text-center mt-5">
                 <h1>OTP Verification</h1>
                 <p>Enter the 6-digit OTP sent to your email .</p>
-                {% comment %} Time remaining: <p id="timer" class="text-danger">one minute</p> {% endcomment %}
+                Time remaining: <p id="timer" class="text-danger">one minute</p> 
                 {% if messages %}
                 <div class="text-danger d-flex justify-content-center mt-2">
                     {% for message in messages%}
@@ -51,29 +51,51 @@
 {% endblock %}
 {% block script %}
 
-    <!-- Include Bootstrap JS and jQuery -->
-    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-        crossorigin="anonymous"></script> -->
-
         
 <script>
-    // Countdown timer for 2 minutes (120 seconds)
-    var timeleft = 60;
-    var timer = setInterval(function() {
-        var minutes = Math.floor(timeleft / 60);
-        var seconds = timeleft % 60;
+    var timer; // Variable to store the timer interval
+    var timeleft = 60; // Initial time in seconds
+    var timerExpired = false; // Flag to track if the timer has expired
 
-        document.getElementById('timer').innerHTML = 'Time remaining: ' + minutes + ' minutes ' + seconds + ' seconds';
-        timeleft--;
+    function startTimer() {
+        timer = setInterval(function() {
+            if (timeleft <= 0) {
+                clearInterval(timer);
+                timerExpired = true;
+            } else {
+                document.getElementById('timer').innerHTML = timeleft + ' seconds remaining';
+                timeleft--;
+            }
+        }, 1000);
+    }
 
-        if (timeleft < 0) {
-            clearInterval(timer);
-            document.getElementById('timer').innerHTML = 'Time is up!';
-            // Here you can perform additional actions when the timer reaches 0
+    function resetTimer() {
+        timeleft = 60;
+        clearInterval(timer);
+        timerExpired = false;
+        startTimer();
+    }
+
+    document.querySelector('.otp-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+    
+        // Your OTP verification logic goes here
+        var enteredOTP = document.getElementById('otp').value;
+        var isOTPValid = /* Your OTP validation logic */;
+    
+        if (isOTPValid) {
+            // OTP is valid, perform necessary actions
+    
+            // Check if the timer has already expired
+            if (!timerExpired) {
+                // Restart the timer if it hasn't expired
+                resetTimer();
+            }
+        } else {
+            // OTP is not valid, handle accordingly
+            alert('Invalid OTP. Please try again.');
         }
-    }, 1000); // Update the timer every 1 second (1000 milliseconds)
+    });
 </script>
 {% endblock %}
 

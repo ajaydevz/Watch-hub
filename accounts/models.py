@@ -45,6 +45,8 @@ class CustomUser(AbstractUser):
                              blank=True,null=True, help_text='enter 10 digit phone number')
     username = models.CharField(max_length=20,unique=False,verbose_name='username',
                              blank=True,null=True,)
+    
+    wallet  = models.PositiveIntegerField(default=0)
     otp = models.IntegerField(default=0)
     is_verified = models.BooleanField(default=False)
     
@@ -74,4 +76,14 @@ class CustomUser(AbstractUser):
     class Meta:
         verbose_name='CustomUser'
         verbose_name_plural="CustomUsers"
+    
+#USER WALLET MODEL FOR WALLET
+class UserWallet(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    transaction = models.CharField(max_length=50)
+    created_at = models.DateTimeField(auto_now_add=True)
+    amount = models.FloatField()
+
+    def _str_(self):
+        return f'{self.user.username} amount {self.amount}'
     

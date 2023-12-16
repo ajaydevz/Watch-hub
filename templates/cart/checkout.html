@@ -2,6 +2,9 @@
 
 
 {% block content %}
+
+
+
 <!-- Start Hero Section -->
 <div class="hero">
     <div class="container">
@@ -14,10 +17,13 @@
         </div>
     </div>
 </div>
+
+
+
 <form method="POST" action="{% url 'place_order' %}">
     {% csrf_token %}
     <div class="container">
-        <div class="row mb-5 d-flex justify-content-center" style="width: 22%;" >
+        <div class="row mb-5 d-flex justify-content-center">
             <h2 class="h3 mb-2 mt-5 text-black" style="color: black;">Shipping address</h2>
             <div class="card-body">
                 <h5 class="card-title" style="color:black;"><strong>{{ address.recipient_name }}</strong>
@@ -31,6 +37,7 @@
             </div>
             <input type="hidden" name="selected_address" value="{{ address.id }}">
         </div>
+
         <div class="p-3 p-lg-5 border bg-white">
             <table class="table site-block-order-table mb-5">
                 <thead>
@@ -51,27 +58,109 @@
                         <td><strong class="mx-2">Tax</strong></td>
                         <td>₹ {{ tax }}</td>
                     </tr>
+                    {% comment %} <tr>
+                        <td><strong class="mx-2">Discount</strong></td>
+                        <td>₹ <span id = 'discounts'></span> 0</td>
+                    </tr> {% endcomment %}
                     <tr>
                         <td><strong class="mx-2">Grand Total</strong></td>
-                        <td>₹ {{ grand_total }}</td>
+                        <td >₹ <span  id='grand_total'>{{ grand_total }}</span> </td>
                     </tr>
                 </tbody>
             </table>
 
             <div>
-                 <button type="submit" class="btn btn-secondary">
+                <button type="submit" class="btn btn-primary">
                     Cash on delivery
                     </button>
+                <button class="btn btn-secondary paywithRazorpay">
+                        Pay With RazorPay
+                </button>
+                {% if grand_total < wallet %} 
+                    <div>
+                    <button class="mt-2 text-light paywithwallet"
+                        style="background-color:#094cf4;border-radius:20px; width:300px; height:50px; border: 2px solid #f4f4f4; padding:10px;">
+                        Pay With Wallet
+                    </button>
+                    </div>
+                {% endif %}
+
+                
+                    
+                    
             </div>
+            
 
-
+            
         </div>
     </div>
 </form>
 
 {%endblock content%}
 
-{% block script%}
+
+{% block script %}
+
+ <script>
+     $(document).ready(function () {
+ 
+         $('.paywithwallet').click(function (e) {
+             e.preventDefault();
+             console.log("Clicked the wallet buttonn");
+             var address_id = $("[name='selected_address']").val();
+             var token = $("[name='csrfmiddlewaretoken']").val();
+     
+             data = {
+                 'selected_address': address_id,
+                 'payment_mode': 'wallet',
+                 'payment_id': '',
+                 csrfmiddlewaretoken: token,
+     
+             };
+             $.ajax({
+                 url: '/cart/place-order/',
+                 method: 'POST',
+                 data: data,
+                 
+                 success: function (responseData) {
+                 console.log(responseData);
+                     swal({
+                         title: "Congratulations!",
+                         text: "Your order has been placed successfully",
+                         icon: "success",
+                         buttons: true,
+                         dangerMode: true,
+                     }).then((willDelete) => {
+                         if (willDelete) {
+                         console.log('...........');
+                             window.location.href = '/cart/order-success/'
+                         } else {
+                             swal("Your imaginary file is safe!");
+                         }
+                     });
+                 },
+                 error: function (error) {
+                     // Callback function to handle errors
+                     console.error('Error:', error);
+                 }
+             });
+     
+     
+     
+         });
+ 
+     });
+ </script>
+  
+
+
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
 
 
 {% endblock script %}

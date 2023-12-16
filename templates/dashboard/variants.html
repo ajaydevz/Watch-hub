@@ -109,7 +109,7 @@
                                 <!-- Variant stock  Field -->
                                 <div class="form-group col-md-6">
                                     <label for="VariantStock">Stock</label>
-                                    <input type="number" class="form-control" id="stock" name="stock" value="{{variant.stock}}"
+                                    <input type="number" class="form-control" id="stock"  name="stock" value="{{variant.stock}}"
                                     required>
                                 </div>
                             </div>
@@ -134,7 +134,7 @@
 
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-success" id="submitCategory">Submit</button>
+                                <button type="submit" class="btn btn-success" id="submitCategory" onclick="submitForm()">Submit</button>
                             </div>
                         </div>
                     </form>
@@ -189,6 +189,7 @@
                             <label for="VariantSellingPrice">Selling Price</label>
                             <input type="number" class="form-control" id="SellingPrice" name="SellingPrice" min="0"
                             required>
+                            <div id="stockError" style="color: red;"></div>
                         </div>  
                     <div class="form-group col">
                         <label for="imageUpload">Variant Image</label>
@@ -197,7 +198,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success" id="submitCategory">Submit</button>
+                        <button type="submit" class="btn btn-success" id="submitCategory"  onclick="submitForm()">Submit</button>
                     </div>
                 </form>
             </div>
@@ -273,7 +274,36 @@
                     return;
                 }
             }
-        }6
+        }
+
+            
+        
+        function validateStock() {
+            // Get input value
+            var stockInput = document.getElementById('stock');
+    
+            // Get error message container
+            var stockError = document.getElementById('stockError');
+    
+            // Reset error message
+            stockError.innerHTML = '';
+    
+            // Validate stock
+            var stock = parseInt(stockInput.value, 10);
+            if (isNaN(stock) || stock < 0) {
+                stockError.innerHTML = 'Invalid stock. Please enter a valid positive integer.';
+                return false; // Validation failed
+            }
+    
+            // Validation passed
+            return true;
+        }
+    
+
+
+        
+
+
     </script>
 
 

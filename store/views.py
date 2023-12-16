@@ -180,9 +180,11 @@ def EditVariants(request, variant_id):
 def DeleteVariant(request,variant_id):
     variant = get_object_or_404(Variation, pk=variant_id)
     product_id = variant.product.id
-    if variant.is_available == True:
-        variant.is_available = False
+    if variant.is_available:
+        variant.is_available=False
+        variant.save()
+
     else:
-        variant.is_available = True
-    variant.save()
+        variant.is_available=True
+        variant.save()
     return redirect('variant_view',product_id)

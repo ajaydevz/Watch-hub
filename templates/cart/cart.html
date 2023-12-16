@@ -19,7 +19,7 @@
 {% if messages %}
 	<div class="text-danger d-flex justify-content-center mt-2">
 	{% for message in messages %}
-		<h3>{{ message }}</h3>
+		<h5>{{ message }}</h5>
 	{% endfor %}
 	</div>
 {% endif %}
@@ -44,10 +44,19 @@
 				<tbody>
 				{% for cart_item in cart_items %}
 					<tr>
-					<td class="product-thumbnail">
+					<td class="product-thumbnail 	">
 						<a href="{% url 'product_details' variant_id=cart_item.product.id %}">
 						<img src="/media/{{ cart_item.product.image1 }}" alt="Image" class="img-fluid">
 						</a>
+						{% if cart_item.product.stock >= cart_item.quantity %}
+						<div style="color: white; font-weight: bold; background-color: green;">
+							in Stock 	
+						</div>
+						{%else%}
+						<div style="color: white; font-weight: bold; background-color: red;">
+							out Stock 	
+						</div>
+						{%endif%}
 					</td>
 					<td class="product-name">
 						<h2 class="h5 text-black">{{ cart_item.product.product.product_name }}</h2>

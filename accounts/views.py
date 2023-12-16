@@ -132,6 +132,9 @@ def SendOtp(request):
     print(otp,type(otp))
     return redirect('user_otp')
 
+
+@cache_control(no_cache=True ,must_revalidate=True , no_store=True)
+@never_cache
 def OtpVerification(request):
     if 'useremail' in request.session:
         return redirect('home')
@@ -182,10 +185,14 @@ def OtpVerification(request):
 
 
 #view function for resending the otp
+
 def OtpResend(request):
-     # deleting the session of existing one time password
-    del request.session['otp_secret_key']
-    del request.session['otp_valid_date']
+    # deleting the session of existing one time password
+    try:
+        del request.session['otp_secret_key']
+        del request.session['otp_valid_date']
+    except:
+        pass
     return redirect('send_otp')
 
 

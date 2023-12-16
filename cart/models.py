@@ -29,7 +29,7 @@ class CartItem(models.Model):
 
         return self.product.product_name
     
-class Order(models.Model):
+class Order(models.Model):  
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
     total_price = models.FloatField(null=False)
@@ -74,5 +74,5 @@ class OrderItem(models.Model):
     status = models.CharField(max_length=150, choices=STATUS, default='Order Confirmed')
 
     def str(self):
-        return f"{self.order.id, self.order.tracking_no}"
+        return f"{self.order.id, self.order.tracking_no}, Product:{self.product.product_name}"
     
