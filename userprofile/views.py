@@ -15,6 +15,7 @@ from django.views.decorators.cache import cache_control
 from django.contrib.auth.decorators import login_required
 from .models import CustomUser
 from store.models import *
+from django.contrib.auth import update_session_auth_hash
 # Create your views here.
 
 def UserProfile(request):
@@ -314,6 +315,7 @@ def change_password(request, user_id):
             print("=================================")
             user.save()
 
+
             # Re-authenticate the user with the new password
             user = authenticate(request, email=user.email, password=password)
             if user:
@@ -322,10 +324,12 @@ def change_password(request, user_id):
             print("=================================")
             print("hey its working")
             messages.success(request, "Password changed successfully")
-            return redirect("user_profile")
+            return redirect("change_password", user_id=user_id)
         else:
             messages.error(request, "Passwords don't match")
             return redirect("change_password", user_id=user_id)  # Provide the user_id parameter
 
     return render(request, "userprofile\change_password")
+
+
             

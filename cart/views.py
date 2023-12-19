@@ -576,13 +576,13 @@ def place_order(request):
         
         payMode = request.POST.get('payment')
         if payMode == 'Paid by Razorpay':
-            return JsonResponse({'status': 'Your order has been placed successfully'})
+            return redirect('order_success')
         elif payMode == 'wallet':
             print("hey wallet")
             return JsonResponse({'status': 'Your order has been placed successfully'})
         else:
            pass
-
+        
         return redirect('order_success')
 
     

@@ -55,7 +55,7 @@ $(document).ready(function () {
                                         dangerMode: true,
                                     }).then((willDelete) => {
                                         if (willDelete) {
-                                        console.log('...........');
+                                        console.log('Redirecting to /cart/order-success');
                                             window.location.href = '/cart/order-success'
                                         } else {
                                             swal("Your imaginary file is safe!");
