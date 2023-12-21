@@ -53,49 +53,21 @@
 
         
 <script>
-    var timer; // Variable to store the timer interval
-    var timeleft = 60; // Initial time in seconds
-    var timerExpired = false; // Flag to track if the timer has expired
+    // Countdown timer for 2 minutes (120 seconds)
+    var timeleft = 60;
+    var timer = setInterval(function() {
+        var minutes = Math.floor(timeleft / 60);
+        var seconds = timeleft % 60;
 
-    function startTimer() {
-        timer = setInterval(function() {
-            if (timeleft <= 0) {
-                clearInterval(timer);
-                timerExpired = true;
-            } else {
-                document.getElementById('timer').innerHTML = timeleft + ' seconds remaining';
-                timeleft--;
-            }
-        }, 1000);
-    }
+        document.getElementById('timer').innerHTML = 'Time remaining: ' + minutes + ' minutes ' + seconds + ' seconds';
+        timeleft--;
 
-    function resetTimer() {
-        timeleft = 60;
-        clearInterval(timer);
-        timerExpired = false;
-        startTimer();
-    }
-
-    document.querySelector('.otp-form').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submission behavior
-    
-        // Your OTP verification logic goes here
-        var enteredOTP = document.getElementById('otp').value;
-        var isOTPValid = /* Your OTP validation logic */;
-    
-        if (isOTPValid) {
-            // OTP is valid, perform necessary actions
-    
-            // Check if the timer has already expired
-            if (!timerExpired) {
-                // Restart the timer if it hasn't expired
-                resetTimer();
-            }
-        } else {
-            // OTP is not valid, handle accordingly
-            alert('Invalid OTP. Please try again.');
+        if (timeleft < 0) {
+            clearInterval(timer);
+            document.getElementById('timer').innerHTML = 'Time is up!';
+            // Here you can perform additional actions when the timer reaches 0
         }
-    });
+    }, 1000); // Update the timer every 1 second (1000 milliseconds)
 </script>
 {% endblock %}
 

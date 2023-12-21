@@ -21,21 +21,7 @@ def Home(request):
     
     return render(request,'home\home.html',context)
 
-# def ViewShop(request):
-#     categories=Category.objects.filter(is_activate=True)
-#     products=Product.objects.filter(is_activate=True)
-#     variants = Variation.objects.filter(is_available=True).order_by('product').distinct('product')
 
-
-#     available_colors = Variation.objects.filter(is_available=True).values('color').distinct()
-#     context={
-#         'category':categories,
-#         'product':products,
-#         'variants':variants,
-#         "color":available_colors,
-#     }
-
-#     return render(request,'home\shop.html',context)
 
 def ViewShop(request):
     categories = Category.objects.filter(is_activate=True)
@@ -108,5 +94,5 @@ def VariantSelect(request,variant_id):
     product_id = variants.product
 
     # return render(request,'product_details.html',variant_id)
-    return render(request, 'product_details.html', {'variant_id': variant_id})
+    return render(request, 'home/product_details.html', {'variant_id': variant_id})
 

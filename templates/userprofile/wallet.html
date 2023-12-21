@@ -1,0 +1,104 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% block style %}
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link href="{% static 'css/userprofile/userprofile.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+{% endblock style %}
+
+
+{% block content%}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Left Sidebar -->
+        <nav class="col-lg-2 d-md-block sidebar">
+            <div class="position-sticky">
+                <div class="d-flex justify-content-center">
+                    <h4 class="mt-4 ml-3" style="color: rgb(70, 43, 43); font-weight: 1200;">Hi {{user.username}}</h4>
+                </div>
+        
+                <div class="card mt-4 mx-2" style="border: none; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <a class="nav-link navitem" href="{% url 'user_profile'%}">
+                                    My Profile
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a class="nav-link navitem" href="{% url 'my_orders' %}">
+                                    My Orders
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a class="nav-link navitem" href="{% url 'wishlist_view' %}">
+                                    Wishlist
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a class="nav-link navitem" href="{% url 'user_wallet' %}">
+                                    Wallet
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="col-lg-8">
+            <div class="d-flex justify-content-between align-items-center mt-5 mb-3">
+                <h1>Wallet history</h1>
+                <div class="card" style="width: 200px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                   
+                    <div class="card-body" style="background-color: rgba(226, 255, 162, 0.804); height: 70px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                        <h5 class="card-title mb-3">Wallet Balance</h5>
+                        <div>
+                            <h5 class="card-text"> ₹ &nbsp;&nbsp;{{balance}}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table id="example" class="table table-striped table-light table-sm">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Amount</th>
+                            <th>Credited/Debited</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- You should dynamically populate this table with user data from your backend -->
+                       
+                        {% for wallet in wallets %}
+                            <tr class="table-rows">
+                                <td>{{ wallet.amount }}</td>
+                                <td>{{ wallet.transaction }}</td>
+                                <td>{{ wallet.created_at  }}</td>
+                              
+                            </tr>
+                        {% endfor%}
+
+                        <!-- Repeat this for each user -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div style="height: 100px; width: 100%; background-color: #f0f0f0;"></div>
+
+        {% endblock content %}
+
+        {% block script %}
+        <script>
+            $(document).ready(function () {
+                $('#example').DataTable();
+            });
+        </script>
+        <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+        {% endblock %}

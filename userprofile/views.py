@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.contrib.auth import authenticate,login
 from django.http import Http404, HttpResponse, JsonResponse
-from accounts.models import CustomUser
+from accounts.models import CustomUser, UserWallet
 from .models import Address
 from django.core.paginator import Paginator, EmptyPage
 from accounts.models import CustomUser
@@ -208,18 +208,14 @@ def OrderDetails(request,order_id):
 
 
 
-
-
 def OrderCancellation(request, order_id):
-    order = get_object_or_404(Order, id=order_id)
+    order = Order.objects.get(id=order_id)
+    
+    order_items = OrderItem.objects.filter(order=order)
+    print("This all are my order items for a undestandngs-----------------",order_items )
+    print("This all are my order items for a undestandngs-----------------",order_items )
 
-    orderItems = OrderItem.objects.filter(order = order)
-
-
-    print("This all are my order items for a undestandngs-----------------",orderItems)
-    print("This all are my order items for a undestandngs-----------------",orderItems)
-
-    for i in orderItems:
+    for i in order_items :
         print(i)
         print("This is my Stock as per the varient--------",i.variant.stock)
         print("This is my Stock as per the varient--------",i.variant.stock)
@@ -229,12 +225,22 @@ def OrderCancellation(request, order_id):
         varient.save()
         print("This is my stock after the cancel request ",i.variant.stock)
     print(order)
-    
-    # Update order status to 'Cancelled'
+
+
+    user = request.user
+    user_wallet = UserWallet(user=user, amount=0)  # Set default amount here
+    user_wallet.save()
+
     order.status = 'Cancelled'
     order.save()
 
-    # You may want to perform additional actions related to order cancellation here.
+    if order.payment_mode == "Paid by Razorpay":
+        user.wallet += order.total_price
+        user_wallet.amount += order.total_price
+
+    user_wallet.transaction = 'credited'
+    user.save()
+    user_wallet.save()
 
     order_items = OrderItem.objects.filter(order=order)
     status = order.status
@@ -264,51 +270,22 @@ def OrderReturn(request,order_id):
     return render(request,"userprofile/order_details.html",context)
 
 
-
-# def change_password(request, user_id):
-#     user = CustomUser.objects.get(id=user_id)
-#     print("heyyyyy")
-#     if request.method == "POST":
-#         password = request.POST.get("password")
-#         confirm_password = request.POST.get("c_password")
-#         user_email =  request.session['useremail']
-
-#         if password == confirm_password:
-#             user.set_password(password)
-#             print("=================================")
-#             user.save()
-            
-#             print("=================================")
-#             user = authenticate(request, email=user.email, password=password)
-#             print("=================================")
-#             if user:
-#                 login(request, user)
-#                 request.session['useremail'] = user_email
-                
-#             print("=================================")
-#             print("hey its working")
-#             messages.success(request, "Password changed successfully")
-#             return redirect("user_profile")
-#         else:
-#             messages.error(request, "Passwords don't match")
-#             return redirect("change_password", user_id=user_id)  # Provide the user_id parameter
-
-#     return render(request, "userprofile\change_password")
-
-
-def change_password(request, user_id):
-    user = CustomUser.objects.get(id=user_id)
+@login_required(login_url='/login/')
+def change_password(request):
+    # user = CustomUser.objects.get(id=user_id)
+    user = request.user
     print("heyyyyy")
     if request.method == "POST":
         current_password = request.POST.get("current_password")
         password = request.POST.get("password")
         confirm_password = request.POST.get("c_password")
-        user_email = request.session['useremail']
+        # user_email = request.session['useremail']
 
         # Verify the current password before allowing a change
         if not user.check_password(current_password):
+            print("+++++++++++++++++++++++++++++++++++++++")
             messages.error(request, "Incorrect current password")
-            return redirect("change_password", user_id=user_id)
+            return redirect("change_password", user_id=user.id)
 
         if password == confirm_password:
             user.set_password(password)
@@ -324,12 +301,29 @@ def change_password(request, user_id):
             print("=================================")
             print("hey its working")
             messages.success(request, "Password changed successfully")
-            return redirect("change_password", user_id=user_id)
+            return redirect("change_password")
         else:
+            print("heloooooooo")
             messages.error(request, "Passwords don't match")
-            return redirect("change_password", user_id=user_id)  # Provide the user_id parameter
+            return redirect("change_password")  
 
-    return render(request, "userprofile\change_password")
+    return render(request, "userprofile/change_password")
 
 
             
+
+def UserWallets(request):
+
+    wallets=UserWallet.objects.filter(user=request.user).order_by('created_at')
+
+    if request.user:
+        user = request.user
+        balance = user.wallet
+    
+    context={
+        'wallet':wallets,
+        'balance':balance,
+    }
+
+    return render(request,'userprofile/wallet.html',context)
+
