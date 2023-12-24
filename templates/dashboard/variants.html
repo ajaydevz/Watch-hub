@@ -109,7 +109,7 @@
                                 <!-- Variant stock  Field -->
                                 <div class="form-group col-md-6">
                                     <label for="VariantStock">Stock</label>
-                                    <input type="number" class="form-control" id="stock"  name="stock" value="{{variant.stock}}"
+                                    <input type="number" class="form-control" id="stock"  name="stock" value="{{variant.stock}}"  
                                     required>
                                 </div>
                             </div>
@@ -117,12 +117,12 @@
                             <!-- Variant Actual Price Field -->
                             <div class="form-group col">
                                 <label for="VariantActualPrice">Actual Price</label>
-                                <input type="number" class="form-control" id="ActualPrice" name="ActualPrice" value="{{variant.actual_price}}"
+                                <input type="number" class="form-control" id="ActualPrice" name="ActualPrice" value="{{variant.actual_price}}" 
                                 required>
                             </div>
                             <div class="form-group col">
                                 <label for="VariantSellingPrice">Selling Price</label>
-                                <input type="number" class="form-control" id="SellingPrice" name="SellingPrice" value="{{variant.selling_price}}"
+                                <input type="number" class="form-control" id="SellingPrice" name="SellingPrice" value="{{variant.selling_price}}" 
                                 required>
                             </div>
                             <div class="form-group col">
@@ -175,25 +175,25 @@
                             <!-- Variant stock  Field -->
                             <div class="form-group col-md-6">
                                 <label for="VariantStock">Stock</label>
-                                <input type="number" class="form-control" id="stock" name="stock" min="0" required>
+                                <input type="number" class="form-control" id="stock" name="stock" min="0" required oninput="validateInput(this)" required>
                             </div>
                         </div>
                     </div>
                         <!-- Variant Actual Price Field -->
                         <div class="form-group col">
                             <label for="VariantActualPrice">Actual Price</label>
-                            <input type="number" class="form-control" id="ActualPrice" name="ActualPrice" min="0"
+                            <input type="number" class="form-control" id="ActualPrice" name="ActualPrice" min="0" required oninput="validateInput(this)"
                             required>
                         </div>
                         <div class="form-group col">
                             <label for="VariantSellingPrice">Selling Price</label>
-                            <input type="number" class="form-control" id="SellingPrice" name="SellingPrice" min="0"
+                            <input type="number" class="form-control" id="SellingPrice" name="SellingPrice" min="0" required oninput="validateInput(this)"
                             required>
                             <div id="stockError" style="color: red;"></div>
                         </div>  
                     <div class="form-group col">
                         <label for="imageUpload">Variant Image</label>
-                        <input type="file" class="form-control" id="imageUpload" name="VariantImage" accept="image/*" multiple> 
+                        <input type="file" class="form-control" id="imageUpload" name="VariantImage" accept="image/*" multiple required> 
                         <small id="imageError" class="text-danger"></small>
                     </div>
                     <div class="modal-footer">
@@ -212,6 +212,22 @@
 {% endblock%}
 
 {% block script%}
+<script>
+    function validateInput(input) {
+        var value = input.value;
+        var minValue = parseFloat(input.min);
+
+        if (value < minValue) {
+            // Display an error message
+            document.getElementById("stockError").innerHTML = "Value cannot be negative.";
+            // You can also disable the submit button or take other actions based on your requirements
+        } else {
+            // Clear the error message
+            document.getElementById("stockError").innerHTML = "";
+        }
+    }
+</script>
+
 <script>
     $(document).ready(function () {
         $('#example').DataTable();
@@ -298,6 +314,42 @@
             // Validation passed
             return true;
         }
+
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var stockInput = document.getElementById("stock");
+            var actualPriceInput = document.getElementById("ActualPrice");
+            var sellingPriceInput = document.getElementById("SellingPrice");
+    
+            stockInput.addEventListener("input", validateInput);
+            actualPriceInput.addEventListener("input", validateInput);
+            sellingPriceInput.addEventListener("input", validateInput);
+    
+            function validateInput() {
+                var stockValue = parseFloat(stockInput.value);
+                var actualPriceValue = parseFloat(actualPriceInput.value);
+                var sellingPriceValue = parseFloat(sellingPriceInput.value);
+    
+                if (stockValue < 0 || isNaN(stockValue)) {
+                    stockInput.setCustomValidity("Stock cannot be negative");
+                } else {
+                    stockInput.setCustomValidity("");
+                }
+    
+                if (actualPriceValue < 0 || isNaN(actualPriceValue)) {
+                    actualPriceInput.setCustomValidity("Actual price cannot be negative");
+                } else {
+                    actualPriceInput.setCustomValidity("");
+                }
+    
+                if (sellingPriceValue < 0 || isNaN(sellingPriceValue)) {
+                    sellingPriceInput.setCustomValidity("Selling price cannot be negative");
+                } else {
+                    sellingPriceInput.setCustomValidity("");
+                }
+            }
+        });
     
 
 

@@ -1,9 +1,15 @@
 {% extends 'dashboard/admin_base.html' %}
+
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+
 {% block bootstraplink %}
 
 <!-- Add these lines to your <head> section -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.12/dist/cropper.min.css">
     <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.12/dist/cropper.min.js"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/cropperjs/dist/cropper.css">
+    <script src="https://unpkg.com/cropperjs/dist/cropper.js"></script>
     
 
 {% endblock %}
@@ -59,30 +65,10 @@
         </div>
     </div>
 
-    <!-- Modal for cropping -->
-    <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-labelledby="cropperModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="cropperModalLabel">Crop Image</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" id="cropperBody">
-                    <!-- Cropper canvas will be appended here -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="cropperSaveBtn">Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Modal for edit categories-->
     {% for category in categories %}
-    <div class="modal fade" id="editCategoryModal-{{forloop.counter}}" tabindex="-1" role="dialog"
+    <div class="modal fade" id="editCategoryModal-{{forloop.counter}}" tabindex="-1" role="dialog" onsubmit="return validateForm()"
         aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -111,7 +97,8 @@
                         </div>
                         <div class="form-group">
                             <label for="cat_img">Category Image:</label>
-                            <input type="file" class="form-control-file" id="category_img" name="category_img" accept="image/*" required>
+                            <input type="file" class="form-control-file" id="category_img"  name="category_img" accept="image/*"  required>
+                           
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -178,17 +165,7 @@
         $('#example').DataTable();
     });
 
-    
-    function validateDescription(textarea) {
-        const pattern = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
-        const isValid = pattern.test(textarea.value);
-        
-        if (!isValid) {
-            textarea.setCustomValidity("Only letters and spaces are allowed.");
-        } else {
-            textarea.setCustomValidity("");
-        }
-    }
+
    
     function validateDescription(textarea) {
         const pattern = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
@@ -273,27 +250,17 @@
         }
     }
 
-    function validateImageType() {
-        var fileInput = document.getElementById('category_img');
-        var errorMessageContainer = document.getElementById('error-message');
     
-        // Remove any existing error message
-        errorMessageContainer.innerHTML = '';
+
     
-        if (fileInput.files.length > 0) {
-            var allowedExtensions = ['png', 'jpg', 'jpeg'];
-            var fileName = fileInput.files[0].name;
-            var fileExtension = fileName.split('.').pop().toLowerCase();
+
     
-            if (allowedExtensions.indexOf(fileExtension) === -1) {
-                var errorMessage = document.createElement('span');
-                errorMessage.textContent = 'Invalid file extension. Only PNG, JPG, and JPEG files are allowed.';
-                errorMessage.style.color = 'red';
-                errorMessageContainer.appendChild(errorMessage);
-                fileInput.value = ''; // Clear the file input
-            }
-        }
-    }
+    
+
+    
+    
+
+    
     
     
     
@@ -303,46 +270,6 @@
 
 </script>
 <!-- Add this script in your <script> section -->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var imageInputs = document.querySelectorAll('input[data-crop="true"]');
-    
-        imageInputs.forEach(function (input) {
-        input.addEventListener('change', function (e) {
-            var image = new Image();
-            var cropperModal = new bootstrap.Modal(document.getElementById('cropperModal'));
-            var cropper = null;
-    
-            image.onload = function () {
-            cropper = new Cropper(image, {
-                aspectRatio: 1, // Set your desired aspect ratio
-                viewMode: 1,    // Set your desired view mode
-            });
-    
-            // Replace the content of the modal body with the Cropper instance
-            document.getElementById('cropperBody').innerHTML = '';
-            document.getElementById('cropperBody').appendChild(cropper.getCropperCanvas());
-            
-            // Show the modal
-            cropperModal.show();
-            };
-    
-            image.src = URL.createObjectURL(e.target.files[0]);
-    
-            document.getElementById('cropperSaveBtn').addEventListener('click', function () {
-            // Get the cropped canvas
-            var croppedCanvas = cropper.getCroppedCanvas();
-    
-            // Convert the canvas to a data URL and set it as the value of the original input
-            input.value = croppedCanvas.toDataURL();
-    
-            // Close the modal
-            cropperModal.hide();
-            });
-        });
-        });
-    });
-    </script>
             
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>

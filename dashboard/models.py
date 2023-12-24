@@ -1,4 +1,6 @@
 from django.db import models
+from image_cropping import ImageCropField,ImageRatioField
+
 
 # Create your models here.
 class Banner(models.Model):
@@ -7,3 +9,7 @@ class Banner(models.Model):
     banner_count=models.IntegerField(default=1)
     def __str__(self):
         return self.banner_name
+    
+
+
+

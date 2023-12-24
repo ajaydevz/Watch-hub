@@ -122,8 +122,19 @@ def SendOtp(request):
     
     subject = 'verify your email to continue to create an account '
     message = otp
-    from_email = settings.EMAIL_HOST_USER   
-    recipient_list = [ email ] 
+    from_email = settings.EMAIL_HOST_USER  
+    # email2=request.session['usere mail']
+    print("__________________")
+    print("__________________")
+    print("__________________")
+    print("__________________")
+    print("The email is the ",request.session['user-email'])
+    print("__________________")
+    print("__________________")
+    print("__________________")
+    print("__________________")
+
+    recipient_list = [email]   
     send_mail(subject, message, from_email, recipient_list)  
 
     user=CustomUser.objects.get(email=email)
@@ -173,7 +184,6 @@ def OtpVerification(request):
                     messages.error(request,"entered otp is not correct!!!")
                    
             else:
-                del request.session['user-email'] 
                 del request.session['otp_secret_key']
                 del request.session['otp_valid_date']
                 messages.error(request,"time expired for otp validation!!!!")

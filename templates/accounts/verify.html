@@ -52,22 +52,78 @@
 {% block script %}
 
         
+
+{% comment %} 
 <script>
-    // Countdown timer for 2 minutes (120 seconds)
-    var timeleft = 60;
-    var timer = setInterval(function() {
-        var minutes = Math.floor(timeleft / 60);
-        var seconds = timeleft % 60;
+    // Get the initial time from sessionStorage or set it if not present
+    let initialTime = parseInt(sessionStorage.getItem('initialTime')) || Math.floor(new Date().getTime() / 1000);
+    sessionStorage.setItem('initialTime', initialTime);
 
-        document.getElementById('timer').innerHTML = 'Time remaining: ' + minutes + ' minutes ' + seconds + ' seconds';
-        timeleft--;
+    // Calculate the elapsed time since the page was loaded
+    let elapsedTime = Math.floor(new Date().getTime() / 1000) - initialTime;
 
-        if (timeleft < 0) {
-            clearInterval(timer);
-            document.getElementById('timer').innerHTML = 'Time is up!';
-            // Here you can perform additional actions when the timer reaches 0
-        }
-    }, 1000); // Update the timer every 1 second (1000 milliseconds)
-</script>
+    // Set the initial time to the remaining time
+    initialTime = initialTime + Math.max(0, 60 - elapsedTime);
+
+    // Display the initial time in the console
+    console.log("Initial Time:", initialTime);
+
+    // Start the timer
+    let timeleft = 60;
+    let timer = setInterval(function() {
+      let minutes = Math.floor(timeleft / 60);
+      let seconds = timeleft % 60;
+
+      document.getElementById('timer').innerHTML = 'Time remaining: ' + minutes + ' minutes ' + seconds + ' seconds';
+      timeleft--;
+
+      if (timeleft < 0) {
+        clearInterval(timer);
+        document.getElementById('timer').innerHTML = 'Time is up!';
+        // Here you can perform additional actions when the timer reaches 0
+      }
+    }, 1000);
+  </script> {% endcomment %}
+
+  <script>
+    // Get the initial time from sessionStorage or set it if not present
+    let initialTime = parseInt(sessionStorage.getItem('initialTime')) || Math.floor(new Date().getTime() / 1000);
+    sessionStorage.setItem('initialTime', initialTime);
+
+    // Calculate the elapsed time since the page was loaded
+    let elapsedTime = Math.floor(new Date().getTime() / 1000) - initialTime;
+
+    // Set the initial time to the remaining time
+    initialTime = initialTime + Math.max(0, 60 - elapsedTime);
+
+    // Display the initial time in the console
+    console.log("Initial Time:", initialTime);
+
+    // Get the remaining time from sessionStorage or set it to 60 if not present
+    let remainingTime = parseInt(sessionStorage.getItem('remainingTime')) || 60;
+
+    // Display the remaining time in the console
+    console.log("Remaining Time:", remainingTime);
+
+    // Start the timer
+    let timer = setInterval(function() {
+      let minutes = Math.floor(remainingTime / 60);
+      let seconds = remainingTime % 60;
+
+      document.getElementById('timer').innerHTML = 'Time remaining: ' + minutes + ' minutes ' + seconds + ' seconds';
+      remainingTime--;
+
+      if (remainingTime < 0) {
+        clearInterval(timer);
+        document.getElementById('timer').innerHTML = 'Time is up!';
+        // Here you can perform additional actions when the timer reaches 0
+      }
+    }, 1000);
+
+    // Store the remaining time in sessionStorage when the page is closed or refreshed
+    window.addEventListener('beforeunload', function() {
+      sessionStorage.setItem('remainingTime', remainingTime);
+    });
+  </script>
 {% endblock %}
 

@@ -1,0 +1,10 @@
+[gui]
+	recentrepo = C:/Users/AJAYDEV/git
+[user]
+	name = AjayDev
+	email = ajaydevzzz30@gmail.com
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
