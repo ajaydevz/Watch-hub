@@ -1,0 +1,174 @@
+{% extends "dashboard/admin_base.html" %}
+{% block bootstraplink %}
+
+
+{% endblock bootstraplink %}
+
+
+{% block content %}
+<div class="container col-md-12 mt-5 justify-content-evenly" style="background-color: #f1f1f2;">
+<div class="container-fluid pt-4 px-4 col-lg-8">
+    <div class="card border-0 rounded shadow " style="background-color: #c6eecb;">
+        <div class="card-body">
+            <div class="col-md-12 d-flex justify-content-center ">
+                <h2>Sales Report </h2>
+        
+            </div>
+            {% comment %} <form method="post">
+                {% csrf_token %}
+                <div class="row justify-content-around m-4">
+                    <div class="col-md-3">
+                        <label>Start Date</label>
+                        <input type="date" class="form-control" name="start_date">
+                    </div>
+                    <div class="col-md-3">
+                        <label>End Date</label>
+                        <input type="date" class="form-control" name="end_date">
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-primary mt-4" type="submit">Generate Report</button>
+                    </div>
+                </div>
+            </form> {% endcomment %}
+            <form method="post" onsubmit="return validateForm()">
+                {% csrf_token %}
+                <div class="row justify-content-around m-4">
+                    <div class="col-md-3">
+                        <label>Start Date</label>
+                        <input type="date" class="form-control" name="start_date" id="start_date">
+                    </div>
+                    <div class="col-md-3">
+                        <label>End Date</label>
+                        <input type="date" class="form-control" name="end_date" id="end_date">
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-primary mt-4" type="submit">Generate Report</button>
+                    </div>
+                </div>
+            </form>
+    
+            <div class="row justify-content-around m-2">
+                <div class="col-md-3">
+                    <label>Total Sales:</label>
+                    <h5>{{ total_sales }}</h5>
+                </div>
+                <div class="col-md-3">
+                    <label>Total Order:</label>
+                    <h5>{{ total_order }}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="card border-0 rounded shadow  mt-4" style="background-color: #c6eecb;">
+    <div class="card-body">
+        
+        <div class="col-md-12 d-flex justify-content-center ">
+            <h2>Sales By Status</h2>
+    
+        </div>
+        <div class="d-flex flex-wrap justify-content-between m-2 col-sm-12 ">
+            <div class="d-flex flex-column mb-2 ">
+                <div><label>Pending:</label></div>
+                <div><h5>{{Pending}}</h5></div>
+            </div>
+            <div class="d-flex flex-column mb-2">
+                <label>Processing:</label>
+                <h5>{{Processing}}</h5>
+            </div>
+            <div class="d-flex flex-column mb-2">
+                <label>Shipped:</label>
+                <h5>{{Shipped}}</h5>
+            </div>
+            <div class="d-flex flex-column mb-2">
+                <label>Delivered:</label>
+                <h5>{{Delivered}}</h5>
+            </div>
+            <div class="d-flex flex-column mb-2">
+                <label>Cancelled:</label>
+                <h5>{{cancelled}}</h5>
+            </div>
+            <div class="d-flex flex-column mb-2">
+                <label>Return:</label>
+                <h5>{{Return}}</h5>
+            </div>
+        </div>
+    
+    </div>
+</div>
+
+<div class="card border-0 rounded shadow mt-4" style="background-color: #c6eecb;">
+    <div class="card-body">
+    <div class="bg-light text-center rounded p-4">
+        <div class="row align-items-center justify-content-between mb-4">
+            <div class="col-md-6">
+                <h6 class="mb-0">Sales report</h6>
+            </div>
+            <div class="col-md-6">
+                <a class="btn btn-warning" href="{% url 'sales_report_pdf' %}">Download Sales Report</a>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table text-start align-middle table-bordered table-hover mb-0" id="example">
+                <thead>
+                <tr class="text-dark">
+                    <th scope="col">Order Id</th>
+                    <th scope="col">Tracking No</th>
+                    <th scope="col">Total Price</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Crated At</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.tracking_no }}</td>
+                    <td>{{ order.total_price }}</td>
+                    <td>{{ order.status }}</td>
+                    <td>{{ order.created_at }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+</div>
+</div>
+</div>
+{% endblock content %}
+
+
+
+{% block script %}
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable();
+    });
+</script>
+<script>
+    function validateForm() {
+        var startDate = document.getElementById("start_date").value;
+        var endDate = document.getElementById("end_date").value;
+
+        if (startDate === "" || endDate === "") {
+            alert("Please select both start date and end date.");
+            return false; // Prevent form submission
+        }
+
+        // Check if start date is before or equal to end date
+        if (new Date(startDate) > new Date(endDate)) {
+            alert("Start date must be equal to or before the end date.");
+            return false; // Prevent form submission
+        }
+
+        // Add any additional validation logic if needed
+
+        return true; // Allow form submission
+    }
+</script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+{% endblock script %}

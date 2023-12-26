@@ -6,13 +6,15 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_control
 from cart.models import Order,OrderItem
 from django.template.loader import get_template
-# from xhtml2pdf import pisa
+from xhtml2pdf import pisa
+from django.db.models.functions import ExtractMonth
 from django.db.models import Sum
 from django.utils.datetime_safe import datetime
 from django.http import HttpResponse
 from django.http import StreamingHttpResponse
 from django.contrib.admin.views.decorators import staff_member_required
 from categories.models import Category,Sub_Category
+from django.utils import timezone
 
 
 # Create your views here.
@@ -388,51 +390,164 @@ def OrderStatus(request):
 
 
 
-def sales_report_pdf_download(request):
-    # Handle filtering by date range
+
+
+def GetSalesRevenue(request):
+    total_sales = 0
     if request.method == 'POST':
-        start_date_str = request.POST.get('start_date')
-        end_date_str = request.POST.get('end_date')
+        users=CustomUser.objects.filter(is_active=True).count()
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        print(start_date)
+        request.session['start_date'] = start_date
+        request.session['end_date'] = end_date
 
-        try:
-            # Convert date strings to datetime objects
-            start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
-            end_date = datetime.strptime(end_date_str, '%Y-%m-%d')
+        # date_obj = datetime.strptime(start_date, '%d-%m-%Y')
+        # date_obj2 = datetime.strptime(end_date, '%d-%m-%Y')
 
-            # Filter orders based on the date range
+        # Convert the datetime object to a string in yyyy-mm-dd format
+        # start_date = date_obj.strftime('%Y-%m-%d')
+        # end_date = date_obj2.strftime('%Y-%m-%d')
+
+        if start_date == end_date:
+            print(start_date)
+            orders = Order.objects.filter(created_at__date=start_date)
+        else:
             orders = Order.objects.filter(created_at__range=(start_date, end_date))
-        except ValueError:
-            # Handle the case where date strings are not valid
-            orders = None
+        total_order = Order.objects.filter(created_at__range=(start_date, end_date)).count()
+        Pending = Order.objects.filter(created_at__range=(start_date, end_date),status='Order confirmed').count()
+        Processing = Order.objects.filter(created_at__range=(start_date, end_date),status="In Production").count()
+        Shipped = Order.objects.filter(created_at__range=(start_date, end_date),status='Shipped').count()
+        Delivered = Order.objects.filter(created_at__range=(start_date, end_date),status='Delivered').count()
+        cancelled = Order.objects.filter(created_at__range=(start_date, end_date),status='Cancelled').count()
+        Return = Order.objects.filter(created_at__range=(start_date, end_date),status='Returned').count()
+
+        for order in orders:
+            total_sales = total_sales + order.total_price
+            
+        context = {
+                "users":users,
+                # 'total':total,
+                'orders': orders,
+                'total_sales': total_sales,
+                'total_order': total_order,
+                'Pending': Pending,
+                'Processing': Processing,
+                'Shipped': Shipped,
+                "Delivered": Delivered,
+                'cancelled': cancelled,
+                'Return': Return,
+                "sales":Delivered,
+                "cancelled":cancelled,
+                # "returned":returned,
+                # 'monthly_sales_data': monthly_sales_data
+            }
+        return render(request, 'dashboard/sales_revenue.html', context)
+
     else:
-        # If not a POST request, retrieve all orders
+
         orders = Order.objects.all()
+        total_order = Order.objects.all().count()
+        Pending = Order.objects.filter(status='Order confirmed').count()
+        Processing = Order.objects.filter(status="In Production").count()
+        Shipped = Order.objects.filter(status='Shipped').count()
+        Delivered = Order.objects.filter(status='Delivered').count()
+        cancelled = Order.objects.filter(status='Cancelled').count()
+        Return = Order.objects.filter(status='Returned').count()
+        for order in orders:
+            total_sales = total_sales + order.total_price
+        
+        if 'adminmail' in request.session:
 
-    # Calculate total sales
-    total_sales = orders.aggregate(Sum('total_price'))['total_price__sum'] or 0
+            current_year = timezone.now().year
 
-    # Prepare context for the template
+            # Calculate monthly sales for the current year
+            monthly_sales = Order.objects.filter(
+                created_at__year=current_year
+            ).annotate(month=ExtractMonth('created_at')).values('month').annotate(total_sales=Sum('total_price')).order_by(
+                'month')
+
+            # Create a dictionary to hold the monthly sales data
+            monthly_sales_data = {month: 0 for month in range(1, 13)}
+
+            for entry in monthly_sales:
+                month = entry['month']
+                total_sales = entry['total_sales']
+                monthly_sales_data[month] = total_sales
+            users=CustomUser.objects.all().count()
+            try:
+
+                sales=Order.objects.filter(status="Delivered").count()
+                revenue=Order.objects.filter(status="Delivered")
+                total=0
+                for i in revenue:
+                    total+=i.total_price
+            except:
+                sales=0
+            try:
+
+                cancelled=Order.objects.filter(status="Cancelled").count()
+            except:
+                cancelled=0
+            try:
+
+                returned=Order.objects.filter(status="Returned").count()
+            except:
+                returned=0
+
+            context = {
+                "users":users,
+                'total':total,
+                'orders': orders,
+                'total_sales': total_sales,
+                'total_order': total_order,
+                'Pending': Pending,
+                'Processing': Processing,
+                'Shipped': Shipped,
+                "Delivered": Delivered,
+                'cancelled': cancelled,
+                'Return': Return,
+                "sales":sales,
+                "cancelled":cancelled,
+                "returned":returned,
+                'monthly_sales_data': monthly_sales_data
+            }
+            return render(request, 'dashboard/sales_revenue.html', context)
+        else:
+            return redirect('admin_login')
+
+
+
+def RenderToPdf(template_path, context_dict):
+    template = get_template(template_path)
+    html = template.render(context_dict)
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="Sales_report.pdf"'
+
+    # Create a PDF with xhtml2pdf
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+def SalesReportPdfDownload(request):
+    if 'start_date' and 'end_date' in request.session:
+         start_date = request.session['start_date']
+         end_date = request.session['end_date']
+         try:
+             order = Order.objects.filter(created_at__range=(start_date, end_date))
+             del request.session['start_date']
+             del request.session['end_date']
+         except:
+             order=None
+    else:
+
+        order = Order.objects.all()
     context = {
-        'orders': orders,
-        'total_sales': total_sales,
+        'orders': order,
+        'start_date':start_date,
+        'end_date':end_date,
     }
-
-    # Render the template
-    return render(request, 'dashboard/sales_report_pdf.html', context)
-
-
-# def render_to_pdf(template_path, context_dict):
-#     template = get_template(template_path)
-#     html = template.render(context_dict)
-    
-#     # Use StreamingHttpResponse for better handling of large files
-#     response = StreamingHttpResponse(content_type='application/pdf')
-#     response['Content-Disposition'] = 'attachment; filename="Sales_report.pdf"'
-
-#     # Create a PDF with xhtml2pdf
-#     pdf_data = pisa.CreatePDF(html, dest=response)
-#     if pdf_data.err:
-#         return HttpResponse('We had some errors <pre>' + html + '</pre>')
-
-#     return response
-
+    pdf = RenderToPdf('dashboard/sales_report_pdf.html', context)
+    return pdf
