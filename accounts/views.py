@@ -178,7 +178,8 @@ def OtpVerification(request):
                     del request.session['otp_secret_key']
                     del request.session['otp_valid_date']
                     
-
+                    messages.success(request, "Successfully verified OTP. You can now log in.")
+                    
                     return redirect('user_login')
                else:
                     messages.error(request,"entered otp is not correct!!!")

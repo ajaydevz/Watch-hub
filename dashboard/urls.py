@@ -24,4 +24,6 @@ urlpatterns = [
        path("orders-details/<int:order_id>/",views.OrdersDetails,name="orders_details"),
        path('order-status',views.OrderStatus,name="order_status"),
 
+        path('sales-report-pdf/', views.sales_report_pdf_download, name='sales_report_pdf'),
+
 ]

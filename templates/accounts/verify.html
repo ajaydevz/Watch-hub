@@ -1,13 +1,7 @@
 {% extends 'layout/base.html' %}
 {% load static %}
 
-{% block style %}
-    <!-- Include Bootstrap CSS -->
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous"> -->
-    {% comment %} <link href=" {% static 'css/accounts/verify.css' %}" rel="stylesheet"> {% endcomment %}
-    <!-- Custom CSS for Styling -->
-{% endblock %}
+
 
 {% block content %}
     <div class="container mb-5">
@@ -49,58 +43,33 @@
         </div>
     </div>
 {% endblock %}
+
 {% block script %}
-
-        
-
-{% comment %} 
-<script>
-    // Get the initial time from sessionStorage or set it if not present
-    let initialTime = parseInt(sessionStorage.getItem('initialTime')) || Math.floor(new Date().getTime() / 1000);
-    sessionStorage.setItem('initialTime', initialTime);
-
-    // Calculate the elapsed time since the page was loaded
-    let elapsedTime = Math.floor(new Date().getTime() / 1000) - initialTime;
-
-    // Set the initial time to the remaining time
-    initialTime = initialTime + Math.max(0, 60 - elapsedTime);
-
-    // Display the initial time in the console
-    console.log("Initial Time:", initialTime);
-
-    // Start the timer
-    let timeleft = 60;
-    let timer = setInterval(function() {
-      let minutes = Math.floor(timeleft / 60);
-      let seconds = timeleft % 60;
-
-      document.getElementById('timer').innerHTML = 'Time remaining: ' + minutes + ' minutes ' + seconds + ' seconds';
-      timeleft--;
-
-      if (timeleft < 0) {
-        clearInterval(timer);
-        document.getElementById('timer').innerHTML = 'Time is up!';
-        // Here you can perform additional actions when the timer reaches 0
-      }
-    }, 1000);
-  </script> {% endcomment %}
 
   <script>
     // Get the initial time from sessionStorage or set it if not present
     let initialTime = parseInt(sessionStorage.getItem('initialTime')) || Math.floor(new Date().getTime() / 1000);
+
+    console.log("This is the first time whilel page is loading",initialTime)
+
     sessionStorage.setItem('initialTime', initialTime);
 
     // Calculate the elapsed time since the page was loaded
     let elapsedTime = Math.floor(new Date().getTime() / 1000) - initialTime;
 
+    console.log("This is the elapsed time the diffrence",elapsedTime)
+
     // Set the initial time to the remaining time
     initialTime = initialTime + Math.max(0, 60 - elapsedTime);
+
+    console.log("After the refresh the time will change and set like this",initialTime)
 
     // Display the initial time in the console
     console.log("Initial Time:", initialTime);
 
     // Get the remaining time from sessionStorage or set it to 60 if not present
     let remainingTime = parseInt(sessionStorage.getItem('remainingTime')) || 60;
+
 
     // Display the remaining time in the console
     console.log("Remaining Time:", remainingTime);
@@ -125,5 +94,6 @@
       sessionStorage.setItem('remainingTime', remainingTime);
     });
   </script>
+
 {% endblock %}
 

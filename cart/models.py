@@ -52,7 +52,7 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
 
-    def _str_(self):
+    def __str__(self):
         return str(self.tracking_no)
     
 class OrderItem(models.Model):

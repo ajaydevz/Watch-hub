@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 40px;
+        }
+
+        #invoice {
+            padding: 30px;
+            border: 1px solid #ccc;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+        }
+
+        #invoice header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #invoice h1 {
+            font-size: 2.5em;
+            color: #333;
+        }
+
+        #invoice .details {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #invoice .client-info,
+        #invoice .invoice-info {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+
+        #invoice .client-info p,
+        #invoice .invoice-info p {
+            margin: 5px 0;
+        }
+
+        #invoice table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        #invoice table th,
+        #invoice table td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: left;
+        }
+
+        #invoice table th {
+            background-color: #f2f2f2;
+        }
+
+        #invoice table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        #invoice table tr:hover {
+            background-color: #f0f0f0;
+        }
+
+        #invoice table td.total {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="invoice">
+        <header>
+            <h1>Sales Report</h1>
+        </header>
+        <div class="details">
+            <div class="client-info">
+                <h3>Client Information</h3>
+                <p> Watchhub <br>999 Church Street<br>City, Country<br>Email: info@example.com</p>
+            </div>
+            <div class="invoice-info">
+                <h3>Invoice Information</h3>
+                <p>Invoice Number: INV-001<br>Invoice Date: {{current_date}}<br>Due Date: {{due_date}}</p>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Order Id</th>
+                    <th>Tracking No</th>
+                    <th>Total Price</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.tracking_no }}</td>
+                    <td>{{ order.total_price }}</td>
+                    <td>{{ order.status }}</td>
+                    <td>{{ order.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

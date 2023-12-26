@@ -5,6 +5,12 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_control
 from cart.models import Order,OrderItem
+from django.template.loader import get_template
+# from xhtml2pdf import pisa
+from django.db.models import Sum
+from django.utils.datetime_safe import datetime
+from django.http import HttpResponse
+from django.http import StreamingHttpResponse
 from django.contrib.admin.views.decorators import staff_member_required
 from categories.models import Category,Sub_Category
 
@@ -379,3 +385,54 @@ def OrderStatus(request):
         'order_item': order_item
     }
     return render(request, 'dashboard/orders_details.html', context)
+
+
+
+def sales_report_pdf_download(request):
+    # Handle filtering by date range
+    if request.method == 'POST':
+        start_date_str = request.POST.get('start_date')
+        end_date_str = request.POST.get('end_date')
+
+        try:
+            # Convert date strings to datetime objects
+            start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
+            end_date = datetime.strptime(end_date_str, '%Y-%m-%d')
+
+            # Filter orders based on the date range
+            orders = Order.objects.filter(created_at__range=(start_date, end_date))
+        except ValueError:
+            # Handle the case where date strings are not valid
+            orders = None
+    else:
+        # If not a POST request, retrieve all orders
+        orders = Order.objects.all()
+
+    # Calculate total sales
+    total_sales = orders.aggregate(Sum('total_price'))['total_price__sum'] or 0
+
+    # Prepare context for the template
+    context = {
+        'orders': orders,
+        'total_sales': total_sales,
+    }
+
+    # Render the template
+    return render(request, 'dashboard/sales_report_pdf.html', context)
+
+
+# def render_to_pdf(template_path, context_dict):
+#     template = get_template(template_path)
+#     html = template.render(context_dict)
+    
+#     # Use StreamingHttpResponse for better handling of large files
+#     response = StreamingHttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = 'attachment; filename="Sales_report.pdf"'
+
+#     # Create a PDF with xhtml2pdf
+#     pdf_data = pisa.CreatePDF(html, dest=response)
+#     if pdf_data.err:
+#         return HttpResponse('We had some errors <pre>' + html + '</pre>')
+
+#     return response
+
