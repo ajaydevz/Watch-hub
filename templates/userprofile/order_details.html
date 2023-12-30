@@ -154,10 +154,12 @@
                                     <td>Payment Methode</td>
                                     <td>: {{order.payment_mode}}</td>
                                 </tr>
-                                <tr>
-                                    <td>Payment Id</td>
-                                    <td>: {{order.payment_id}}</td>
-                                </tr>
+                                {% if order.payment_mode == 'Paid by Razorpay' %}
+                                    <tr>
+                                        <td>Payment Id</td>
+                                        <td>: {{order.payment_id}}</td>
+                                    </tr>
+                                {% endif %}
                                 <tr>
                                     <td>Tracking No</td>
                                     <td>: {{order.tracking_no}}</td>

@@ -127,7 +127,7 @@
                             </div>
                             <div class="form-group col">
                                 <label for="imageUpload">Variant Image</label>
-                                <input type="file" class="form-control" id="imageUpload" accept="image/*" name="VariantImage" multiple>
+                                <input type="file" class="form-control" id="imageUpload" accept="image/*" name="VariantImage" onchange="validateImageUpload(this)" multiple>
                                 <small id="imageError" class="text-danger"></small>
                             </div>
                         
@@ -193,7 +193,7 @@
                         </div>  
                     <div class="form-group col">
                         <label for="imageUpload">Variant Image</label>
-                        <input type="file" class="form-control" id="imageUpload" name="VariantImage" accept="image/*" multiple required> 
+                        <input type="file" class="form-control" id="imageUpload" name="VariantImage" accept="image/*" onchange="validateImageUpload(this)" multiple required> 
                         <small id="imageError" class="text-danger"></small>
                     </div>
                     <div class="modal-footer">
@@ -350,7 +350,33 @@
                 }
             }
         });
+        
+        function validateImageUpload(input) {
+            var validExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+            var minImageCount = 4;
     
+            var files = input.files;
+            var fileCount = files.length;
+    
+            // Check the number of selected files
+            if (fileCount < minImageCount) {
+                alert('Please upload at least ' + minImageCount + ' images.');
+                input.value = ''; // Clear the file input
+                return;
+            }
+    
+            // Check each file's extension
+            for (var i = 0; i < fileCount; i++) {
+                var fileName = files[i].name.toLowerCase();
+                var fileExtension = fileName.split('.').pop();
+    
+                if (!validExtensions.includes(fileExtension)) {
+                    alert('Please upload only valid image files (jpg, jpeg, png, or gif).');
+                    input.value = ''; // Clear the file input
+                    return;
+                }
+            }
+        }
 
 
         

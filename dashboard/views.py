@@ -17,6 +17,8 @@ from categories.models import Category,Sub_Category
 from django.utils import timezone
 
 
+
+
 # Create your views here.
 @cache_control(no_store=True, no_cache=True)
 def AdminLogin(request):

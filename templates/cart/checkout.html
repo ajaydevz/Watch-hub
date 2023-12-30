@@ -25,18 +25,20 @@
     <div class="container">
         <div class="row mb-5 d-flex justify-content-center">
             <h2 class="h3 mb-2 mt-5 text-black" style="color: black;">Shipping address</h2>
-            <div class="card-body">
-                <h5 class="card-title" style="color:black;"><strong>{{ address.recipient_name }}</strong>
-                </h5>
-                <p class="card-text">
-                    {{ address.house_no }}/{{ address.street_name }}<br>
-                    {{ address.village_name }}<br>
-                    {{ address.postal_code }}/{{ address.district }}<br>
-                    {{ address.state }}/{{ address.country }}
-                </p>
-            </div>
-            <input type="hidden" name="selected_address" value="{{ address.id }}">
+            <br></br>
+            
         </div>
+        <div class="card-body">
+            <h5 class="card-title" style="color:black;"><strong>{{ address.recipient_name }}</strong>
+            </h5>
+            <p class="card-text">
+                {{ address.house_no }}/{{ address.street_name }}<br>
+                {{ address.village_name }}<br>
+                {{ address.postal_code }}/{{ address.district }}<br>
+                {{ address.state }}/{{ address.country }}
+            </p>
+        </div>
+        <input type="hidden" name="selected_address" value="{{ address.id }}">
 
         <div class="p-3 p-lg-5 border bg-white">
             <table class="table site-block-order-table mb-5">

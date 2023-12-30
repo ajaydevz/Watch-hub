@@ -155,7 +155,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="postal_code" class="form-label">Postal Code:</label>
-                                <input type="text" class="form-control" id="postal_code" name="postal_code" value=""
+                                <input type="text" class="form-control" id="postal_code" name="postal_code" pattern="[1-9]\d{5}" value=""
                                     required>
                             </div>
                         </div>
@@ -333,7 +333,7 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="postal_code" class="form-label">Postal Code:</label>
-                                        <input type="text" class="form-control" id="postal_code-{{ address.id }}" name="postal_code"
+                                        <input type="text" class="form-control" id="postal_code-{{ address.id }}" name="postal_code" pattern="[1-9]\d{5}"
                                             value="{{ address.postal_code }}" required>
                                     </div>
                                 </div>

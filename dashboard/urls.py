@@ -28,3 +28,5 @@ urlpatterns = [
        path('get-sales-revenue/',views.GetSalesRevenue,name='get_sales_revenue'),
 
 ]
+
+

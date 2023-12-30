@@ -108,7 +108,7 @@
                                 required></textarea>
                             <div class="form-group">
                                 <label for="cat_img">SubCategory Image:</label>
-                                <input type="file" class="form-control-file" id="cat_img" name="cat_img" accept="image/*">
+                                <input type="file" class="form-control-file" id="cat_img" name="cat_img" accept="image/*" onchange="validateImageUpload(this)" required>
                             </div>
                         </div>
 
@@ -164,7 +164,7 @@
                         <!--sub Category Image Field -->
                         <div class="form-group">
                             <label for="cat_img">SubCategory Image:</label>
-                            <input type="file" class="form-control-file" id="cat_img" name="cat_img" accept="image/*"  >
+                            <input type="file" class="form-control-file" id="cat_img" name="cat_img" accept="image/*" onchange="validateImageUpload(this)" required>
                         </div>
 
                     </div>
@@ -242,7 +242,24 @@
         }
     }
     
+    function validateImageUpload(input) {
+        var validExtensions = ['jpg', 'jpeg', 'png', 'gif'];
     
+        var files = input.files;
+        var fileCount = files.length;
+    
+        // Check each file's extension
+        for (var i = 0; i < fileCount; i++) {
+            var fileName = files[i].name.toLowerCase();
+            var fileExtension = fileName.split('.').pop();
+    
+            if (!validExtensions.includes(fileExtension)) {
+                alert('Please upload only valid image files (jpg, jpeg, png, or gif).');
+                input.value = ''; // Clear the file input
+                return;
+            }
+        }
+    }
 
     
     
