@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate,login,logout
-from accounts.models import CustomUser
+from accounts.models import CustomUser,UserWallet
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_control
@@ -11,11 +11,12 @@ from django.db.models.functions import ExtractMonth
 from django.db.models import Sum
 from django.utils.datetime_safe import datetime
 from django.http import HttpResponse
+from store.models import Coupon
 from django.http import StreamingHttpResponse
 from django.contrib.admin.views.decorators import staff_member_required
 from categories.models import Category,Sub_Category
 from django.utils import timezone
-
+from django.contrib.auth.decorators import user_passes_test
 
 
 
@@ -335,61 +336,59 @@ def OrdersDetails(request,order_id):
 
 
 def OrderStatus(request):
-    # Handle updating order status
+  
     if request.method == 'POST':
-        # Get the URL of the previous page
         url = request.META.get('HTTP_REFERER')
         try:
-            # Get order_id and order_status from the form
             order_id = request.POST.get('order_id')
             order_status = request.POST.get('order_status')
-            
-            # Check if the order status is 'Order Status'
+            print(order_status)
             if order_status == 'Order Status':
-                # Retrieve order and order items
                 order = Order.objects.get(id=order_id)
                 order_item = OrderItem.objects.filter(order=order)
-                # Prepare context and redirect to the previous page
                 context = {
                     'order': order,
                     'order_item': order_item
                 }
                 return redirect(url)
-
-            # Continue with updating order status
             order = Order.objects.get(id=order_id)
             order_item = OrderItem.objects.filter(order=order)
             
-            # Update order status
             order.status = order_status
             order.save()
-
-            # Retrieve order items and prepare context
+            if order_status == 'Returned' or  order_status == 'Cancelled':
+                if order.payment_mode == "Paid by Razorpay" or order.payment_mode == "wallet":
+                    email = order.user.email
+                    user = CustomUser.objects.get(email=email)
+                    user.wallet = user.wallet + order.total_price
+                    userwallet = UserWallet()
+                    userwallet.user = user
+                    userwallet.amount = order.total_price
+                    userwallet.transaction = 'Credited'
+                    userwallet.save()
+                    user.save()  
+                    
+                order_item.save()
+                
             order_item = OrderItem.objects.filter(order=order)
             context = {
                 'order': order,
                 'order_item': order_item
             }
-
-            # Print order details for debugging
             print(order.total_price)
             print("order_status")
-            
-            # Redirect to the previous page
             return redirect(url)
          
         except:
             pass
-
-    # If not a POST request, render the order details page
     print("order_status")
     order_item = OrderItem.objects.filter(order=order)
     context = {
         'order': order,
         'order_item': order_item
     }
-    return render(request, 'dashboard/orders_details.html', context)
 
+    return render(request, 'dashboard/orders_details.html', context)
 
 
 
@@ -553,3 +552,87 @@ def SalesReportPdfDownload(request):
     }
     pdf = RenderToPdf('dashboard/sales_report_pdf.html', context)
     return pdf
+
+
+def is_admin(user):
+    return user.is_authenticated and user.is_superuser
+
+
+@user_passes_test(is_admin, login_url='admin_login')
+def coupon(request):
+    
+    coupon=Coupon.objects.all().order_by('id')
+
+    context={
+        'coupon':coupon,
+    }
+    return render(request,'dashboard/coupon.html',context)
+
+def add_coupon(request):
+    
+    if request.method=='POST':
+        coupon_name=request.POST.get('couponName')
+        coupon_code=request.POST.get('couponCode')
+        discountAmount=request.POST.get('discountAmount')
+        validFrom=request.POST.get('validFrom')
+        validTo=request.POST.get('validTo')
+        minimumAmount=request.POST.get('minimumAmount')
+
+        if Coupon.objects.filter(coupon_name=coupon_name).exists():
+            messages.error(request,"Entered Coupon is already exists!!")
+            return redirect('coupon')
+        elif Coupon.objects.filter(code=coupon_code).exists():
+            messages.error(request,"Entered Coupon code is already exists!!")
+            return redirect('coupon')
+            
+        else:
+            coupon=Coupon(coupon_name=coupon_name,code=coupon_code,discount=discountAmount, valid_from = validFrom, valid_to = validTo, minimum_amount = minimumAmount)
+            coupon.save()
+
+            return redirect('coupon')
+        
+
+def edit_coupon(request,coupon_id):
+
+    if request.method=='POST':
+        coupon=Coupon.objects.get(id=coupon_id)
+
+        coupon_name = request.POST.get('couponName')
+        coupon.coupon_name = coupon_name
+
+        coupon_code = request.POST.get('couponCode')
+        coupon.coupon_code = request.POST.get('couponCode')
+
+        coupon.discount = request.POST.get('discountAmount')
+        coupon.valid_from = request.POST.get('validFrom')
+        coupon.valid_to = request.POST.get('validTo')
+        coupon.minimum_amount = request.POST.get('minimumAmount')
+
+        
+
+        if Coupon.objects.filter(coupon_name=coupon_name).exclude(id=coupon_id).exists():
+
+            messages.error(request,"Coupon name you have chosen is already taken ")
+            return redirect('coupon')
+        
+        elif Coupon.objects.filter(code=coupon_code).exclude(id=coupon_id).exists():
+             messages.error(request,"Coupon code you have chosen is already taken ")
+             return redirect('coupon')
+        
+        else:
+            coupon.save()
+            return redirect('coupon')
+        
+
+def block_coupon(request,coupon_id):
+
+    coupon=Coupon.objects.get(id=coupon_id)
+    if coupon.is_available == True:
+        
+        coupon.is_available=False
+    else:
+        coupon.is_available=True
+    coupon.save()
+    return redirect('coupon')
+
+

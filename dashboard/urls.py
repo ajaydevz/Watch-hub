@@ -15,6 +15,7 @@ urlpatterns = [
        path('add_categories/',views.AddCategories,name='add_categories'),
        path('edit_categories/<int:category_id>/',views.EditCategories,name='edit_categories'),
        path('delete_categories/<int:category_id>/',views.DeleteCategories,name='delete_categories'),
+       
        path('sub-categories/',views.SubCategories,name='sub_categories'),
        path('add-subcategories/',views.AddSubCategories,name='add_subcategories'),
        path('edit-subcategories/<int:subcategory_id>/',views.EditSubCategories,name='edit_subcategories'),
@@ -26,6 +27,12 @@ urlpatterns = [
 
        path('sales-report-pdf/',views.SalesReportPdfDownload, name='sales_report_pdf'),
        path('get-sales-revenue/',views.GetSalesRevenue,name='get_sales_revenue'),
+
+       path('coupon',views.coupon,name='coupon'),
+       path('add-coupon',views.add_coupon,name="add_coupon"),
+       path('edit-coupon/<int:coupon_id>/',views.edit_coupon,name="edit_coupon"),
+       path('block-coupon/<int:coupon_id>/',views.block_coupon,name="block_coupon"),
+
 
 ]
 

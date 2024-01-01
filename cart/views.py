@@ -58,6 +58,7 @@ def _cart_id(request):
     if not cart:
         cart=request.session.create()
     return cart
+
 @login_required(login_url='user_login')
 def add_cart(request,product_id):
     print('add cart from wishlist is working')
@@ -334,6 +335,7 @@ def checkout_page(request):
                 'quantity': quantity,
                 'cart_items': cart_items,
                 'total' : total,
+                'wallet' :wallet,
                 
             
             }
@@ -371,6 +373,7 @@ def checkout_page(request):
             'quantity': quantity,
             'cart_items': cart_items,
             'total' : total,
+            'wallet' :wallet,
            
         
             }

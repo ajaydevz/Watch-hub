@@ -57,3 +57,19 @@ class Variation(models.Model):
 
         def _str_(self):
             return f"{self.product.product_name} - {self.color}"
+
+
+class Coupon(models.Model):
+    coupon_name=models.CharField(max_length=20,default='discount coupon')
+    code = models.CharField(max_length=10)
+    discount = models.IntegerField(default=100 )
+    valid_from = models.DateField()
+    valid_to = models.DateField()
+    is_expired = models.BooleanField(default=False)
+    minimum_amount = models.IntegerField(default=500)
+    is_available = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.code
+    
+    
