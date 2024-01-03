@@ -17,7 +17,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from categories.models import Category,Sub_Category
 from django.utils import timezone
 from django.contrib.auth.decorators import user_passes_test
-
+from django.shortcuts import get_object_or_404
 
 
 # Create your views here.
@@ -624,9 +624,11 @@ def edit_coupon(request,coupon_id):
             return redirect('coupon')
         
 
+
 def block_coupon(request,coupon_id):
 
     coupon=Coupon.objects.get(id=coupon_id)
+    print("hihihihjihihihihihihihiii")
     if coupon.is_available == True:
         
         coupon.is_available=False
@@ -634,5 +636,11 @@ def block_coupon(request,coupon_id):
         coupon.is_available=True
     coupon.save()
     return redirect('coupon')
+
+
+
+
+
+
 
 

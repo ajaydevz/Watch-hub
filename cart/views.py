@@ -8,7 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from accounts.models import CustomUser,UserWallet
 from wishlist.models import WishlistItem
 from userprofile.models import Address
-from store.models import Product, Variation
+from store.models import Product, Variation,Coupon
 from cart.models import Cart,CartItem, Order, OrderItem
 from django.utils import timezone
 # Create your views here.
@@ -321,6 +321,8 @@ def checkout_page(request):
 
                 # Get today's date
                 today = timezone.now().date()
+                coupons=Coupon.objects.filter(minimum_amount__lte=grand_total,valid_to__gte=today ,is_available=True )
+
                 
 
             except ObjectDoesNotExist:
@@ -328,7 +330,8 @@ def checkout_page(request):
                 pass
 
             context = {
-               
+
+                'coupons':coupons,
                 'address': address,
                 'tax': tax,
                 'grand_total': grand_total,
@@ -361,13 +364,15 @@ def checkout_page(request):
                 quantity += cart_item.quantity
             tax = (2*total)/100
             grand_total = total + tax
+            coupons=Coupon.objects.filter(minimum_amount__lte=grand_total)
             print("bbbbbbbbbbbbb")
         except ObjectDoesNotExist:
             print("cccccccccccccccccc")    
             pass
 
         context = {
-            
+
+            'coupons':coupons,
             'tax': tax,
             'grand_total': grand_total,
             'quantity': quantity,
@@ -658,9 +663,22 @@ def update_product_quantity(order):
         product_variant.save()
 
 
-
-
-
-
 def OrderSuccess(request):
     return render(request, 'cart/thankyou.html')
+
+def ApplyCoupon(request):
+    
+    if request.method=='POST':
+        coupon_code = request.POST.get('key1')
+        
+        grand_total=request.POST.get('key2')
+        grand_totals=float(grand_total)
+        try:
+            coupon = Coupon.objects.get(code=coupon_code,is_available=True)
+            
+        except:
+            print("its working on except")
+        discount_amount=coupon.discount
+        total=grand_totals-discount_amount
+        request.session['grand_total'] = total
+        return JsonResponse({"total": f"{total}", "discount_amount": f"{discount_amount}"})

@@ -3,6 +3,28 @@
 
 {% block content %}
 
+<style>
+    .coupon-container {
+        max-width: 800px; /* Adjust as needed */
+        margin: 0 auto;
+    }
+    
+    .coupon-card {
+        max-width: 350px; /* Adjust as needed */
+    }
+    
+    .coupon-code {
+        width: 100%;
+    }
+    
+    .alert {
+        margin-top: 0.5rem;
+    }
+    
+
+</style>
+
+
 
 
 <!-- Start Hero Section -->
@@ -17,29 +39,77 @@
         </div>
     </div>
 </div>
+<div class="coupon-container mt-5">
+    {% if coupons %}
+        <div class="d-flex justify-content-center">
+            <label for="myDropdown" style="color: #000; font-weight: 700;">
+                <h2>Coupons available for you</h2>
+            </label>
+        </div>
+
+        <div class="d-flex flex-wrap justify-content-center">
+            {% for coupon in coupons %}
+            <div class="coupon-card mx-3 my-3">
+                <h6 class="fw-bold text-success">Coupon-{{ forloop.counter }}</h6>
+                <div class="card mb-3" style="border: 1px solid rgb(106, 106, 106); border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                    <div class="card-body"  style="background-color: darkseagreen;">
+                        <h5 class="card-title"> {{ coupon.coupon_name }}</h5>
+                        <h6 class="mt-2">Coupon Code:</h6>
+                        <div class="d-flex align-items-center">
+                            <input class="form-control coupon-code" type="text" value="{{ coupon.code }}" readonly>
+                            <button type="button" class="btn btn-primary ml-2" onclick="copyText(this)">Copy</button>
+                            <div class="alert alert-success ml-2" role="alert" style="display: none;">Coupon code copied!</div>
+                        </div>
+                        <p class="mt-2" style="color: #04090a;">Enjoy a discount of Rs.{{ coupon.discount }} on your purchase!</p>
+                        <p class="text-danger mb-0">Valid from {{ coupon.valid_from }} to {{ coupon.valid_to }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="d-flex justify-content-center mt-3 mb-3">
+            <label style="color: #000; font-weight: 700;">There are no coupons available for you right now</label>
+        </div>
+    {% endif %}
+</div>
 
 
 
 <form method="POST" action="{% url 'place_order' %}">
     {% csrf_token %}
     <div class="container">
+        <h2 class="h3 mb-2 mt-5 text-black" style="color: black;">Shipping address</h2>
         <div class="row mb-5 d-flex justify-content-center">
-            <h2 class="h3 mb-2 mt-5 text-black" style="color: black;">Shipping address</h2>
-            <br></br>
-            
+            <div class="card-body">
+                <h5 class="card-title" style="color:black;"><strong>{{ address.recipient_name }}</strong>
+                </h5>
+                <p class="card-text">
+                    {{ address.house_no }}/{{ address.street_name }}<br>
+                    {{ address.village_name }}<br>
+                    {{ address.postal_code }}/{{ address.district }}<br>
+                    {{ address.state }}/{{ address.country }}
+                </p>
+            </div>
+            <input type="hidden" name="selected_address" value="{{ address.id }}">
         </div>
-        <div class="card-body">
-            <h5 class="card-title" style="color:black;"><strong>{{ address.recipient_name }}</strong>
-            </h5>
-            <p class="card-text">
-                {{ address.house_no }}/{{ address.street_name }}<br>
-                {{ address.village_name }}<br>
-                {{ address.postal_code }}/{{ address.district }}<br>
-                {{ address.state }}/{{ address.country }}
-            </p>
-        </div>
-        <input type="hidden" name="selected_address" value="{{ address.id }}">
 
+        <div class="col-lg-4 d-flex justify-content-end">
+            <div class="row">
+                <div class="col-lg-12">
+                    <p class="text-info">Enter your coupon code</p>
+                </div>
+                <div class=" mb-3 col-lg-6">
+                    <input type="text" class="form-control py-3" id="coupon" placeholder="Coupon Code">
+                </div>
+                <div class="col-lg-4 mb-5">
+                    <button type="button" id="ApplyCoupon" class="btn-success"
+                        style="border-radius:20%; height:55px; border: 1px solid #346d44;">Apply
+                        coupon</button>
+                </div>
+            </div>
+        </div>
         <div class="p-3 p-lg-5 border bg-white">
             <table class="table site-block-order-table mb-5">
                 <thead>
@@ -60,10 +130,10 @@
                         <td><strong class="mx-2">Tax</strong></td>
                         <td>₹ {{ tax }}</td>
                     </tr>
-                    {% comment %} <tr>
+                    <tr>
                         <td><strong class="mx-2">Discount</strong></td>
-                        <td>₹ <span id = 'discounts'></span> 0</td>
-                    </tr> {% endcomment %}
+                        <td>₹ <span id = 'discounts'></span>.0</td>
+                    </tr>
                     <tr>
                         <td><strong class="mx-2">Grand Total</strong></td>
                         <td >₹ <span  id='grand_total'>{{ grand_total }}</span> </td>
@@ -100,70 +170,129 @@
 
 {%endblock content%}
 
-
 {% block script %}
-
- <script>
-     $(document).ready(function () {
- 
-         $('.paywithwallet').click(function (e) {
-             e.preventDefault();
-             console.log("Clicked the wallet buttonn");
-             var address_id = $("[name='selected_address']").val();
-             var token = $("[name='csrfmiddlewaretoken']").val();
-     
-             data = {
-                 'selected_address': address_id,
-                 'payment_mode': 'wallet',
-                 'payment_id': '',
-                 csrfmiddlewaretoken: token,
-     
-             };
-             $.ajax({
-                 url: '/cart/place-order/',
-                 method: 'POST',
-                 data: data,
-                 
-                 success: function (responseData) {
-                 console.log(responseData);
-                     swal({
-                         title: "Congratulations!",
-                         text: "Your order has been placed successfully",
-                         icon: "success",
-                         buttons: true,
-                         dangerMode: true,
-                     }).then((willDelete) => {
-                         if (willDelete) {
-                         console.log('...........');
-                             window.location.href = '/cart/order-success/'
-                         } else {
-                             swal("Your imaginary file is safe!");
-                         }
-                     });
-                 },
-                 error: function (error) {
-                     // Callback function to handle errors
-                     console.error('Error:', error);
-                 }
-             });
-     
-     
-     
-         });
- 
-     });
- </script>
-  
-
-
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
- <script src="https://checkout.razorpay.com/v1/checkout.js"></script
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
+<script>
+    function copyText(button) {
+        // Find the input element related to the clicked button
+        var couponCodeInput = button.parentElement.querySelector('.coupon-code');
 
+        // Select the text inside the input
+        couponCodeInput.select();
+        couponCodeInput.setSelectionRange(0, 99999); // For mobile devices
 
+        // Copy the text to clipboard
+        document.execCommand('copy');
 
+        // Optionally, provide some feedback to the user
+        //alert('Copied the coupon code: ' + couponCodeInput.value);
+        // Show the alert message when the code is copied
+        var alertMessage = button.parentElement.querySelector('.alert');
+        alertMessage.style.display = 'block';
+
+        // Hide the alert after a certain time (e.g., 3 seconds)
+        setTimeout(function () {
+            alertMessage.style.display = 'none';
+        }, 3000);
+    }
+
+    jQuery.noConflict(); // Release the $ variable
+
+    var couponApplied = false; // Flag to check if the coupon is already applied
+
+    document.getElementById('ApplyCoupon').addEventListener('click', function () {
+        if (couponApplied) {
+            // Coupon already applied, do not proceed
+            console.log("Coupon already applied!");
+            return;
+        }
+
+        console.log("Applying coupon...");
+
+        var coupon_code = document.getElementById('coupon').value;
+        var grand_total = document.getElementById('grand_total').innerText;
+        console.log(grand_total, "This is the total value to Checkout");
+        var token = $("[name='csrfmiddlewaretoken']").val();
+        var dataToSend = {
+            key1: coupon_code,
+            key2: grand_total,
+            csrfmiddlewaretoken: token,
+        };
+
+        $.ajax({
+            url: '/cart/apply-coupon/',
+            method: 'POST',
+            data: dataToSend,
+            success: function (response) {
+                // Handle the response from the server
+                console.log(document.getElementById('discounts').innerText);
+                document.getElementById('discounts').innerText = +response.discount_amount;
+
+                console.log(response.total);
+                console.log("this is the discounted amount ", response.discount_amount);
+                console.log("this is the discounted amount1111 ", response.total);
+
+                document.getElementById('grand_total').innerText = response.total;
+
+                // Set the flag to indicate that the coupon has been applied
+                couponApplied = true;
+            },
+            error: function (error) {
+                // Handle errors
+                console.error('Error:', error);
+            }
+        });
+    });
+
+    $(document).ready(function () {
+
+        $('.paywithwallet').click(function (e) {
+            e.preventDefault();
+            console.log("Clicked the wallet button");
+            var address_id = $("[name='selected_address']").val();
+            var token = $("[name='csrfmiddlewaretoken']").val();
+
+            data = {
+                'selected_address': address_id,
+                'payment_mode': 'wallet',
+                'payment_id': '',
+                csrfmiddlewaretoken: token,
+
+            };
+            $.ajax({
+                url: '/cart/place-order/',
+                method: 'POST',
+                data: data,
+
+                success: function (responseData) {
+                    console.log(responseData);
+                    swal({
+                        title: "Congratulations!",
+                        text: "Your order has been placed successfully",
+                        icon: "success",
+                        buttons: true,
+                        dangerMode: true,
+                    }).then((willDelete) => {
+                        if (willDelete) {
+                            console.log('...........');
+                            window.location.href = '/cart/order-success/'
+                        } else {
+                            swal("Your imaginary file is safe!");
+                        }
+                    });
+                },
+                error: function (error) {
+                    // Callback function to handle errors
+                    console.error('Error:', error);
+                }
+            });
+
+        });
+
+    });
+</script>
 {% endblock script %}

@@ -172,13 +172,15 @@
                             data-target="#exampleModal-{{ forloop.counter }}">Edit</button>
 
                     </td>
+    
+
                     <td>
                         {% if coupon.is_available %}
                             <a href="{% url 'block_coupon' coupon_id=coupon.id %}">
                                 <button class="btn btn-danger toggle-btn">Deactivate</button>
                             </a>
                         {% else %}
-                        <a href="{% url 'block_coupon' coupon_id=coupon.id %}">
+                            <a href="{% url 'block_coupon' coupon_id=coupon.id %}">
                                 <button class="btn btn-success toggle-btn">Activate</button>
                             </a>
                         {% endif %}
@@ -190,8 +192,7 @@
         </table>
     </div>
 </main>
-
-{% endblock%}
+{% endblock %}
 
 {% block script%}
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -212,7 +213,6 @@ crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
 integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
@@ -224,76 +224,7 @@ $(document).ready(function () {
 });
 
 </script>
-<script>
-function  validateAddCouponForm(couponNameId, couponCodeId, discountAmountId, validFromId, validToId, minimumAmountId) {
-    // Get form inputs
-    var couponName = document.getElementById(couponNameId).value.trim();
-    var couponCode = document.getElementById(couponCodeId).value;
-    var discountAmount = document.getElementById(discountAmountId).value;
-    var validFrom = document.getElementById(validFromId).value;
-    var validTo = document.getElementById(validToId).value;
-    var minimumAmount = document.getElementById(minimumAmountId).value;
 
-    // Perform validations
-    
-    // Perform validations
-    if (!/^[a-zA-Z][a-zA-Z\s]{0,9}$/.test(couponName)) {
-        alert('Please enter a valid coupon name with up to 10 letters and spaces.');
-        return false;
-    }
-
-
-    // Check if coupon name is only spaces
-    if (/^\s+$/.test(couponName)) {
-        alert('Coupon name cannot be only spaces.');
-        return false;
-    }
-
-    // Check if coupon name length is between 3 and 12 characters
-    if (couponName.length < 3 || couponName.length > 10) {
-        alert('Coupon name should be between 3 and 10 characters.');
-        return false;
-    }
-
-    if (couponCode.trim() === '' || !/^[a-zA-Z0-9]+$/.test(couponCode)) {
-        alert('Please enter a valid coupon code.');
-        return false;
-    }
-
-    if (isNaN(discountAmount) || parseInt(discountAmount) < 1) {
-        alert('Please enter a valid discount amount.');
-        return false;
-    }
-
-    // Convert date strings to Date objects for comparison
-    var startDate = new Date(validFrom);
-    var endDate = new Date(validTo);
-
-    // Check if start date is before end date
-    if (startDate >= endDate) {
-        alert('End date must be after the start date.');
-        return false;
-    }
-
-    // Check if start date is before or equal to the current date
-    var currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0);
-    if (startDate <= currentDate) {
-        alert('Start date must be after the current date.');
-        return false;
-    }
-
-    // Check if end date is before or equal to the current date
-    if (endDate <= currentDate) {
-        alert('End date must be after the current date.');
-        return false;
-    }
-    // Perform additional validations as needed
-    
-    // If all validations pass, return true to submit the form
-    return true;
-}
-</script>
 
 <script>
     
@@ -310,11 +241,6 @@ function  validateAddCouponForm(couponNameId, couponCodeId, discountAmountId, va
     // Perform validations
     
     // Perform validations
-    if (!/^[a-zA-Z][a-zA-Z\s]{0,9}$/.test(couponName)) {
-        alert('Please enter a valid coupon name with up to 10 letters and spaces.');
-        return false;
-    }
-
 
     // Check if coupon name is only spaces
     if (/^\s+$/.test(couponName)) {
