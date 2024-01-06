@@ -46,6 +46,8 @@ def ViewSubcategory(request,category_id):
     # Assuming you already have 'subcategory' containing the filtered subcategories
     variants = Variation.objects.filter(product__sub_category__in=subcategory,is_available=True)
 
+        
+
 
     context={
         'subcategory':subcategory,
@@ -72,6 +74,47 @@ def ProductDetails(request,variant_id):
 
     variants = Variation.objects.get(pk=variant_id)
     product_id = variants.product
+    print(type(variants))
+
+    category_offer_percentage = float(variants.product.category.category_offer)
+    
+    # Convert the selling price to a Decimal before performing the multiplication
+    selling_price = float(variants.selling_price)
+    
+    # Calculate the discount amount based on the category offer percentage
+    discount_amount = selling_price * (category_offer_percentage / 100)
+    
+    # Calculate the offer price by subtracting the discount amount from the selling price
+    offer_price = selling_price - discount_amount
+    
+    
+    
+    
+    # Calculate the offer price based on the category offer percentage
+   
+
+
+    available_variants =Variation.objects.filter(product=product_id,is_available=True)
+
+    for i in available_variants:
+
+        print(i.color)
+    context={
+        # 'product':product,
+        'variant': variants,
+        'available_variants':available_variants,
+        'offer_price': offer_price,
+    }
+
+    return render(request,'home\product_details.html',context)
+
+
+
+
+
+def VariantSelect(request,variant_id):
+    variants = Variation.objects.get(pk=variant_id)
+    product_id = variants.product
 
     available_variants =Variation.objects.filter(product=product_id,is_available=True)
 
@@ -84,15 +127,62 @@ def ProductDetails(request,variant_id):
         'available_variants':available_variants
     }
 
-    return render(request,'home/product_details.html',context)
+    return render(request,'home\product_details.html',context)
 
 
 
-def VariantSelect(request,variant_id):
+def ProductSearch(request):
 
-    variants = Variation.objects.get(pk=variant_id)
-    product_id = variants.product
+    query = request.GET.get('search')
+    color_filter = request.GET.get('color')
+    print(color_filter)
+    sort = request.GET.get('sort')
+    print(sort)
 
-    # return render(request,'product_details.html',variant_id)
-    return render(request, 'home/product_details.html', {'variant_id': variant_id})
+    categories = Category.objects.filter(is_activate=True)
+    products = Product.objects.filter(is_activate=True)
+    available_colors = Variation.objects.filter(is_available=True).values('color').distinct()
+    variants = Variation.objects.filter(is_available=True)
+
+    if query:
+        variants = variants.filter(product__product_name__icontains=query)
+
+    if color_filter:
+        variants = variants.filter(color=color_filter)
+
+    if sort == '1':
+        variants = variants.order_by('-selling_price')
+    else:
+        variants = variants.order_by('selling_price')
+
+    context = {
+        'category': categories,
+        'product': products,
+        'variants': variants,
+        'color': available_colors,
+    }
+
+    return render(request, 'home/shop.html', context)
+
+
+def ProductSort(request):
+    sort=request.GET.get('sort')
+    categories=Category.objects.filter(is_activate=True)
+    products=Product.objects.filter(is_activate=True)
+    available_colors = Variation.objects.filter(is_available=True).values('color').distinct()
+
+    if sort== '1':
+        variants=Variation.objects.filter(is_available=True).order_by('-selling_price')
+
+    else:
+         variants=Variation.objects.filter(is_available=True).order_by('selling_price')
+
+    context={
+        'category':categories,
+        'product':products,
+        'variants':variants,
+        "color":available_colors,
+    }
+
+    return render(request,'home/shop.html',context)
 

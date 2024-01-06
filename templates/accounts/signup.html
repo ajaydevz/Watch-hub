@@ -64,6 +64,13 @@
 						<label for="showConfirmPassword">Show Password</label>
 	
 					</div>
+
+					<div class="form-group ">
+						<label for="referral_code" class="form-control">Referel Code(Optional)</label>
+						<input type="text" class="form-control" id="referral_code" placeholder="Enter Refrel Code"
+							name="referral_code">
+					</div>
+					
 					<div class="d-flex justify-content-center">
 						<button id="test" type="submit" class="btn btn-primary btn-block signup_button mt-3">Send OTP</button>
 					</div>
@@ -114,6 +121,8 @@
 			});
 		
 			function validateForm() {
+
+				sessionStorage.clear()
 				// Implement your validation logic here
 				var username = $("#username").val();
 				var email = $("#email").val();

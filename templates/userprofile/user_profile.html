@@ -35,6 +35,7 @@
                             </a>
                         </li>
                     </div>
+                    
                     <div class="itemsdiv mx-2 my-2">
                         <li class="nav-item">
                             <a class="nav-link navitem" href="{% url 'wishlist_view'%}">
@@ -101,9 +102,18 @@
                         </form>
                         {%endif%}
                     </div>
+                    
 
                 </div>
-                
+                <div class="col-lg-12">
+                    <div class="text-center mt-3">
+                        <p>Referral Code: <span id="referral-code">{{ user.referral_code }}</span>
+                            <button id="k" type="button" onclick="ajay('{{ user.referral_code }}')"
+                                style="border: 0; background-color: rgb(206, 204, 202); border-radius: 10px;"
+                                class="p-1 copy-button">Copy</button>
+                        </p>
+                    </div>
+                </div>
 
 
             </div>
@@ -420,6 +430,18 @@ aria-hidden="true">
 {% endblock %}
 {% block script %}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function ajay(i) {
+        console.log(i)
+        navigator.clipboard.writeText(i);
+        const copyButton = document.getElementById('k');
+        copyButton.textContent = "Copied!";
+        setTimeout(() => {
+            copyButton.textContent = "Copy";
+        }, 5000);
+    };
+</script>
 
 <script>
     function confirmDelete(addressId) {

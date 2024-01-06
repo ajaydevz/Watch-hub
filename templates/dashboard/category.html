@@ -54,6 +54,14 @@
                             <canvas id="imageCanvas"></canvas>
                             <div id="preview-container"></div>
                         </div>
+                
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="offerCategory">Category Offer in %</label>
+                            <input type="number" id="offerCategory" class="form-control" min="0" name="category_offer"/>
+                        </div>
+                        
+                        
                         
                                               
                     </div>
@@ -99,8 +107,16 @@
                         <div class="form-group">
                             <label for="cat_img">Category Image:</label>
                             <input type="file" class="form-control-file" id="category_img"  name="category_img" accept="image/*" onchange="validateImageUpload(this)" required>
-                           
+                            <div id="error-message"></div>
+                            <canvas id="imageCanvas"></canvas>
+                            <div id="preview-container"></div>
                         </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="offerCategory">Category Offer in %</label>
+                            <input type="number" id="offerCategory" class="form-control" value="{{ category.category_offer }}" min="0" name="category_offer"/>
+                        </div>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -127,7 +143,8 @@
                     <th>Description</th>
                     <th>Image</th>
                     <th>Actions</th>
-                    <th></th>
+                    <th>Actions</th>
+                    
                 </tr>
             </thead>
             <tbody>
@@ -162,9 +179,15 @@
 {% block script%}
 
 <script>
-    $(document).ready(function () {
-        $('#example').DataTable();
+    $(document).ready(function() {
+        $('#example').DataTable({
+            "columnDefs": [
+                { "targets": [0, 1, 2, 3], }, // Adjust the column indices based on your table structure
+            ]
+        });
     });
+
+    
 
 
    

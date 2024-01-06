@@ -248,7 +248,7 @@
         });
     });
 
-    $(document).ready(function () {
+    {% comment %} $(document).ready(function () {
 
         $('.paywithwallet').click(function (e) {
             e.preventDefault();
@@ -291,6 +291,56 @@
                 }
             });
 
+        });
+
+    }); {% endcomment %}
+</script>
+<script>
+    $(document).ready(function () {
+
+        $('.paywithwallet').click(function (e) {
+            e.preventDefault();
+            console.log("Clicked the wallet buttonn");
+            var address_id = $("[name='selected_address']").val();
+            var token = $("[name='csrfmiddlewaretoken']").val();
+    
+            data = {
+                'selected_address': address_id,
+                'payment_mode': 'wallet',
+                'payment_id': '',
+                csrfmiddlewaretoken: token,
+    
+            };
+            $.ajax({
+                url: '/cart/place-order/',
+                method: 'POST',
+                data: data,
+                
+                success: function (responseData) {
+                console.log(responseData);
+                    swal({
+                        title: "Congratulations!",
+                        text: "Your order has been placed successfully",
+                        icon: "success",
+                        buttons: true,
+                        dangerMode: true,
+                    }).then((willDelete) => {
+                        if (willDelete) {
+                        console.log('...........');
+                            window.location.href = '/cart/order-success/'
+                        } else {
+                            swal("Your imaginary file is safe!");
+                        }
+                    });
+                },
+                error: function (error) {
+                    // Callback function to handle errors
+                    console.error('Error:', error);
+                }
+            });
+    
+    
+    
         });
 
     });

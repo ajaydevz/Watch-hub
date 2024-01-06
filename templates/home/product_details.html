@@ -7,28 +7,81 @@
 {% endblock %}
 
 {% block content %}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- <style>
+    .btn variant-button.clicked {
+        
+        border:5px;
+        border-style: solid;
+        border-color: white
+        
+        /* Scale the button up by 20% when clicked */
+    }
+</style> -->
+<style>
+    * {box-sizing: border-box;}
+    
+    .img-zoom-container {
+      position: relative;
+    }
+    
+    .img-zoom-lens {
+      position: absolute;
+      border: 1px solid #d4d4d4;
+      /*set the size of the lens:*/
+      width: 40px;
+      height: 40px;
+    }
+    
+    .img-zoom-result {
+      border: 1px solid #d4d4d4;
+      /*set the size of the result div:*/
+      width: 300px;
+      height: 300px;
+    }
+    </style>
+
+{% if messages %}
+<div class="text-dark d-flex justify-content-center mt-2" id="messagesDiv">
+    {% for message in messages%}
+    <p
+        style="background-color: rgb(255, 114, 114); border-radius:10px; padding-left:30px;padding-right:30px; padding-top:10px; padding-bottom:10px;">
+        {{message}}</p>
+    {%endfor%}
+</div>
+{% endif %}
+
 <div class="container mt-5">
     <div class="row d-flex justify-content-center">
         <!-- Main Product Image -->
         <div class="col-sm-6 mx-auto vertical-align">
-            <div class="col-md-6">
+
+            <div class="col-md-6 img-zoom-container">
                 <!-- Main Product Image -->
-                <img src="/media/{{ variant.image1 }}" onclick="changeImage()" id="main-image" class="img-fluid" width="140%">
+                <img src="/media/{{variant.image1}}" id="myimage" class="img-fluid" width="140%">
+                <div  class="img-zoom-lens"></div>
             </div>
-            <div class="d-flex flex-row col-md-6">
+            <div id="myresult" class="img-zoom-result"></div>
+            <!-- Small Images Container -->
+            <div class="d-flex flex-row col-md-6 ">
                 <!-- Small Images -->
                 <div class="small-image mt-3 mb-5">
-                    <img src="/media/{{ variant.image2 }}" id="image1" alt="Small Image 1" class="img-fluid small-img" style="width: 100%;">
+                    <img src="/media/{{variant.image2}}" class="sub-image" alt="Small Image 1" id="image_2"
+                        class="img-fluid small-img" style="width: 100%;" onclick="swapMainWithSubImage(this);">
                 </div>
-                <div class="small-image mt-3 mb-2">
-                    <img src="/media/{{ variant.image3 }}" alt="Small Image 2" class="img-fluid small-img" style="width: 100%;">
+                <div class="small-image  mt-3 mb-2">
+                    <img src="/media/{{variant.image3}}" class="sub-image" alt="Small Image 2" id="image_3"
+                        class="img-fluid small-img" style="width: 100%;" onclick="swapMainWithSubImage(this);">
                 </div>
-                <div class="small-image mt-3 mb-2">
-                    <img src="/media/{{ variant.image3 }}" alt="Small Image 3" class="img-fluid small-img" style="width: 100%;">
+                <div class="small-image  mt-3 mb-2">
+                    <img src="/media/{{variant.image4}}" class="sub-image" alt="Small Image 3" id="image_4"
+                        class="img-fluid small-img" style="width: 100%;" onclick="swapMainWithSubImage(this);">
                 </div>
             </div>
         </div>
-
+    
         <!-- Product Details -->
         <div class="col-sm-6 mb-5">
             <h2 style="color: black; font-weight: bolder">{{ variant.product.product_name }}</h2>
@@ -60,13 +113,35 @@
                 <!-- In Stock -->
                 <div class="d-flex mt-3">
                 </div>
+
+                <h5 class="mt-4" style="color:rgb(49, 36, 36)">Available Vatiants</h5>
+                <div class="d-flex">
+    
+    
+                    {% for variants in available_variants %}
+    
+                    <div class="d-flex mr-5 mb-5 mt-1 ">
+                        <a href="{% url 'variant_select' variant_id=variants.id %}">
+                        <button type="button" class="btn variant-button" id="variant-selector-{{ variants.id }}"
+                            data-variant-id="{{ variants.id }}"
+                            style=" background: {{ variants.color }} ; margin-right:5px; width: 35px; height: 2px;border-radius:10%;">
+    
+                        </button>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+
+
                 <!-- Buttons -->
                 <div class="mt-3">
+                    <input id="variantID" type="hidden" value="{{ variant.id }}">
                     <a href="{% url 'add_cart' product_id=variant.id %}">
-                        <button class="btn btn-primary" class="btn btn-sm button-addtocart">Add to Cart</button>
+                        <button class="btn btn-primary ">Add to Cart</button>
                     </a>
+    
                     <a href="{% url 'add_to_wishlist' product_id=variant.id %}">
-                        <button class="btn" id="wishlist">Add to wishlist</button>
+                        <button class="btn btn-secondary" id="wishlist">Add to wishlist</button>
                     </a>
                 </div>
                 <!-- Add your "Add to Cart" button or any other relevant content here -->
@@ -76,53 +151,188 @@
             <p>{{ variant.product.description }}</p>
         </div>
     </div>
+    {% comment %} <div class="d-flex justify-content-around row">
+        <div class="col-lg-3">
+
+            <img src="{% static 'user\custom\images\truck.svg' %}" alt="Image" class="img-fluid">
+            <label>Fast and free shipping</label>
+        </div>
+        <div class="col-lg-3">
+            <img src="{% static 'images/bag.svg' %}" alt="Image" class="img-fluid">
+            <label>Easy to shop</label>
+        </div>
+        <div class="col-lg-3">
+            <img src="{% static 'images/support.svg' %}" alt="Image" class="img-fluid">
+            <label>24/7 support</label>
+        </div>
+        <div class="col-lg-3">
+            <img src="{% static 'images/return.svg' %}" alt="Image" class="img-fluid">
+            <label>Hassle free returns</label>
+        </div>
+    </div> {% endcomment %}
+
 </div>
 
-<script>
-    function changeImage() {
-        // Get references to the main image and the small image
-        const mainImage = document.getElementById('main-image');
-        const smallImage = document.getElementById('image1');
 
-        // Store the src attributes of the images
-        const mainImageSrc = mainImage.src;
-        const smallImageSrc = smallImage.src;
-
-        // Swap the src attributes
-        mainImage.src = smallImageSrc;
-        smallImage.src = mainImageSrc;
-    }
-</script>
 
 {% endblock %}
 
 {% block script %}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function imageZoom(imgID, resultID) {
+        var img, lens, result, cx, cy;
+        img = document.getElementById(imgID);
+        result = document.getElementById(resultID);
+        /*create lens:*/
+        lens = document.createElement("DIV");
+        lens.setAttribute("class", "img-zoom-lens");
+        /*insert lens:*/
+        img.parentElement.insertBefore(lens, img);
+        /*calculate the ratio between result DIV and lens:*/
+        cx = result.offsetWidth / lens.offsetWidth;
+        cy = result.offsetHeight / lens.offsetHeight;
+        /*set background properties for the result DIV:*/
+        result.style.backgroundImage = "url('" + img.src + "')";
+        result.style.backgroundSize = (img.width * cx) + "px " + (img.height * cy) + "px";
+        /*execute a function when someone moves the cursor over the image, or the lens:*/
+        lens.addEventListener("mousemove", moveLens);
+        img.addEventListener("mousemove", moveLens);
+        /*and also for touch screens:*/
+        lens.addEventListener("touchmove", moveLens);
+        img.addEventListener("touchmove", moveLens);
+        function moveLens(e) {
+            var pos, x, y;
+            /*prevent any other actions that may occur when moving over the image:*/
+            e.preventDefault();
+            /*get the cursor's x and y positions:*/
+            pos = getCursorPos(e);
+            /*calculate the position of the lens:*/
+            x = pos.x - (lens.offsetWidth / 2);
+            y = pos.y - (lens.offsetHeight / 2);
+            /*prevent the lens from being positioned outside the image:*/
+            if (x > img.width - lens.offsetWidth) { x = img.width - lens.offsetWidth; }
+            if (x < 0) { x = 0; }
+            if (y > img.height - lens.offsetHeight) { y = img.height - lens.offsetHeight; }
+            if (y < 0) { y = 0; }
+            /*set the position of the lens:*/
+            lens.style.left = x + "px";
+            lens.style.top = y + "px";
+            /*display what the lens "sees":*/
+            result.style.backgroundPosition = "-" + (x * cx) + "px -" + (y * cy) + "px";
+        }
+        function getCursorPos(e) {
+            var a, x = 0, y = 0;
+            e = e || window.event;
+            /*get the x and y positions of the image:*/
+            a = img.getBoundingClientRect();
+            /*calculate the cursor's x and y coordinates, relative to the image:*/
+            x = e.pageX - a.left;
+            y = e.pageY - a.top;
+            /*consider any page scrolling:*/
+            x = x - window.pageXOffset;
+            y = y - window.pageYOffset;
+            return { x: x, y: y };
+        }
+    }
+
+</script>
+
+<script>
+
+    // Initiate zoom effect:
+    imageZoom("myimage", "myresult");
+
+
+</script>
+<script>
+    $(document).ready(function () {
+        // Attach a click event handler to all buttons with the 'variant-button' class
+        $(".variant-button").click(function () {
+            var variantId = $(this).data("variant-id");
+            console.log(variantId)
+            console.log(".......................................");
+            $.ajax({
+                type: "GET", // You can change this to GET or any other method
+                url: "/home/variant_select/" + variantId + "/", // Replace with your actual backend endpoint
+                //data: { variant_id: variantId }, // Send the variantId as data -->
+                success: function (response) {
+                    $('#price').text(response.variant)
+                    $('#stock').text(response.variant_stock)
+                    $('#myimage').attr("src", response.variant_image1);
+                    $('#image_2').attr("src", response.variant_image2);
+                    $('#image_3').attr("src", response.variant_image3);
+                    $('#image_4').attr("src", response.variant_image4);
+                    $('#variantID').text(response.variant_id);
+                    console.log(response);
+
+                },
+                error: function () {
+                    // Handle errors (if any)
+                    console.log("Error sending Variant ID.");
+                }
+            });
+
+        });
+    });
+</script>
 
 <script>
     $(document).ready(function () {
-        // Attach a click event handler to all small images
-        $(".small-img").click(function () {
-            // Get the source of the clicked small image
-            var newSrc = $(this).attr("src");
+        $(".addtocart").click(function () {
+            //var variantId = $(this).data("variant-id");
+            var variantId = document.getElementById('variantID').value
+            console.log(variantId)
+            console.log(".......................................");
+            $.ajax({
+                //type: "POST", 
+                url: "/home/add-cart/" + variantId + "/", 
 
-            // Set the source of the main product image to the clicked small image source
-            $("#image_1").attr("src", newSrc);
+            });
 
-            // Optionally, you can animate the image size change for a smoother transition
-            $("#image_1").animate({
-                width: "140%"  // Adjust the size as needed
-            }, 500);  // You can adjust the animation duration (in milliseconds)
-
-            // Reset the size of other small images
-            $(".small-img").css("width", "100%");
-
-            // Set the size of the clicked small image to a larger size
-            $(this).css("width", "140%");  // Adjust the size as needed
         });
-
-        // Other code in your script...
     });
 </script>
+
+<script>
+    function swapMainWithSubImage(subImage) {
+        // Get the current main image and sub-image sources
+        var mainImage = document.getElementById("myimage");
+        var mainImageSrc = mainImage.getAttribute("src");
+        var subImageSrc = subImage.getAttribute("src");
+
+        // Set the main image source to the clicked sub-image source
+        mainImage.setAttribute("src", subImageSrc);
+
+        // Set the clicked sub-image source to the previous main image source
+        subImage.setAttribute("src", mainImageSrc);
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.getElementById('wishlist').addEventListener('click', function() {
+        Swal.fire({
+            title: 'sucsess!',
+            text: 'Added to wishlist successfully!',
+            icon: 'danger',
+            confirmButtonText: 'Okay'
+        });
+    });
+</script> 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        setTimeout(function () {
+            var messagesDiv = document.getElementById('messagesDiv');
+            if (messagesDiv) {
+                messagesDiv.style.display = 'none';
+            }
+        }, 5000); // Adjust the time as needed
+    });
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
 {% endblock %}

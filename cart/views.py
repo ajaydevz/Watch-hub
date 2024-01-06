@@ -295,9 +295,15 @@ def checkout_page(request):
             user_id = user.id
 
             selected_address_id=request.POST.get('selectedAddress')
+
+            print(selected_address_id)
+            print(selected_address_id)
+            print(selected_address_id)
             if selected_address_id is None:
-                default_address=Address.objects.get(user_id=user_id,is_default=True)
-                selected_address_id=default_address.id
+                # default_address=Address.objects.get(user_id=user_id,is_default=True)
+                # selected_address_id=default_address.id
+                messages.error(request,'please selecta a address')
+                return redirect('address_checkout')
 
             print(selected_address_id)
             address = Address.objects.get(id=selected_address_id) #using the user id getting all addresses associated with that user

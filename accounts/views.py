@@ -13,7 +13,7 @@ from .utils import send_otp
 from django.conf import settings
 from django.core.mail import send_mail
 from datetime import datetime, timedelta
-
+from accounts.models import UserWallet
 from datetime import datetime
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.hashers import make_password
@@ -22,6 +22,22 @@ from django.contrib.auth.hashers import make_password
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 @never_cache
 def UserLogin(request):
+
+    
+
+    print('__________________________')
+    print('__________________________')
+    print('__________________________')
+    print('__________________________')
+   
+    print('__________________________')
+    print('__________________________')
+    print('__________________________')
+    print('__________________________')
+    print('__________________________')
+
+
+
     # Check if a user or admin is already logged in
     if 'useremail' in request.session:
         return redirect('home')
@@ -72,7 +88,25 @@ def UserSignup(request):
         phone = request.POST.get('phone_no')
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirmpassword')
-        
+        ref_code = request.POST.get('referral_code')
+
+        if ref_code:
+                try:
+                    referrer = CustomUser.objects.get(referral_code=ref_code)
+                    referrer.wallet = referrer.wallet + 100
+                    referrer.save()
+                    wallerhistory_referer=UserWallet(user=referrer)
+                    wallerhistory_referer.transaction="Credit"
+                    wallerhistory_referer.created_at=datetime.now()
+                    wallerhistory_referer.amount=100
+
+                    wallerhistory_referer.save()
+                
+                   
+                except CustomUser.DoesNotExist:
+                    referrer = None
+        else:
+                referrer = None
    
     #checking the email is valid or not
         email_checking = CustomUser.objects.filter(email = user_email)
@@ -84,8 +118,25 @@ def UserSignup(request):
         elif password == confirm_password:
 
             my_User=CustomUser.objects.create_user(email=user_email,password=password,username=username,phone=phone)
+            my_User.referral_code=generate_referral_code()
+            my_User.referrer=referrer
             my_User.save()
             request.session['user-email'] = user_email
+
+            payhis =  CustomUser.objects.get(email = user_email)
+            payhis.referrer 
+
+            if payhis.referrer :
+                    
+                    payhis.wallet = payhis.wallet + 100
+                    payhis.save()
+
+
+                    wallerhistory=UserWallet(user=payhis)
+                    wallerhistory.transaction="Credit"
+                    wallerhistory.created_at=datetime.now()
+                    wallerhistory.amount = 100
+                    wallerhistory.save()
 
             return redirect('send_otp')
         else:
@@ -95,6 +146,8 @@ def UserSignup(request):
     return render(request,'accounts/signup.html')
 
 
+def generate_referral_code():
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
 
 
 

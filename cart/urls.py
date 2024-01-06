@@ -19,3 +19,5 @@ urlpatterns = [
        path('order-success',views.OrderSuccess,name='order_success'),
        path('apply-coupon/',views.ApplyCoupon,name="apply_coupon"),
 ]
+
+

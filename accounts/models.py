@@ -49,6 +49,9 @@ class CustomUser(AbstractUser):
     wallet  = models.PositiveIntegerField(default=0)
     otp = models.IntegerField(default=0)
     is_verified = models.BooleanField(default=False)
+
+    referral_code = models.CharField(max_length=12, unique=True, null=True, blank=True)
+    referrer = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
     
     groups = models.ManyToManyField(
         AuthGroup,
@@ -77,13 +80,16 @@ class CustomUser(AbstractUser):
         verbose_name='CustomUser'
         verbose_name_plural="CustomUsers"
     
+
 #USER WALLET MODEL FOR WALLET
 class UserWallet(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    transaction = models.CharField(max_length=50)
-    created_at = models.DateTimeField(auto_now_add=True)
-    amount = models.FloatField()
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,null=True)
+    transaction = models.CharField(max_length=50,null=True)
+    created_at = models.DateTimeField(auto_now_add=True,null=True)
+    amount = models.FloatField(null=True)
 
     def _str_(self):
         return f'{self.user.username} amount {self.amount}'
     
+
+ 

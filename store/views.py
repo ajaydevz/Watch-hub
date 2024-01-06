@@ -177,6 +177,7 @@ def EditVariants(request, variant_id):
         return redirect('variant_view',product_id)
 
 
+
 def DeleteVariant(request,variant_id):
     variant = get_object_or_404(Variation, pk=variant_id)
     product_id = variant.product.id

@@ -9,6 +9,9 @@ urlpatterns = [
     path('display-products/<int:sub_category_id>/',views.DisplayProducts,name="display_product"),
     path('product-details/<int:variant_id>/',views.ProductDetails,name="product_details"),
     path('variant_select/<int:variant_id>/',views.VariantSelect,name="variant_select"),
+    path('product-search',views.ProductSearch,name="product_search"),
+    path('product-sort',views.ProductSort,name="product_sort"),
+
 
 ]
 

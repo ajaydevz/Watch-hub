@@ -1,4 +1,3 @@
-
 from django.db import models
 from django.urls import reverse
 
@@ -11,9 +10,10 @@ class Category(models.Model):
     category_image=models.ImageField(upload_to='photos/categories/')
     description = models.TextField(max_length=225,blank=True)
     is_activate=models.BooleanField(default=True)
+    category_offer = models.IntegerField(default=0, null=True, blank=True)
 
     class Meta:
-        verbose_name = 'category'
+        verbose_name = 'category'   
         verbose_name_plural= 'categories'
 
     def get_url(self):

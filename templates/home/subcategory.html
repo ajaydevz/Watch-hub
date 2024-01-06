@@ -40,36 +40,43 @@
 			{% for base_variants in base_variant %}
 			<div class="col-12 col-md-4 col-lg-3 mb-5 mt-5">
 				
-				<a class="product-item" href="{% url 'product_details' variant_id=base_variants.id %}">
-					<img src="/media/{{base_variants.image1}}" class="img-fluid product-thumbnail" width="60%" height="60%">
-					<h3 class="product-title">{{base_variants.product.product_name}}</h3>
-					<strong class="product-price">Rs.{{base_variants.selling_price}}</strong>
-					<div class="d-flex justify-content-center"> 
-						<span class="icon-cross">
+					<a class="product-item" href="{% url 'product_details' variant_id=base_variants.id %}">
+						<div style="position: relative; display: inline-block;">
+							<img src="/media/{{base_variants.image1}}" class="img-fluid product-thumbnail" width="60%" height="60%" alt="Product Image">
 						
-							<img src="{% static 'images/icons8-love.png' %}" class="img-fluid">
-							
-							
-						</span>
-						<div class="d-flex justify-content-center mt-1 mb-5">
-							<a href="{% url 'add_cart' product_id=base_variants.id %}">
-							<button class="btn btn-sm button-addtocart">Add to Cart</button>
-							</a>
 						</div>
-						<div class="d-flex justify-content-center mt-1 mb-5">
-							<button class="btn btn-primary btn-sm">Buy Now</button>
+						
+						<!-- <img src="/media/{{base_variants.image1}}" class="img-fluid product-thumbnail" width="60%" height="60%"> -->
+						<h3 class="product-title">{{base_variants.product.product_name}}</h3>
+						<strong class="product-price">Rs.{{base_variants.selling_price}}</strong>
+						{% comment %} {%if base_variants.product %}
+						<div>offer{{base_variants.product.category.category_offer }}%</div>
+						{%endif%} {% endcomment %}
+						<div class="d-flex justify-content-center"> 
+							<span class="icon-cross">
+							
+								<img src="{% static 'images/icons8-love.png' %}" class="img-fluid">
+								
+								
+							</span>
+							<div class="d-flex justify-content-center mt-1 mb-5">
+								<a href="{% url 'add_cart' product_id=base_variants.id %}">
+								<button class="btn btn-sm button-addtocart">Add to Cart</button>
+								</a>
+							</div>
+							<div class="d-flex justify-content-center mt-1 mb-5">
+								<button class="btn btn-primary btn-sm">Buy Now</button>
+							</div>
+						
 						</div>
-					
-					</div>
-					
-				</a>
+						
+					</a>
 				
 			</div>
 			{% endfor %}
 			<!-- End Column 1 -->
 
 			<!-- Start Column 2 -->
-
 {% endblock %}
 
 {% block script %}

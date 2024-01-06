@@ -61,6 +61,7 @@
 					<td class="product-name">
 						<h2 class="h5 text-black">{{ cart_item.product.product.product_name }}</h2>
 					</td>
+			
 					<td id="cart_item_price">{{ cart_item.product.selling_price }}</td>
 					<td>
 						<div class="input-group mb-3 d-flex justify-content-center align-items-center quantity-container" style="max-width: 120px;">
@@ -73,6 +74,7 @@
 						</div>
 						</div>
 					</td>
+					
 					<td id="cart_item_total-{{ cart_item.product.id }}">{{ cart_item.sub_total }}</td>
 					<td>
 						<a href="{% url 'remove_cartitem' product_id=cart_item.product.id %}" class="btn btn-black btn-sm">X</a>

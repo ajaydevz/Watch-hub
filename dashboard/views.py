@@ -157,12 +157,13 @@ def AddCategories(request):
         category_name = request.POST.get('categoryName')
         category_desc = request.POST.get('categoryDescription')
         category_image = request.FILES.get('category_img')
+        category_offer = request.POST.get('category_offer')
 
         if Category.objects.filter(category_name = category_name).exists():
             messages.error(request, "Cannot Add An Existing Category !!")
             return redirect('categories')
         else:
-            category = Category(category_name= category_name, description = category_desc , category_image= category_image)
+            category = Category(category_name= category_name, description = category_desc , category_image= category_image, category_offer=category_offer)
             category.save()
             return redirect('categories') 
         
@@ -178,9 +179,23 @@ def EditCategories(request,category_id):
 
         if category_img is None:
             category.category_image = category_image
-    
+
         else:
             category.category_image = category_img
+
+        if 'category_offer' in request.POST:
+            category_offer = request.POST['category_offer']
+
+            try:
+                # Try to convert the value to a number
+                category_offer = int(category_offer)
+            except ValueError:
+                messages.error(request, "Category offer must be a number.")
+                return redirect('categories')
+
+            category.category_offer = category_offer
+
+        category.save()
 
         if Category.objects.filter(category_name=category_name).exclude(id=category_id).exists():
             messages.error(request,"Entered Category is already taken!!")
