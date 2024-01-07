@@ -660,7 +660,16 @@ def cancel_order(request, order_id):
     order.save()
 
     # Now, you can handle the product quantity update
+    update_product_quantity(order)
 
+
+def update_product_quantity(order):
+    # Retrieve the order items and increment the product quantities in stock
+    order_items = OrderItem.objects.filter(order=order)
+    for order_item in order_items:
+        product_variant = order_item.variant
+        product_variant.stock += order_item.quantity
+        product_variant.save()
 
 
 def OrderSuccess(request):
