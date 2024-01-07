@@ -64,8 +64,6 @@ def AdminHome(request):
         print(total_sales)
         print(int(total_sales))
 
-        print(total_sales)
-        print(total_sales)
         revenue = 0
 
         context = {
@@ -86,7 +84,6 @@ def AdminLogout(request):
         logout(request)
         return redirect("admin_login")
     else:
-        print("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
         return redirect(request, "dashboard/adminlogin.html")
 
 
@@ -377,12 +374,6 @@ def GetSalesRevenue(request):
         request.session["start_date"] = start_date
         request.session["end_date"] = end_date
 
-        # date_obj = datetime.strptime(start_date, '%d-%m-%Y')
-        # date_obj2 = datetime.strptime(end_date, '%d-%m-%Y')
-
-        # Convert the datetime object to a string in yyyy-mm-dd format
-        # start_date = date_obj.strftime('%Y-%m-%d')
-        # end_date = date_obj2.strftime('%Y-%m-%d')
 
         if start_date == end_date:
             print(start_date)
