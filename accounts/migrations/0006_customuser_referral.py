@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('accounts', '0005_customuser_wallet'),
+        ("accounts", "0005_customuser_wallet"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='customuser',
-            name='referral',
+            model_name="customuser",
+            name="referral",
             field=models.CharField(blank=True, max_length=50, null=True),
         ),
     ]

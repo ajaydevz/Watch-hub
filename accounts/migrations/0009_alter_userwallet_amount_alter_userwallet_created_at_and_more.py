@@ -6,30 +6,33 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('accounts', '0008_delete_payementwallet'),
+        ("accounts", "0008_delete_payementwallet"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='userwallet',
-            name='amount',
+            model_name="userwallet",
+            name="amount",
             field=models.FloatField(null=True),
         ),
         migrations.AlterField(
-            model_name='userwallet',
-            name='created_at',
+            model_name="userwallet",
+            name="created_at",
             field=models.DateTimeField(auto_now_add=True, null=True),
         ),
         migrations.AlterField(
-            model_name='userwallet',
-            name='transaction',
+            model_name="userwallet",
+            name="transaction",
             field=models.CharField(max_length=50, null=True),
         ),
         migrations.AlterField(
-            model_name='userwallet',
-            name='user',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="userwallet",
+            name="user",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

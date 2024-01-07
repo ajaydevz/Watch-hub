@@ -6,33 +6,54 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('accounts', '0006_customuser_referral'),
+        ("accounts", "0006_customuser_referral"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='customuser',
-            name='referral',
+            model_name="customuser",
+            name="referral",
         ),
         migrations.AddField(
-            model_name='customuser',
-            name='referral_code',
+            model_name="customuser",
+            name="referral_code",
             field=models.CharField(blank=True, max_length=12, null=True, unique=True),
         ),
         migrations.AddField(
-            model_name='customuser',
-            name='referrer',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL),
+            model_name="customuser",
+            name="referrer",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.CreateModel(
-            name='Payementwallet',
+            name="Payementwallet",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('paymenttype', models.CharField(blank=True, max_length=150, null=True)),
-                ('created', models.DateField(auto_now_add=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "paymenttype",
+                    models.CharField(blank=True, max_length=150, null=True),
+                ),
+                ("created", models.DateField(auto_now_add=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]
