@@ -8,7 +8,6 @@ class Category(models.Model):
     category_image = models.ImageField(upload_to="photos/categories/")
     description = models.TextField(max_length=225, blank=True)
     is_activate = models.BooleanField(default=True)
-    category_offer = models.IntegerField(default=0, null=True, blank=True)
 
     class Meta:
         verbose_name = "category"
