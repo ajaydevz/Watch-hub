@@ -25,7 +25,12 @@
 # License for more details.
 
 from psycopg2.extensions import (
-    new_type, new_array_type, register_type, register_adapter, QuotedString)
+    new_type,
+    new_array_type,
+    register_type,
+    register_adapter,
+    QuotedString,
+)
 
 # The module is imported on register_ipaddress
 ipaddress = None
@@ -58,17 +63,21 @@ def register_ipaddress(conn_or_curs=None):
     for c in _casters:
         register_type(c, conn_or_curs)
 
-    for t in [ipaddress.IPv4Interface, ipaddress.IPv6Interface,
-              ipaddress.IPv4Network, ipaddress.IPv6Network]:
+    for t in [
+        ipaddress.IPv4Interface,
+        ipaddress.IPv6Interface,
+        ipaddress.IPv4Network,
+        ipaddress.IPv6Network,
+    ]:
         register_adapter(t, adapt_ipaddress)
 
 
 def _make_casters():
-    inet = new_type((869,), 'INET', cast_interface)
-    ainet = new_array_type((1041,), 'INET[]', inet)
+    inet = new_type((869,), "INET", cast_interface)
+    ainet = new_array_type((1041,), "INET[]", inet)
 
-    cidr = new_type((650,), 'CIDR', cast_network)
-    acidr = new_array_type((651,), 'CIDR[]', cidr)
+    cidr = new_type((650,), "CIDR", cast_network)
+    acidr = new_array_type((651,), "CIDR[]", cidr)
 
     return [inet, ainet, cidr, acidr]
 

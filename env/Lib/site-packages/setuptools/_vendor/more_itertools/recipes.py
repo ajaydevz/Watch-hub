@@ -25,35 +25,35 @@ import operator
 from random import randrange, sample, choice
 
 __all__ = [
-    'all_equal',
-    'consume',
-    'convolve',
-    'dotproduct',
-    'first_true',
-    'flatten',
-    'grouper',
-    'iter_except',
-    'ncycles',
-    'nth',
-    'nth_combination',
-    'padnone',
-    'pad_none',
-    'pairwise',
-    'partition',
-    'powerset',
-    'prepend',
-    'quantify',
-    'random_combination_with_replacement',
-    'random_combination',
-    'random_permutation',
-    'random_product',
-    'repeatfunc',
-    'roundrobin',
-    'tabulate',
-    'tail',
-    'take',
-    'unique_everseen',
-    'unique_justseen',
+    "all_equal",
+    "consume",
+    "convolve",
+    "dotproduct",
+    "first_true",
+    "flatten",
+    "grouper",
+    "iter_except",
+    "ncycles",
+    "nth",
+    "nth_combination",
+    "padnone",
+    "pad_none",
+    "pairwise",
+    "partition",
+    "powerset",
+    "prepend",
+    "quantify",
+    "random_combination_with_replacement",
+    "random_combination",
+    "random_permutation",
+    "random_product",
+    "repeatfunc",
+    "roundrobin",
+    "tabulate",
+    "tail",
+    "take",
+    "unique_everseen",
+    "unique_justseen",
 ]
 
 
@@ -289,9 +289,7 @@ def grouper(iterable, n, fillvalue=None):
 
     """
     if isinstance(iterable, int):
-        warnings.warn(
-            "grouper expects iterable as first parameter", DeprecationWarning
-        )
+        warnings.warn("grouper expects iterable as first parameter", DeprecationWarning)
         n, iterable = iterable, n
     args = [iter(iterable)] * n
     return zip_longest(fillvalue=fillvalue, *args)

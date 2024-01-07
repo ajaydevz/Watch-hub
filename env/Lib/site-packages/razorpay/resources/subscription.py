@@ -65,7 +65,7 @@ class Subscription(Resource):
             Subscription Dict for given subscription id
         """
         url = "{}/{}/cancel_scheduled_changes".format(self.base_url, subscription_id)
-        return self.post_url(url, data, **kwargs)    
+        return self.post_url(url, data, **kwargs)
 
     def createAddon(self, subscription_id, data={}, **kwargs):
         """
@@ -78,19 +78,19 @@ class Subscription(Resource):
             Subscription dict for given subscription id
         """
         url = "{}/{}/addons".format(self.base_url, subscription_id)
-        return self.post_url(url, data, **kwargs) 
+        return self.post_url(url, data, **kwargs)
 
     def edit(self, subscription_id, data={}, **kwargs):
         """
          Update particular subscription
 
         Args:
-            subscription_id : Id for which subscription has to be edited         
+            subscription_id : Id for which subscription has to be edited
         Returns:
             Subscription dict for given subscription id
         """
-        url = '{}/{}'.format(self.base_url, subscription_id)   
-        return self.patch_url(url, data, **kwargs) 
+        url = "{}/{}".format(self.base_url, subscription_id)
+        return self.patch_url(url, data, **kwargs)
 
     def pending_update(self, subscription_id, **kwargs):
         """
@@ -102,8 +102,8 @@ class Subscription(Resource):
         Returns:
             Subscription dict for given subscription Id
         """
-        url = '{}/{}/retrieve_scheduled_changes'.format(self.base_url, subscription_id)   
-        return self.get_url(url, {}, **kwargs)    
+        url = "{}/{}/retrieve_scheduled_changes".format(self.base_url, subscription_id)
+        return self.get_url(url, {}, **kwargs)
 
     def pause(self, subscription_id, data={}, **kwargs):
         """
@@ -143,4 +143,4 @@ class Subscription(Resource):
             Subscription Dict for given subscription id
         """
         url = "{}/{}/{}".format(self.base_url, subscription_id, offer_id)
-        return self.delete_url(url, data, **kwargs)                 
+        return self.delete_url(url, data, **kwargs)

@@ -51,6 +51,7 @@ form of custom URL resolvers.
 """
 
 from lxml import etree
+
 try:
     from urlparse import urljoin
     from urllib2 import urlopen
@@ -71,6 +72,7 @@ DEFAULT_MAX_INCLUSION_DEPTH = 6
 
 ##
 # Fatal include error.
+
 
 class FatalIncludeError(etree.LxmlSyntaxError):
     pass
@@ -93,14 +95,15 @@ class LimitedRecursiveIncludeError(FatalIncludeError):
 #    or raise an IOError exception.
 # @throws IOError If the loader fails to load the resource.
 
+
 def default_loader(href, parse, encoding=None):
-    file = open(href, 'rb')
+    file = open(href, "rb")
     if parse == "xml":
         data = etree.parse(file).getroot()
     else:
         data = file.read()
         if not encoding:
-            encoding = 'utf-8'
+            encoding = "utf-8"
         data = data.decode(encoding)
     file.close()
     return data
@@ -108,7 +111,8 @@ def default_loader(href, parse, encoding=None):
 
 ##
 # Default loader used by lxml.etree - handles custom resolvers properly
-# 
+#
+
 
 def _lxml_default_loader(href, parse, encoding=None, parser=None):
     if parse == "xml":
@@ -117,11 +121,11 @@ def _lxml_default_loader(href, parse, encoding=None, parser=None):
         if "://" in href:
             f = urlopen(href)
         else:
-            f = open(href, 'rb')
+            f = open(href, "rb")
         data = f.read()
         f.close()
         if not encoding:
-            encoding = 'utf-8'
+            encoding = "utf-8"
         data = data.decode(encoding)
     return data
 
@@ -129,9 +133,11 @@ def _lxml_default_loader(href, parse, encoding=None, parser=None):
 ##
 # Wrapper for ET compatibility - drops the parser
 
+
 def _wrap_et_loader(loader):
     def load(href, parse, encoding=None, parser=None):
         return loader(href, parse, encoding)
+
     return load
 
 
@@ -153,28 +159,35 @@ def _wrap_et_loader(loader):
 # @throws IOError If the function fails to load a given resource.
 # @returns the node or its replacement if it was an XInclude node
 
-def include(elem, loader=None, base_url=None,
-            max_depth=DEFAULT_MAX_INCLUSION_DEPTH):
+
+def include(elem, loader=None, base_url=None, max_depth=DEFAULT_MAX_INCLUSION_DEPTH):
     if max_depth is None:
         max_depth = -1
     elif max_depth < 0:
-        raise ValueError("expected non-negative depth or None for 'max_depth', got %r" % max_depth)
+        raise ValueError(
+            "expected non-negative depth or None for 'max_depth', got %r" % max_depth
+        )
 
     if base_url is None:
-        if hasattr(elem, 'getroot'):
+        if hasattr(elem, "getroot"):
             tree = elem
             elem = elem.getroot()
         else:
             tree = elem.getroottree()
-        if hasattr(tree, 'docinfo'):
+        if hasattr(tree, "docinfo"):
             base_url = tree.docinfo.URL
-    elif hasattr(elem, 'getroot'):
+    elif hasattr(elem, "getroot"):
         elem = elem.getroot()
     _include(elem, loader, base_url, max_depth)
 
 
-def _include(elem, loader=None, base_url=None,
-             max_depth=DEFAULT_MAX_INCLUSION_DEPTH, _parent_hrefs=None):
+def _include(
+    elem,
+    loader=None,
+    base_url=None,
+    max_depth=DEFAULT_MAX_INCLUSION_DEPTH,
+    _parent_hrefs=None,
+):
     if loader is not None:
         load_include = _wrap_et_loader(loader)
     else:
@@ -185,8 +198,7 @@ def _include(elem, loader=None, base_url=None,
 
     parser = elem.getroottree().parser
 
-    include_elements = list(
-        elem.iter(XINCLUDE_ITER_TAG))
+    include_elements = list(elem.iter(XINCLUDE_ITER_TAG))
 
     for e in include_elements:
         if e.tag == XINCLUDE_INCLUDE:
@@ -196,34 +208,31 @@ def _include(elem, loader=None, base_url=None,
             parent = e.getparent()
             if parse == "xml":
                 if href in _parent_hrefs:
-                    raise FatalIncludeError(
-                        "recursive include of %r detected" % href
-                        )
+                    raise FatalIncludeError("recursive include of %r detected" % href)
                 if max_depth == 0:
                     raise LimitedRecursiveIncludeError(
-                        "maximum xinclude depth reached when including file %s" % href)
+                        "maximum xinclude depth reached when including file %s" % href
+                    )
                 node = load_include(href, parse, parser=parser)
                 if node is None:
-                    raise FatalIncludeError(
-                        "cannot load %r as %r" % (href, parse)
-                        )
-                node = _include(node, loader, href, max_depth - 1, {href} | _parent_hrefs)
+                    raise FatalIncludeError("cannot load %r as %r" % (href, parse))
+                node = _include(
+                    node, loader, href, max_depth - 1, {href} | _parent_hrefs
+                )
                 if e.tail:
                     node.tail = (node.tail or "") + e.tail
                 if parent is None:
-                    return node # replaced the root node!
+                    return node  # replaced the root node!
                 parent.replace(e, node)
             elif parse == "text":
                 text = load_include(href, parse, encoding=e.get("encoding"))
                 if text is None:
-                    raise FatalIncludeError(
-                        "cannot load %r as %r" % (href, parse)
-                        )
+                    raise FatalIncludeError("cannot load %r as %r" % (href, parse))
                 predecessor = e.getprevious()
                 if predecessor is not None:
                     predecessor.tail = (predecessor.tail or "") + text
                 elif parent is None:
-                    return text # replaced the root node!
+                    return text  # replaced the root node!
                 else:
                     parent.text = (parent.text or "") + text + (e.tail or "")
                 parent.remove(e)
@@ -236,9 +245,9 @@ def _include(elem, loader=None, base_url=None,
             if parent is not None and parent.tag != XINCLUDE_INCLUDE:
                 raise FatalIncludeError(
                     "xi:fallback tag must be child of xi:include (%r)" % e.tag
-                    )
+                )
         else:
             raise FatalIncludeError(
                 "Invalid element found in XInclude namespace (%r)" % e.tag
-                )
+            )
     return elem

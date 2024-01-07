@@ -6,7 +6,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -15,19 +14,33 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Address',
+            name="Address",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('house_no', models.IntegerField()),
-                ('recipient_name', models.CharField(max_length=100)),
-                ('street_name', models.CharField(max_length=50)),
-                ('village_name', models.CharField(max_length=50)),
-                ('postal_code', models.IntegerField()),
-                ('district', models.CharField(max_length=50)),
-                ('state', models.CharField(max_length=50)),
-                ('country', models.CharField(max_length=50)),
-                ('is_default', models.BooleanField(default=False)),
-                ('user_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("house_no", models.IntegerField()),
+                ("recipient_name", models.CharField(max_length=100)),
+                ("street_name", models.CharField(max_length=50)),
+                ("village_name", models.CharField(max_length=50)),
+                ("postal_code", models.IntegerField()),
+                ("district", models.CharField(max_length=50)),
+                ("state", models.CharField(max_length=50)),
+                ("country", models.CharField(max_length=50)),
+                ("is_default", models.BooleanField(default=False)),
+                (
+                    "user_id",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

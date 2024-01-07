@@ -52,7 +52,7 @@ class AbstractConnectionPool:
 
         self._pool = []
         self._used = {}
-        self._rused = {}    # id(conn) -> key map
+        self._rused = {}  # id(conn) -> key map
         self._keys = 0
 
         for i in range(self.minconn):
@@ -158,8 +158,8 @@ class ThreadedConnectionPool(AbstractConnectionPool):
     def __init__(self, minconn, maxconn, *args, **kwargs):
         """Initialize the threading lock."""
         import threading
-        AbstractConnectionPool.__init__(
-            self, minconn, maxconn, *args, **kwargs)
+
+        AbstractConnectionPool.__init__(self, minconn, maxconn, *args, **kwargs)
         self._lock = threading.Lock()
 
     def getconn(self, key=None):

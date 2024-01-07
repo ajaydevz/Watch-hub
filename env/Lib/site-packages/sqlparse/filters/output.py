@@ -9,9 +9,9 @@ from sqlparse import sql, tokens as T
 
 
 class OutputFilter:
-    varname_prefix = ''
+    varname_prefix = ""
 
-    def __init__(self, varname='sql'):
+    def __init__(self, varname="sql"):
         self.varname = self.varname_prefix + varname
         self.count = 0
 
@@ -21,7 +21,7 @@ class OutputFilter:
     def process(self, stmt):
         self.count += 1
         if self.count > 1:
-            varname = '{f.varname}{f.count}'.format(f=self)
+            varname = "{f.varname}{f.count}".format(f=self)
         else:
             varname = self.varname
 
@@ -34,29 +34,29 @@ class OutputPythonFilter(OutputFilter):
     def _process(self, stream, varname, has_nl):
         # SQL query assignation to varname
         if self.count > 1:
-            yield sql.Token(T.Whitespace, '\n')
+            yield sql.Token(T.Whitespace, "\n")
         yield sql.Token(T.Name, varname)
-        yield sql.Token(T.Whitespace, ' ')
-        yield sql.Token(T.Operator, '=')
-        yield sql.Token(T.Whitespace, ' ')
+        yield sql.Token(T.Whitespace, " ")
+        yield sql.Token(T.Operator, "=")
+        yield sql.Token(T.Whitespace, " ")
         if has_nl:
-            yield sql.Token(T.Operator, '(')
+            yield sql.Token(T.Operator, "(")
         yield sql.Token(T.Text, "'")
 
         # Print the tokens on the quote
         for token in stream:
             # Token is a new line separator
-            if token.is_whitespace and '\n' in token.value:
+            if token.is_whitespace and "\n" in token.value:
                 # Close quote and add a new line
                 yield sql.Token(T.Text, " '")
-                yield sql.Token(T.Whitespace, '\n')
+                yield sql.Token(T.Whitespace, "\n")
 
                 # Quote header on secondary lines
-                yield sql.Token(T.Whitespace, ' ' * (len(varname) + 4))
+                yield sql.Token(T.Whitespace, " " * (len(varname) + 4))
                 yield sql.Token(T.Text, "'")
 
                 # Indentation
-                after_lb = token.value.split('\n', 1)[1]
+                after_lb = token.value.split("\n", 1)[1]
                 if after_lb:
                     yield sql.Token(T.Whitespace, after_lb)
                 continue
@@ -71,41 +71,41 @@ class OutputPythonFilter(OutputFilter):
         # Close quote
         yield sql.Token(T.Text, "'")
         if has_nl:
-            yield sql.Token(T.Operator, ')')
+            yield sql.Token(T.Operator, ")")
 
 
 class OutputPHPFilter(OutputFilter):
-    varname_prefix = '$'
+    varname_prefix = "$"
 
     def _process(self, stream, varname, has_nl):
         # SQL query assignation to varname (quote header)
         if self.count > 1:
-            yield sql.Token(T.Whitespace, '\n')
+            yield sql.Token(T.Whitespace, "\n")
         yield sql.Token(T.Name, varname)
-        yield sql.Token(T.Whitespace, ' ')
+        yield sql.Token(T.Whitespace, " ")
         if has_nl:
-            yield sql.Token(T.Whitespace, ' ')
-        yield sql.Token(T.Operator, '=')
-        yield sql.Token(T.Whitespace, ' ')
+            yield sql.Token(T.Whitespace, " ")
+        yield sql.Token(T.Operator, "=")
+        yield sql.Token(T.Whitespace, " ")
         yield sql.Token(T.Text, '"')
 
         # Print the tokens on the quote
         for token in stream:
             # Token is a new line separator
-            if token.is_whitespace and '\n' in token.value:
+            if token.is_whitespace and "\n" in token.value:
                 # Close quote and add a new line
                 yield sql.Token(T.Text, ' ";')
-                yield sql.Token(T.Whitespace, '\n')
+                yield sql.Token(T.Whitespace, "\n")
 
                 # Quote header on secondary lines
                 yield sql.Token(T.Name, varname)
-                yield sql.Token(T.Whitespace, ' ')
-                yield sql.Token(T.Operator, '.=')
-                yield sql.Token(T.Whitespace, ' ')
+                yield sql.Token(T.Whitespace, " ")
+                yield sql.Token(T.Operator, ".=")
+                yield sql.Token(T.Whitespace, " ")
                 yield sql.Token(T.Text, '"')
 
                 # Indentation
-                after_lb = token.value.split('\n', 1)[1]
+                after_lb = token.value.split("\n", 1)[1]
                 if after_lb:
                     yield sql.Token(T.Whitespace, after_lb)
                 continue
@@ -119,4 +119,4 @@ class OutputPHPFilter(OutputFilter):
 
         # Close quote
         yield sql.Token(T.Text, '"')
-        yield sql.Token(T.Punctuation, ';')
+        yield sql.Token(T.Punctuation, ";")

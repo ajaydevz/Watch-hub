@@ -43,8 +43,8 @@ def unwrap(string, *params):
 
     # Unwrap lines, taking into account bulleted lists, ordered lists and
     # underlines consisting of = signs
-    if output.find('\n') != -1:
-        output = re.sub('(?<=\\S)\n(?=[^ \n\t\\d\\*\\-=])', ' ', output)
+    if output.find("\n") != -1:
+        output = re.sub("(?<=\\S)\n(?=[^ \n\t\\d\\*\\-=])", " ", output)
 
     if params:
         output = output % params

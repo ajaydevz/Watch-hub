@@ -9,8 +9,7 @@ class Transfer(Resource):
         self.base_url = URL.V1 + URL.TRANSFER_URL
 
     def fetch_all(self, data={}, **kwargs):  # pragma: no cover
-        warnings.warn("Will be Deprecated in next release, use all",
-                      DeprecationWarning)
+        warnings.warn("Will be Deprecated in next release, use all", DeprecationWarning)
         return self.all(data, **kwargs)
 
     def all(self, data={}, **kwargs):
@@ -20,10 +19,10 @@ class Transfer(Resource):
         Returns:
             Dictionary of Transfer data
         """
-        if 'payment_id' in data:
-            url = URL.V1 + "/payments/{}/transfers".format(data['payment_id'])
+        if "payment_id" in data:
+            url = URL.V1 + "/payments/{}/transfers".format(data["payment_id"])
 
-            del data['payment_id']
+            del data["payment_id"]
             return self.get_url(url, data, **kwargs)
 
         return super(Transfer, self).all(data, **kwargs)

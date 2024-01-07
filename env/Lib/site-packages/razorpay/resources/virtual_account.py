@@ -28,10 +28,7 @@ class VirtualAccount(Resource):
         Returns:
             Virtual Account dict for given Virtual Account Id
         """
-        return super(VirtualAccount, self).fetch(
-            virtual_account_id,
-            data,
-            **kwargs)
+        return super(VirtualAccount, self).fetch(virtual_account_id, data, **kwargs)
 
     def create(self, data={}, **kwargs):
         """
@@ -91,9 +88,11 @@ class VirtualAccount(Resource):
                 Id for which Virtual Account objects has to be Closed
         """
         url = "{}/{}/allowed_payers".format(self.base_url, virtual_account_id)
-        return self.post_url(url, data, **kwargs) 
+        return self.post_url(url, data, **kwargs)
 
-    def delete_allowed_player(self, virtual_account_id, allowed_player_id, data={}, **kwargs):
+    def delete_allowed_player(
+        self, virtual_account_id, allowed_player_id, data={}, **kwargs
+    ):
         """
         Delete an Allowed Payer Account
 
@@ -101,7 +100,9 @@ class VirtualAccount(Resource):
             virtual_account_id :
                 Id for which Virtual Account objects has to be Closed
         Returns:
-            204        
+            204
         """
-        url = "{}/{}/allowed_payers/{}".format(self.base_url, virtual_account_id, allowed_player_id)
+        url = "{}/{}/allowed_payers/{}".format(
+            self.base_url, virtual_account_id, allowed_player_id
+        )
         return self.delete_url(url, data, **kwargs)

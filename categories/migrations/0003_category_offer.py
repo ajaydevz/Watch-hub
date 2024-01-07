@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('categories', '0002_sub_category'),
+        ("categories", "0002_sub_category"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='category',
-            name='offer',
+            model_name="category",
+            name="offer",
             field=models.IntegerField(blank=True, default=0, null=True),
         ),
     ]

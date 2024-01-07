@@ -1,5 +1,4 @@
-__all__ = ['FFI', 'VerificationError', 'VerificationMissing', 'CDefError',
-           'FFIError']
+__all__ = ["FFI", "VerificationError", "VerificationMissing", "CDefError", "FFIError"]
 
 from .api import FFI
 from .error import CDefError, FFIError, VerificationError, VerificationMissing

@@ -4,9 +4,9 @@ from __future__ import unicode_literals, division, absolute_import, print_functi
 from .version import __version__, __version_info__
 
 __all__ = [
-    '__version__',
-    '__version_info__',
-    'load_order',
+    "__version__",
+    "__version_info__",
+    "load_order",
 ]
 
 
@@ -21,27 +21,27 @@ def load_order():
     """
 
     return [
-        'asn1crypto._errors',
-        'asn1crypto._int',
-        'asn1crypto._ordereddict',
-        'asn1crypto._teletex_codec',
-        'asn1crypto._types',
-        'asn1crypto._inet',
-        'asn1crypto._iri',
-        'asn1crypto.version',
-        'asn1crypto.pem',
-        'asn1crypto.util',
-        'asn1crypto.parser',
-        'asn1crypto.core',
-        'asn1crypto.algos',
-        'asn1crypto.keys',
-        'asn1crypto.x509',
-        'asn1crypto.crl',
-        'asn1crypto.csr',
-        'asn1crypto.ocsp',
-        'asn1crypto.cms',
-        'asn1crypto.pdf',
-        'asn1crypto.pkcs12',
-        'asn1crypto.tsp',
-        'asn1crypto',
+        "asn1crypto._errors",
+        "asn1crypto._int",
+        "asn1crypto._ordereddict",
+        "asn1crypto._teletex_codec",
+        "asn1crypto._types",
+        "asn1crypto._inet",
+        "asn1crypto._iri",
+        "asn1crypto.version",
+        "asn1crypto.pem",
+        "asn1crypto.util",
+        "asn1crypto.parser",
+        "asn1crypto.core",
+        "asn1crypto.algos",
+        "asn1crypto.keys",
+        "asn1crypto.x509",
+        "asn1crypto.crl",
+        "asn1crypto.csr",
+        "asn1crypto.ocsp",
+        "asn1crypto.cms",
+        "asn1crypto.pdf",
+        "asn1crypto.pkcs12",
+        "asn1crypto.tsp",
+        "asn1crypto",
     ]

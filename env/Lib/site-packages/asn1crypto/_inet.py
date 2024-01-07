@@ -23,38 +23,44 @@ def inet_ntop(address_family, packed_ip):
     """
 
     if address_family not in set([socket.AF_INET, socket.AF_INET6]):
-        raise ValueError(unwrap(
-            '''
+        raise ValueError(
+            unwrap(
+                """
             address_family must be socket.AF_INET (%s) or socket.AF_INET6 (%s),
             not %s
-            ''',
-            repr(socket.AF_INET),
-            repr(socket.AF_INET6),
-            repr(address_family)
-        ))
+            """,
+                repr(socket.AF_INET),
+                repr(socket.AF_INET6),
+                repr(address_family),
+            )
+        )
 
     if not isinstance(packed_ip, byte_cls):
-        raise TypeError(unwrap(
-            '''
+        raise TypeError(
+            unwrap(
+                """
             packed_ip must be a byte string, not %s
-            ''',
-            type_name(packed_ip)
-        ))
+            """,
+                type_name(packed_ip),
+            )
+        )
 
     required_len = 4 if address_family == socket.AF_INET else 16
     if len(packed_ip) != required_len:
-        raise ValueError(unwrap(
-            '''
+        raise ValueError(
+            unwrap(
+                """
             packed_ip must be %d bytes long - is %d
-            ''',
-            required_len,
-            len(packed_ip)
-        ))
+            """,
+                required_len,
+                len(packed_ip),
+            )
+        )
 
     if address_family == socket.AF_INET:
-        return '%d.%d.%d.%d' % tuple(bytes_to_list(packed_ip))
+        return "%d.%d.%d.%d" % tuple(bytes_to_list(packed_ip))
 
-    octets = struct.unpack(b'!HHHHHHHH', packed_ip)
+    octets = struct.unpack(b"!HHHHHHHH", packed_ip)
 
     runs_of_zero = {}
     longest_run = 0
@@ -73,12 +79,12 @@ def inet_ntop(address_family, packed_ip):
     hexed = [hex(o)[2:] for o in octets]
 
     if longest_run < 2:
-        return ':'.join(hexed)
+        return ":".join(hexed)
 
     zero_start = runs_of_zero[longest_run]
     zero_end = zero_start + longest_run
 
-    return ':'.join(hexed[:zero_start]) + '::' + ':'.join(hexed[zero_end:])
+    return ":".join(hexed[:zero_start]) + "::" + ":".join(hexed[zero_end:])
 
 
 def inet_pton(address_family, ip_string):
@@ -96,26 +102,30 @@ def inet_pton(address_family, ip_string):
     """
 
     if address_family not in set([socket.AF_INET, socket.AF_INET6]):
-        raise ValueError(unwrap(
-            '''
+        raise ValueError(
+            unwrap(
+                """
             address_family must be socket.AF_INET (%s) or socket.AF_INET6 (%s),
             not %s
-            ''',
-            repr(socket.AF_INET),
-            repr(socket.AF_INET6),
-            repr(address_family)
-        ))
+            """,
+                repr(socket.AF_INET),
+                repr(socket.AF_INET6),
+                repr(address_family),
+            )
+        )
 
     if not isinstance(ip_string, str_cls):
-        raise TypeError(unwrap(
-            '''
+        raise TypeError(
+            unwrap(
+                """
             ip_string must be a unicode string, not %s
-            ''',
-            type_name(ip_string)
-        ))
+            """,
+                type_name(ip_string),
+            )
+        )
 
     if address_family == socket.AF_INET:
-        octets = ip_string.split('.')
+        octets = ip_string.split(".")
         error = len(octets) != 4
         if not error:
             ints = []
@@ -127,29 +137,31 @@ def inet_pton(address_family, ip_string):
                 ints.append(o)
 
         if error:
-            raise ValueError(unwrap(
-                '''
+            raise ValueError(
+                unwrap(
+                    """
                 ip_string must be a dotted string with four integers in the
                 range of 0 to 255, got %s
-                ''',
-                repr(ip_string)
-            ))
+                """,
+                    repr(ip_string),
+                )
+            )
 
-        return struct.pack(b'!BBBB', *ints)
+        return struct.pack(b"!BBBB", *ints)
 
     error = False
-    omitted = ip_string.count('::')
+    omitted = ip_string.count("::")
     if omitted > 1:
         error = True
     elif omitted == 0:
-        octets = ip_string.split(':')
+        octets = ip_string.split(":")
         error = len(octets) != 8
     else:
-        begin, end = ip_string.split('::')
-        begin_octets = begin.split(':')
-        end_octets = end.split(':')
+        begin, end = ip_string.split("::")
+        begin_octets = begin.split(":")
+        end_octets = end.split(":")
         missing = 8 - len(begin_octets) - len(end_octets)
-        octets = begin_octets + (['0'] * missing) + end_octets
+        octets = begin_octets + (["0"] * missing) + end_octets
 
     if not error:
         ints = []
@@ -160,11 +172,13 @@ def inet_pton(address_family, ip_string):
                 break
             ints.append(o)
 
-        return struct.pack(b'!HHHHHHHH', *ints)
+        return struct.pack(b"!HHHHHHHH", *ints)
 
-    raise ValueError(unwrap(
-        '''
+    raise ValueError(
+        unwrap(
+            """
         ip_string must be a valid ipv6 string, got %s
-        ''',
-        repr(ip_string)
-    ))
+        """,
+            repr(ip_string),
+        )
+    )

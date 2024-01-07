@@ -18,5 +18,5 @@ def fill_width(bytes_, width):
     """
 
     while len(bytes_) < width:
-        bytes_ = b'\x00' + bytes_
+        bytes_ = b"\x00" + bytes_
     return bytes_

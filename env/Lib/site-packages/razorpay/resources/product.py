@@ -14,18 +14,18 @@ class Product(Resource):
         Returns:
             Product Configuration Dict which was created
         """
-        url = '{}/{}{}'.format(self.base_url, account_id, URL.PRODUCT)
+        url = "{}/{}{}".format(self.base_url, account_id, URL.PRODUCT)
 
         return self.post_url(url, data, **kwargs)
 
-    def fetch(self, account_id, product_id,  data={}, **kwargs):
+    def fetch(self, account_id, product_id, data={}, **kwargs):
         """
         Fetch product for given accound and product id
 
         Returns:
             account dict for given account_id
         """
-        url = '{}/{}{}/{}'.format(self.base_url, account_id, URL.PRODUCT, product_id)
+        url = "{}/{}{}/{}".format(self.base_url, account_id, URL.PRODUCT, product_id)
         return self.get_url(url, data, **kwargs)
 
     def edit(self, account_id, product_id, data={}, **kwargs):
@@ -35,15 +35,15 @@ class Product(Resource):
         Returns:
             Account Dict which was edited
         """
-        url = '{}/{}{}/{}'.format(self.base_url, account_id, URL.PRODUCT, product_id)
+        url = "{}/{}{}/{}".format(self.base_url, account_id, URL.PRODUCT, product_id)
         return self.patch_url(url, data, **kwargs)
 
-    def fetchTnc(self, product_name,  data={}, **kwargs):
+    def fetchTnc(self, product_name, data={}, **kwargs):
         """
         Fetch Terms and Conditions for a Sub-Merchant
 
         Returns:
             Tnc dict for given account_id
         """
-        url = '{}{}/{}{}'.format(URL.V2, URL.PRODUCT, product_name, URL.TNC )
+        url = "{}{}/{}{}".format(URL.V2, URL.PRODUCT, product_name, URL.TNC)
         return self.get_url(url, data, **kwargs)

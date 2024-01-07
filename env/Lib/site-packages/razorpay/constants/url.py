@@ -1,7 +1,7 @@
 class URL(object):
-    BASE_URL = 'https://api.razorpay.com'
-    V1 = '/v1'
-    V2 = '/v2'
+    BASE_URL = "https://api.razorpay.com"
+    V1 = "/v1"
+    V2 = "/v2"
     ORDER_URL = "/orders"
     INVOICE_URL = "/invoices"
     PAYMENT_LINK_URL = "/payment_links"

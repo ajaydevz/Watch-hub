@@ -12,7 +12,7 @@ class _CaseFilter:
     ttype = None
 
     def __init__(self, case=None):
-        case = case or 'upper'
+        case = case or "upper"
         self.convert = getattr(str, case)
 
     def process(self, stream):
@@ -55,5 +55,5 @@ class TruncateStringFilter:
                 quote = "'"
 
             if len(inner) > self.width:
-                value = ''.join((quote, inner[:self.width], self.char, quote))
+                value = "".join((quote, inner[: self.width], self.char, quote))
             yield ttype, value

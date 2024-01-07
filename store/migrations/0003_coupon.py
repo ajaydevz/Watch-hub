@@ -4,24 +4,34 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('store', '0002_variation'),
+        ("store", "0002_variation"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Coupon',
+            name="Coupon",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('coupon_name', models.CharField(default='discount coupon', max_length=20)),
-                ('code', models.CharField(max_length=10)),
-                ('discount', models.IntegerField(default=100)),
-                ('valid_from', models.DateField()),
-                ('valid_to', models.DateField()),
-                ('is_expired', models.BooleanField(default=False)),
-                ('minimum_amount', models.IntegerField(default=500)),
-                ('is_available', models.BooleanField(default=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "coupon_name",
+                    models.CharField(default="discount coupon", max_length=20),
+                ),
+                ("code", models.CharField(max_length=10)),
+                ("discount", models.IntegerField(default=100)),
+                ("valid_from", models.DateField()),
+                ("valid_to", models.DateField()),
+                ("is_expired", models.BooleanField(default=False)),
+                ("minimum_amount", models.IntegerField(default=500)),
+                ("is_available", models.BooleanField(default=True)),
             ],
         ),
     ]

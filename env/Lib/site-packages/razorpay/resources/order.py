@@ -9,8 +9,7 @@ class Order(Resource):
         self.base_url = URL.V1 + URL.ORDER_URL
 
     def fetch_all(self, data={}, **kwargs):  # pragma: no cover
-        warnings.warn("Will be Deprecated in next release, use all",
-                      DeprecationWarning)
+        warnings.warn("Will be Deprecated in next release, use all", DeprecationWarning)
         return self.all(data, **kwargs)
 
     def all(self, data={}, **kwargs):
@@ -35,8 +34,9 @@ class Order(Resource):
         return super(Order, self).fetch(order_id, data, **kwargs)
 
     def fetch_all_payments(self, order_id, data={}, **kwargs):  # pragma: no cover
-        warnings.warn("Will be Deprecated in next release, use payments",
-                      DeprecationWarning)
+        warnings.warn(
+            "Will be Deprecated in next release, use payments", DeprecationWarning
+        )
         return self.payments(order_id, data, **kwargs)
 
     def payments(self, order_id, data={}, **kwargs):
@@ -69,7 +69,7 @@ class Order(Resource):
         """
         url = self.base_url
         return self.post_url(url, data, **kwargs)
-    
+
     def edit(self, order_id, data={}, **kwargs):
         """
          Update order
@@ -77,11 +77,11 @@ class Order(Resource):
         Args:
             data : Dictionary having keys using which order have to be edited
                 'notes' : key value pair as notes
-            
+
             Returns:
             Order Dict which was edited
 
         """
-        url = '{}/{}'.format(self.base_url, order_id)
+        url = "{}/{}".format(self.base_url, order_id)
 
         return self.patch_url(url, data, **kwargs)

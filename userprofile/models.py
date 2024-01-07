@@ -1,6 +1,7 @@
 from django.db import models
 
 from accounts.models import CustomUser
+
 # Create your models here.
 
 
@@ -18,5 +19,3 @@ class Address(models.Model):
 
     def __str__(self):
         return f"Adress for {self.recipient_name}"
-    
-    

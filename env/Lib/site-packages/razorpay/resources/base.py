@@ -1,5 +1,4 @@
 class Resource(object):
-
     def __init__(self, client=None):
         self.client = client
 
@@ -30,4 +29,4 @@ class Resource(object):
         return self.delete_url(url, data, **kwargs)
 
     def file_url(self, url, data, **kwargs):
-        return self.client.file(url, data, **kwargs)    
+        return self.client.file(url, data, **kwargs)

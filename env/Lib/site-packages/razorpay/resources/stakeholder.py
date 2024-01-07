@@ -14,11 +14,11 @@ class Stakeholder(Resource):
         Returns:
             Stakeholder Dict which was created
         """
-        url = '{}/{}{}'.format(self.base_url, account_id, URL.STAKEHOLDER)
+        url = "{}/{}{}".format(self.base_url, account_id, URL.STAKEHOLDER)
 
         return self.post_url(url, data, **kwargs)
 
-    def fetch(self, account_id, stakeholder_id,  data={}, **kwargs):
+    def fetch(self, account_id, stakeholder_id, data={}, **kwargs):
         """
         Fetch stakeholder for given account & stakeholder id
 
@@ -29,7 +29,9 @@ class Stakeholder(Resource):
         Returns:
             stakeholder dict for given account_id
         """
-        url = '{}/{}{}/{}'.format(self.base_url, account_id, URL.STAKEHOLDER, stakeholder_id)
+        url = "{}/{}{}/{}".format(
+            self.base_url, account_id, URL.STAKEHOLDER, stakeholder_id
+        )
 
         return self.get_url(url, data, **kwargs)
 
@@ -43,9 +45,9 @@ class Stakeholder(Resource):
         Returns:
             stakeholder dict for given account_id
         """
-        url = '{}/{}{}'.format(self.base_url, account_id, URL.STAKEHOLDER)
+        url = "{}/{}{}".format(self.base_url, account_id, URL.STAKEHOLDER)
 
-        return self.get_url(url, data, **kwargs)        
+        return self.get_url(url, data, **kwargs)
 
     def edit(self, account_id, stakeholder_id, data={}, **kwargs):
         """
@@ -54,7 +56,9 @@ class Stakeholder(Resource):
         Returns:
             Stakeholder Dict which was edited
         """
-        url = '{}/{}{}/{}'.format(self.base_url, account_id, URL.STAKEHOLDER, stakeholder_id)
+        url = "{}/{}{}/{}".format(
+            self.base_url, account_id, URL.STAKEHOLDER, stakeholder_id
+        )
 
         return self.patch_url(url, data, **kwargs)
 
@@ -63,9 +67,11 @@ class Stakeholder(Resource):
         Upload Stakeholder Documents
 
         Returns:
-           Stakeholder Document dict which was created            
+           Stakeholder Document dict which was created
         """
-        url = '{}/{}{}/{}/{}'.format(self.base_url, account_id, URL.STAKEHOLDER, stakeholder_id, "documents")
+        url = "{}/{}{}/{}/{}".format(
+            self.base_url, account_id, URL.STAKEHOLDER, stakeholder_id, "documents"
+        )
 
         return self.file_url(url, data, **kwargs)
 
@@ -76,6 +82,8 @@ class Stakeholder(Resource):
         Returns:
             Stakeholder Document dict for given account & stakeholder Id
         """
-        url = '{}/{}{}/{}/{}'.format(self.base_url, account_id, URL.STAKEHOLDER, stakeholder_id, "documents")
+        url = "{}/{}{}/{}/{}".format(
+            self.base_url, account_id, URL.STAKEHOLDER, stakeholder_id, "documents"
+        )
 
-        return self.get_url(url, data, **kwargs) 
+        return self.get_url(url, data, **kwargs)

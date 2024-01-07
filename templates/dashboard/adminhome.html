@@ -1,128 +1,123 @@
-{% extends 'dashboard/admin_base.html' %}
-
-{% block bootstraplink%}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-{% endblock %}
-{% block content %}
-<Style>
-  .vl{
+{% extends 'dashboard/admin_base.html' %} {% block bootstraplink%}
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css"
+/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+{% endblock %} {% block content %}
+<style>
+  .vl {
     border-left: 6px solid grey;
     margin-left: 4rem;
     height: 19rem;
   }
-</Style>
+</style>
 <!-- This part shows the admin panel upper side div of the whold details -->
 <div class="custom-container col-lg-12 my-4 d-flex justify-content-center">
   <div class="d-flex">
-      <div class="custom-col-md-4 mb-4 p-3">
-          <div class="custom-card shadow-lg p-3 mb-5 bg-white rounded">
-              <div class="custom-card-body">
-                  <h5 class="custom-card-title">User Count</h5>
-                  <p class="custom-card-text text-primary ">{{ users_active }}</p>
-              </div>
-          </div>
+    <div class="custom-col-md-4 mb-4 p-3">
+      <div class="custom-card shadow-lg p-3 mb-5 bg-white rounded">
+        <div class="custom-card-body">
+          <h5 class="custom-card-title">User Count</h5>
+          <p class="custom-card-text text-primary">{{ users_active }}</p>
+        </div>
       </div>
-      <div class="custom-col-md-4 mb-4 p-3">
-          <div class="custom-card shadow-lg p-3 mb-5 bg-white rounded">
-              <div class="custom-card-body">
-                  <h5 class="custom-card-title">Revenue</h5>
-                  <p class="custom-card-text text-danger">{{ total_sales }}</p>
-              </div>
-          </div>
+    </div>
+    <div class="custom-col-md-4 mb-4 p-3">
+      <div class="custom-card shadow-lg p-3 mb-5 bg-white rounded">
+        <div class="custom-card-body">
+          <h5 class="custom-card-title">Revenue</h5>
+          <p class="custom-card-text text-danger">{{ total_sales }}</p>
+        </div>
       </div>
-      <div class="custom-col-md-4 mb-4 p-3">
-          <div class="custom-card shadow-lg p-3 mb-5 bg-white rounded">
-              <div class="custom-card-body">
-                  <h5 class="custom-card-title">Order Count</h5>
-                  <p class="custom-card-text text-success">{{ orders_count }}</p>
-              </div>
-          </div>
+    </div>
+    <div class="custom-col-md-4 mb-4 p-3">
+      <div class="custom-card shadow-lg p-3 mb-5 bg-white rounded">
+        <div class="custom-card-body">
+          <h5 class="custom-card-title">Order Count</h5>
+          <p class="custom-card-text text-success">{{ orders_count }}</p>
+        </div>
       </div>
+    </div>
   </div>
 </div>
 
-
-
-
 <!-- end of the div -->
-
-
 
 <!-- The Charts -->
 
-<hr>
+<hr />
 <div class="d-flex">
-    <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
-    <div class="vl"></div>
-    <canvas id="myChart2" style="width:100%;max-width:600px"></canvas>
+  <canvas id="myChart" style="width: 100%; max-width: 600px"></canvas>
+  <div class="vl"></div>
+  <canvas id="myChart2" style="width: 100%; max-width: 600px"></canvas>
 </div>
-<hr>
+<hr />
 
 <!-- End of the Charts -->
 
-
-
-
-
-{% endblock content %}
-
-{% block script %}
+{% endblock content %} {% block script %}
 <script>
-    var xValues = ["Delevered", "Confirmed", "Cancelled", "Returned" ];
-    var yValues = [{{orders_delevered}} , {{orders_confirmed}}, {{orders_cancelled}}, {{orders_returned}} ];
-    var barColors = [
-      "#b91d47",
-      "#00aba9",
-      "#2b5797",
-      "#e8c3b9"
-    ];
-    
-    new Chart("myChart", {
-      type: "bar",
-      data: {
-        labels: xValues,
-        datasets: [{
-          backgroundColor: barColors,
-          data: yValues
-        }]
-      },
-      options: {
-        title: {
-          display: true,
-          text: "Orders Status"
-        }
+  var xValues = ["Delevered", "Confirmed", "Cancelled", "Returned" ];
+  var yValues = [{{orders_delevered}} , {{orders_confirmed}}, {{orders_cancelled}}, {{orders_returned}} ];
+  var barColors = [
+    "#b91d47",
+    "#00aba9",
+    "#2b5797",
+    "#e8c3b9"
+  ];
+
+  new Chart("myChart", {
+    type: "bar",
+    data: {
+      labels: xValues,
+      datasets: [{
+        backgroundColor: barColors,
+        data: yValues
+      }]
+    },
+    options: {
+      title: {
+        display: true,
+        text: "Orders Status"
       }
-    });
-    </script>
+    }
+  });
+</script>
 <!-- mychart 2-->
 <script>
-    var xValues = ["Users Active", "Users Blocked"];
-    var yValues = [{{users_active}},{{users_block}}];
-    var barColors = [
-    "#00aba9",
-    "#b91d47",
-      
-    ];
-    
-    new Chart("myChart2", {
-      type: "pie",
-      data: {
-        labels: xValues,
-        datasets: [{
-          backgroundColor: barColors,
-          data: yValues
-        }]
-      },
-      options: {
-        title: {
-          display: true,
-          text: "Users"
-        }
+  var xValues = ["Users Active", "Users Blocked"];
+  var yValues = [{{users_active}},{{users_block}}];
+  var barColors = [
+  "#00aba9",
+  "#b91d47",
+
+  ];
+
+  new Chart("myChart2", {
+    type: "pie",
+    data: {
+      labels: xValues,
+      datasets: [{
+        backgroundColor: barColors,
+        data: yValues
+      }]
+    },
+    options: {
+      title: {
+        display: true,
+        text: "Users"
       }
-    });
-    </script>
+    }
+  });
+</script>
 
 {% endblock script %}

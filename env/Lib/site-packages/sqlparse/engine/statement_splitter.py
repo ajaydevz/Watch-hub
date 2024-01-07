@@ -28,9 +28,9 @@ class StatementSplitter:
         """Get the new split level (increase, decrease or remain equal)"""
 
         # parenthesis increase/decrease a level
-        if ttype is T.Punctuation and value == '(':
+        if ttype is T.Punctuation and value == "(":
             return 1
-        elif ttype is T.Punctuation and value == ')':
+        elif ttype is T.Punctuation and value == ")":
             return -1
         elif ttype not in T.Keyword:  # if normal token return
             return 0
@@ -42,16 +42,16 @@ class StatementSplitter:
 
         # three keywords begin with CREATE, but only one of them is DDL
         # DDL Create though can contain more words such as "or replace"
-        if ttype is T.Keyword.DDL and unified.startswith('CREATE'):
+        if ttype is T.Keyword.DDL and unified.startswith("CREATE"):
             self._is_create = True
             return 0
 
         # can have nested declare inside of being...
-        if unified == 'DECLARE' and self._is_create and self._begin_depth == 0:
+        if unified == "DECLARE" and self._is_create and self._begin_depth == 0:
             self._in_declare = True
             return 1
 
-        if unified == 'BEGIN':
+        if unified == "BEGIN":
             self._begin_depth += 1
             if self._is_create:
                 # FIXME(andi): This makes no sense.
@@ -62,15 +62,18 @@ class StatementSplitter:
         # In CASE ... WHEN ... END this results in a split level -1.
         # Would having multiple CASE WHEN END and a Assignment Operator
         # cause the statement to cut off prematurely?
-        if unified == 'END':
+        if unified == "END":
             self._begin_depth = max(0, self._begin_depth - 1)
             return -1
 
-        if (unified in ('IF', 'FOR', 'WHILE', 'CASE')
-                and self._is_create and self._begin_depth > 0):
+        if (
+            unified in ("IF", "FOR", "WHILE", "CASE")
+            and self._is_create
+            and self._begin_depth > 0
+        ):
             return 1
 
-        if unified in ('END IF', 'END FOR', 'END WHILE'):
+        if unified in ("END IF", "END FOR", "END WHILE"):
             return -1
 
         # Default
@@ -99,7 +102,7 @@ class StatementSplitter:
             self.tokens.append(sql.Token(ttype, value))
 
             # Check if we get the end of a statement
-            if self.level <= 0 and ttype is T.Punctuation and value == ';':
+            if self.level <= 0 and ttype is T.Punctuation and value == ";":
                 self.consume_ws = True
 
         # Yield pending statement (if any)

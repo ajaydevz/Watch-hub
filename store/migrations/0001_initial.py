@@ -5,30 +5,50 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('categories', '0002_sub_category'),
+        ("categories", "0002_sub_category"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Product',
+            name="Product",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('product_name', models.CharField(max_length=200, unique=True)),
-                ('description', models.TextField(blank=True, max_length=500)),
-                ('is_available', models.BooleanField(default=True)),
-                ('created_date', models.DateField(auto_now_add=True)),
-                ('modified_data', models.DateField(auto_now=True)),
-                ('is_activate', models.BooleanField(default=True)),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='categories.category')),
-                ('sub_category', models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to='categories.sub_category')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("product_name", models.CharField(max_length=200, unique=True)),
+                ("description", models.TextField(blank=True, max_length=500)),
+                ("is_available", models.BooleanField(default=True)),
+                ("created_date", models.DateField(auto_now_add=True)),
+                ("modified_data", models.DateField(auto_now=True)),
+                ("is_activate", models.BooleanField(default=True)),
+                (
+                    "category",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="categories.category",
+                    ),
+                ),
+                (
+                    "sub_category",
+                    models.ForeignKey(
+                        default=None,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="categories.sub_category",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'variation',
-                'verbose_name_plural': 'variations',
+                "verbose_name": "variation",
+                "verbose_name_plural": "variations",
             },
         ),
     ]

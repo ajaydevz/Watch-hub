@@ -14,7 +14,7 @@ class Token(Resource):
         Returns:
             token Dict which was created
         """
-        url = '{}{}'.format(URL.V1, URL.TOKEN)
+        url = "{}{}".format(URL.V1, URL.TOKEN)
 
         return self.post_url(url, data, **kwargs)
 
@@ -65,8 +65,8 @@ class Token(Resource):
         Returns:
             Dict for fetch token
         """
-        url = '{}{}/{}'.format(URL.V1, URL.TOKEN, "fetch")
-        return self.post_url(url, data, **kwargs) 
+        url = "{}{}/{}".format(URL.V1, URL.TOKEN, "fetch")
+        return self.post_url(url, data, **kwargs)
 
     def deleteToken(self, data={}, **kwargs):
         """
@@ -75,15 +75,17 @@ class Token(Resource):
         Returns:
             Dict for deleted token
         """
-        url = '{}{}/{}'.format(URL.V1, URL.TOKEN, "delete")
-        return self.post_url(url, data, **kwargs) 
+        url = "{}{}/{}".format(URL.V1, URL.TOKEN, "delete")
+        return self.post_url(url, data, **kwargs)
 
     def processPaymentOnAlternatePAorPG(self, data={}, **kwargs):
         """
         Process a Payment on another PA/PG with Token Created on Razorpay
 
         Returns:
-            
+
         """
-        url = '{}{}/{}'.format(URL.V1, URL.TOKEN, "service_provider_tokens/token_transactional_data")
-        return self.post_url(url, data, **kwargs)                
+        url = "{}{}/{}".format(
+            URL.V1, URL.TOKEN, "service_provider_tokens/token_transactional_data"
+        )
+        return self.post_url(url, data, **kwargs)

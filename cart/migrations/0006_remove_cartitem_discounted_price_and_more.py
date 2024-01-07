@@ -4,22 +4,21 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('cart', '0005_cartitem_discounted_price'),
+        ("cart", "0005_cartitem_discounted_price"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='cartitem',
-            name='discounted_price',
+            model_name="cartitem",
+            name="discounted_price",
         ),
         migrations.RemoveField(
-            model_name='cartitem',
-            name='offer_price',
+            model_name="cartitem",
+            name="offer_price",
         ),
         migrations.RemoveField(
-            model_name='cartitem',
-            name='price',
+            model_name="cartitem",
+            name="price",
         ),
     ]

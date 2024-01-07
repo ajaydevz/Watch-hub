@@ -36,7 +36,7 @@ class Account(Resource):
         Returns:
             Account Dict which was edited
         """
-        url = '{}/{}'.format(self.base_url, account_id)
+        url = "{}/{}".format(self.base_url, account_id)
 
         return self.patch_url(url, data, **kwargs)
 
@@ -47,7 +47,7 @@ class Account(Resource):
         Args:
             account_id : Id for which account object has to be deleted
         """
-        url = '{}/{}'.format(self.base_url, account_id)
+        url = "{}/{}".format(self.base_url, account_id)
 
         return self.delete_url(url, data, **kwargs)
 
@@ -56,9 +56,9 @@ class Account(Resource):
         Upload Account Documents
 
         Returns:
-           Account Document dict which was created            
+           Account Document dict which was created
         """
-        url = '{}/{}/{}'.format(self.base_url, account_id, "documents")
+        url = "{}/{}/{}".format(self.base_url, account_id, "documents")
 
         return self.file_url(url, data, **kwargs)
 
@@ -69,6 +69,6 @@ class Account(Resource):
         Returns:
             Account Document dict for given account_id
         """
-        url = '{}/{}/{}'.format(self.base_url, account_id, "documents")
+        url = "{}/{}/{}".format(self.base_url, account_id, "documents")
 
-        return self.get_url(url, data, **kwargs)               
+        return self.get_url(url, data, **kwargs)

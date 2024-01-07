@@ -24,8 +24,7 @@ def merge_flags(cfg1, cfg2):
 
 
 def call(libname, flag, encoding=sys.getfilesystemencoding()):
-    """Calls pkg-config and returns the output if found
-    """
+    """Calls pkg-config and returns the output if found"""
     a = ["pkg-config", "--print-errors"]
     a.append(flag)
     a.append(libname)
@@ -42,18 +41,20 @@ def call(libname, flag, encoding=sys.getfilesystemencoding()):
             pass
         raise PkgConfigError(berr.strip())
 
-    if sys.version_info >= (3,) and not isinstance(bout, str):   # Python 3.x
+    if sys.version_info >= (3,) and not isinstance(bout, str):  # Python 3.x
         try:
             bout = bout.decode(encoding)
         except UnicodeDecodeError:
-            raise PkgConfigError("pkg-config %s %s returned bytes that cannot "
-                                 "be decoded with encoding %r:\n%r" %
-                                 (flag, libname, encoding, bout))
+            raise PkgConfigError(
+                "pkg-config %s %s returned bytes that cannot "
+                "be decoded with encoding %r:\n%r" % (flag, libname, encoding, bout)
+            )
 
-    if os.altsep != '\\' and '\\' in bout:
-        raise PkgConfigError("pkg-config %s %s returned an unsupported "
-                             "backslash-escaped output:\n%r" %
-                             (flag, libname, bout))
+    if os.altsep != "\\" and "\\" in bout:
+        raise PkgConfigError(
+            "pkg-config %s %s returned an unsupported "
+            "backslash-escaped output:\n%r" % (flag, libname, bout)
+        )
     return bout
 
 
@@ -84,20 +85,27 @@ def flags_from_pkgconfig(libs):
     # convert -Dfoo=bar to list of tuples [("foo", "bar")] expected by distutils
     def get_macros(string):
         def _macro(x):
-            x = x[2:]    # drop "-D"
-            if '=' in x:
+            x = x[2:]  # drop "-D"
+            if "=" in x:
                 return tuple(x.split("=", 1))  # "-Dfoo=bar" => ("foo", "bar")
             else:
-                return (x, None)               # "-Dfoo" => ("foo", None)
+                return (x, None)  # "-Dfoo" => ("foo", None)
+
         return [_macro(x) for x in string.split() if x.startswith("-D")]
 
     def get_other_cflags(string):
-        return [x for x in string.split() if not x.startswith("-I") and
-                                             not x.startswith("-D")]
+        return [
+            x
+            for x in string.split()
+            if not x.startswith("-I") and not x.startswith("-D")
+        ]
 
     def get_other_libs(string):
-        return [x for x in string.split() if not x.startswith("-L") and
-                                             not x.startswith("-l")]
+        return [
+            x
+            for x in string.split()
+            if not x.startswith("-L") and not x.startswith("-l")
+        ]
 
     # return kwargs for given libname
     def kwargs(libname):
@@ -111,7 +119,7 @@ def flags_from_pkgconfig(libs):
             "define_macros": get_macros(all_cflags),
             "extra_compile_args": get_other_cflags(all_cflags),
             "extra_link_args": get_other_libs(all_libs),
-            }
+        }
 
     # merge all arguments together
     ret = {}

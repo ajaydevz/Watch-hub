@@ -16,4 +16,3 @@ class Iin(Resource):
         """
 
         return super(Iin, self).fetch(token_iin, data, **kwargs)
-  

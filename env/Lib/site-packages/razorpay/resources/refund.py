@@ -9,8 +9,7 @@ class Refund(Resource):
         self.base_url = URL.V1 + URL.REFUNDS_URL
 
     def fetch_all(self, data={}, **kwargs):  # pragma: no cover
-        warnings.warn("Will be Deprecated in next release, use all",
-                      DeprecationWarning)
+        warnings.warn("Will be Deprecated in next release, use all", DeprecationWarning)
         return self.all(data, **kwargs)
 
     def create(self, data={}, **kwargs):
@@ -49,4 +48,4 @@ class Refund(Resource):
             Refund Dict which was edited
         """
         url = "{}/{}".format(self.base_url, refund_id)
-        return self.patch_url(url, data, **kwargs)     
+        return self.patch_url(url, data, **kwargs)

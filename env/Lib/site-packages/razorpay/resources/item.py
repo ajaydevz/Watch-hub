@@ -6,7 +6,7 @@ class Item(Resource):
     def __init__(self, client=None):
         super(Item, self).__init__(client)
         self.base_url = URL.V1 + URL.ITEM_URL
-    
+
     def create(self, data={}, **kwargs):
         """
         Create item
@@ -28,7 +28,7 @@ class Item(Resource):
             Item dict for given card Id
         """
         return super(Item, self).fetch(item_id, data, **kwargs)
-    
+
     def all(self, data={}, **kwargs):
         """
         Fetch all items
@@ -45,10 +45,10 @@ class Item(Resource):
         Returns:
             Item Dict which was edited
         """
-        url = '{}/{}'.format(self.base_url, item_id)
+        url = "{}/{}".format(self.base_url, item_id)
 
-        return self.patch_url(url, data, **kwargs)    
-    
+        return self.patch_url(url, data, **kwargs)
+
     def delete(self, item_id, **kwargs):
         """
         Delete an Item

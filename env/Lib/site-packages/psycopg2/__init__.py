@@ -48,31 +48,51 @@ Homepage: https://psycopg.org/
 
 # Import the DBAPI-2.0 stuff into top-level module.
 
-from psycopg2._psycopg import (                     # noqa
-    BINARY, NUMBER, STRING, DATETIME, ROWID,
-
-    Binary, Date, Time, Timestamp,
-    DateFromTicks, TimeFromTicks, TimestampFromTicks,
-
-    Error, Warning, DataError, DatabaseError, ProgrammingError, IntegrityError,
-    InterfaceError, InternalError, NotSupportedError, OperationalError,
-
-    _connect, apilevel, threadsafety, paramstyle,
-    __version__, __libpq_version__,
+from psycopg2._psycopg import (  # noqa
+    BINARY,
+    NUMBER,
+    STRING,
+    DATETIME,
+    ROWID,
+    Binary,
+    Date,
+    Time,
+    Timestamp,
+    DateFromTicks,
+    TimeFromTicks,
+    TimestampFromTicks,
+    Error,
+    Warning,
+    DataError,
+    DatabaseError,
+    ProgrammingError,
+    IntegrityError,
+    InterfaceError,
+    InternalError,
+    NotSupportedError,
+    OperationalError,
+    _connect,
+    apilevel,
+    threadsafety,
+    paramstyle,
+    __version__,
+    __libpq_version__,
 )
 
 
 # Register default adapters.
 
 from psycopg2 import extensions as _ext
+
 _ext.register_adapter(tuple, _ext.SQL_IN)
 _ext.register_adapter(type(None), _ext.NoneAdapter)
 
 # Register the Decimal adapter here instead of in the C layer.
 # This way a new class is registered for each sub-interpreter.
 # See ticket #52
-from decimal import Decimal                         # noqa
-from psycopg2._psycopg import Decimal as Adapter    # noqa
+from decimal import Decimal  # noqa
+from psycopg2._psycopg import Decimal as Adapter  # noqa
+
 _ext.register_adapter(Decimal, Adapter)
 del Decimal, Adapter
 
@@ -113,10 +133,10 @@ def connect(dsn=None, connection_factory=None, cursor_factory=None, **kwargs):
 
     """
     kwasync = {}
-    if 'async' in kwargs:
-        kwasync['async'] = kwargs.pop('async')
-    if 'async_' in kwargs:
-        kwasync['async_'] = kwargs.pop('async_')
+    if "async" in kwargs:
+        kwasync["async"] = kwargs.pop("async")
+    if "async_" in kwargs:
+        kwasync["async_"] = kwargs.pop("async_")
 
     dsn = _ext.make_dsn(dsn, **kwargs)
     conn = _connect(dsn, connection_factory=connection_factory, **kwasync)

@@ -22,19 +22,16 @@ from sqlparse.filters.right_margin import RightMarginFilter
 from sqlparse.filters.aligned_indent import AlignedIndentFilter
 
 __all__ = [
-    'SerializerUnicode',
-    'StripCommentsFilter',
-    'StripWhitespaceFilter',
-    'SpacesAroundOperatorsFilter',
-
-    'OutputPHPFilter',
-    'OutputPythonFilter',
-
-    'KeywordCaseFilter',
-    'IdentifierCaseFilter',
-    'TruncateStringFilter',
-
-    'ReindentFilter',
-    'RightMarginFilter',
-    'AlignedIndentFilter',
+    "SerializerUnicode",
+    "StripCommentsFilter",
+    "StripWhitespaceFilter",
+    "SpacesAroundOperatorsFilter",
+    "OutputPHPFilter",
+    "OutputPythonFilter",
+    "KeywordCaseFilter",
+    "IdentifierCaseFilter",
+    "TruncateStringFilter",
+    "ReindentFilter",
+    "RightMarginFilter",
+    "AlignedIndentFilter",
 ]

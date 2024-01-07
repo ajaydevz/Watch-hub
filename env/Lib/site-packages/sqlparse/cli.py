@@ -30,127 +30,147 @@ from sqlparse.exceptions import SQLParseError
 # TODO: Add CLI Tests
 # TODO: Simplify formatter by using argparse `type` arguments
 def create_parser():
-    _CASE_CHOICES = ['upper', 'lower', 'capitalize']
+    _CASE_CHOICES = ["upper", "lower", "capitalize"]
 
     parser = argparse.ArgumentParser(
-        prog='sqlformat',
+        prog="sqlformat",
         description='Format FILE according to OPTIONS. Use "-" as FILE '
-                    'to read from stdin.',
-        usage='%(prog)s  [OPTIONS] FILE, ...',
+        "to read from stdin.",
+        usage="%(prog)s  [OPTIONS] FILE, ...",
     )
 
-    parser.add_argument('filename')
+    parser.add_argument("filename")
 
     parser.add_argument(
-        '-o', '--outfile',
-        dest='outfile',
-        metavar='FILE',
-        help='write output to FILE (defaults to stdout)')
+        "-o",
+        "--outfile",
+        dest="outfile",
+        metavar="FILE",
+        help="write output to FILE (defaults to stdout)",
+    )
 
-    parser.add_argument(
-        '--version',
-        action='version',
-        version=sqlparse.__version__)
+    parser.add_argument("--version", action="version", version=sqlparse.__version__)
 
-    group = parser.add_argument_group('Formatting Options')
+    group = parser.add_argument_group("Formatting Options")
 
     group.add_argument(
-        '-k', '--keywords',
-        metavar='CHOICE',
-        dest='keyword_case',
+        "-k",
+        "--keywords",
+        metavar="CHOICE",
+        dest="keyword_case",
         choices=_CASE_CHOICES,
-        help='change case of keywords, CHOICE is one of {}'.format(
-            ', '.join('"{}"'.format(x) for x in _CASE_CHOICES)))
+        help="change case of keywords, CHOICE is one of {}".format(
+            ", ".join('"{}"'.format(x) for x in _CASE_CHOICES)
+        ),
+    )
 
     group.add_argument(
-        '-i', '--identifiers',
-        metavar='CHOICE',
-        dest='identifier_case',
+        "-i",
+        "--identifiers",
+        metavar="CHOICE",
+        dest="identifier_case",
         choices=_CASE_CHOICES,
-        help='change case of identifiers, CHOICE is one of {}'.format(
-            ', '.join('"{}"'.format(x) for x in _CASE_CHOICES)))
+        help="change case of identifiers, CHOICE is one of {}".format(
+            ", ".join('"{}"'.format(x) for x in _CASE_CHOICES)
+        ),
+    )
 
     group.add_argument(
-        '-l', '--language',
-        metavar='LANG',
-        dest='output_format',
-        choices=['python', 'php'],
-        help='output a snippet in programming language LANG, '
-             'choices are "python", "php"')
+        "-l",
+        "--language",
+        metavar="LANG",
+        dest="output_format",
+        choices=["python", "php"],
+        help="output a snippet in programming language LANG, "
+        'choices are "python", "php"',
+    )
 
     group.add_argument(
-        '--strip-comments',
-        dest='strip_comments',
-        action='store_true',
+        "--strip-comments",
+        dest="strip_comments",
+        action="store_true",
         default=False,
-        help='remove comments')
+        help="remove comments",
+    )
 
     group.add_argument(
-        '-r', '--reindent',
-        dest='reindent',
-        action='store_true',
+        "-r",
+        "--reindent",
+        dest="reindent",
+        action="store_true",
         default=False,
-        help='reindent statements')
+        help="reindent statements",
+    )
 
     group.add_argument(
-        '--indent_width',
-        dest='indent_width',
+        "--indent_width",
+        dest="indent_width",
         default=2,
         type=int,
-        help='indentation width (defaults to 2 spaces)')
+        help="indentation width (defaults to 2 spaces)",
+    )
 
     group.add_argument(
-        '--indent_after_first',
-        dest='indent_after_first',
-        action='store_true',
+        "--indent_after_first",
+        dest="indent_after_first",
+        action="store_true",
         default=False,
-        help='indent after first line of statement (e.g. SELECT)')
+        help="indent after first line of statement (e.g. SELECT)",
+    )
 
     group.add_argument(
-        '--indent_columns',
-        dest='indent_columns',
-        action='store_true',
+        "--indent_columns",
+        dest="indent_columns",
+        action="store_true",
         default=False,
-        help='indent all columns by indent_width instead of keyword length')
+        help="indent all columns by indent_width instead of keyword length",
+    )
 
     group.add_argument(
-        '-a', '--reindent_aligned',
-        action='store_true',
+        "-a",
+        "--reindent_aligned",
+        action="store_true",
         default=False,
-        help='reindent statements to aligned format')
+        help="reindent statements to aligned format",
+    )
 
     group.add_argument(
-        '-s', '--use_space_around_operators',
-        action='store_true',
+        "-s",
+        "--use_space_around_operators",
+        action="store_true",
         default=False,
-        help='place spaces around mathematical operators')
+        help="place spaces around mathematical operators",
+    )
 
     group.add_argument(
-        '--wrap_after',
-        dest='wrap_after',
+        "--wrap_after",
+        dest="wrap_after",
         default=0,
         type=int,
-        help='Column after which lists should be wrapped')
+        help="Column after which lists should be wrapped",
+    )
 
     group.add_argument(
-        '--comma_first',
-        dest='comma_first',
+        "--comma_first",
+        dest="comma_first",
         default=False,
         type=bool,
-        help='Insert linebreak before comma (default False)')
+        help="Insert linebreak before comma (default False)",
+    )
 
     group.add_argument(
-        '--encoding',
-        dest='encoding',
-        default='utf-8',
-        help='Specify the input encoding (default utf-8)')
+        "--encoding",
+        dest="encoding",
+        default="utf-8",
+        help="Specify the input encoding (default utf-8)",
+    )
 
     return parser
 
 
 def _error(msg):
     """Print msg and optionally exit with return code exit_."""
-    sys.stderr.write('[ERROR] {}\n'.format(msg))
+    sys.stderr.write("[ERROR] {}\n".format(msg))
     return 1
 
 
@@ -158,7 +178,7 @@ def main(args=None):
     parser = create_parser()
     args = parser.parse_args(args)
 
-    if args.filename == '-':  # read from stdin
+    if args.filename == "-":  # read from stdin
         wrapper = TextIOWrapper(sys.stdin.buffer, encoding=args.encoding)
         try:
             data = wrapper.read()
@@ -167,18 +187,17 @@ def main(args=None):
     else:
         try:
             with open(args.filename, encoding=args.encoding) as f:
-                data = ''.join(f.readlines())
+                data = "".join(f.readlines())
         except OSError as e:
-            return _error(
-                'Failed to read {}: {}'.format(args.filename, e))
+            return _error("Failed to read {}: {}".format(args.filename, e))
 
     close_stream = False
     if args.outfile:
         try:
-            stream = open(args.outfile, 'w', encoding=args.encoding)
+            stream = open(args.outfile, "w", encoding=args.encoding)
             close_stream = True
         except OSError as e:
-            return _error('Failed to open {}: {}'.format(args.outfile, e))
+            return _error("Failed to open {}: {}".format(args.outfile, e))
     else:
         stream = sys.stdout
 
@@ -186,7 +205,7 @@ def main(args=None):
     try:
         formatter_opts = sqlparse.formatter.validate_options(formatter_opts)
     except SQLParseError as e:
-        return _error('Invalid options: {}'.format(e))
+        return _error("Invalid options: {}".format(e))
 
     s = sqlparse.format(data, **formatter_opts)
     stream.write(s)

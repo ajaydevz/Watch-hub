@@ -10,8 +10,9 @@ def get_include():
     with statically linked libraries.
     """
     import os
+
     lxml_path = __path__[0]
-    include_path = os.path.join(lxml_path, 'includes')
+    include_path = os.path.join(lxml_path, "includes")
     includes = [include_path, lxml_path]
 
     for name in os.listdir(include_path):
@@ -20,4 +21,3 @@ def get_include():
             includes.append(path)
 
     return includes
-

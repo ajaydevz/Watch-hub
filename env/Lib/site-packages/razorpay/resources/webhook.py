@@ -7,7 +7,7 @@ class Webhook(Resource):
         super(Webhook, self).__init__(client)
         self.base_url = URL.V2 + URL.ACCOUNT
 
-    def create(self, data={}, account_id=None,  **kwargs):
+    def create(self, data={}, account_id=None, **kwargs):
         """
         Create webhook from given dict
 
@@ -15,10 +15,10 @@ class Webhook(Resource):
             Webhook Dict which was created
         """
         if account_id is None:
-          url = '{}{}'.format(URL.V1, URL.WEBHOOK)
+            url = "{}{}".format(URL.V1, URL.WEBHOOK)
         else:
-          url = '{}/{}{}'.format(self.base_url, account_id, URL.WEBHOOK)
-        
+            url = "{}/{}{}".format(self.base_url, account_id, URL.WEBHOOK)
+
         return self.post_url(url, data, **kwargs)
 
     def fetch(self, webhook_id, account_id, data={}, **kwargs):
@@ -32,10 +32,12 @@ class Webhook(Resource):
         Returns:
             webhook dict for given webhook_id
         """
-        if(account_id):
-          url = '{}/{}{}/{}'.format(self.base_url, account_id, URL.WEBHOOK, webhook_id)
+        if account_id:
+            url = "{}/{}{}/{}".format(
+                self.base_url, account_id, URL.WEBHOOK, webhook_id
+            )
         else:
-          url = '{}{}/{}'.format(URL.V1, URL.WEBHOOK, webhook_id)
+            url = "{}{}/{}".format(URL.V1, URL.WEBHOOK, webhook_id)
 
         return self.get_url(url, data, **kwargs)
 
@@ -50,11 +52,11 @@ class Webhook(Resource):
             webhook dict for given account_id
         """
         if account_id is None:
-          url = '{}{}'.format(URL.V1, URL.WEBHOOK)    
+            url = "{}{}".format(URL.V1, URL.WEBHOOK)
         else:
-          url = '{}/{}{}'.format(self.base_url, account_id, URL.WEBHOOK)
+            url = "{}/{}{}".format(self.base_url, account_id, URL.WEBHOOK)
 
-        return self.get_url(url, data, **kwargs)        
+        return self.get_url(url, data, **kwargs)
 
     def edit(self, webhook_id, account_id, data={}, **kwargs):
         """
@@ -63,15 +65,17 @@ class Webhook(Resource):
         Returns:
             Webhook Dict which was edited
         """
-        if(account_id):
-          url = '{}/{}{}/{}'.format(self.base_url, account_id, URL.WEBHOOK, webhook_id)
-          return self.patch_url(url, data, **kwargs)
+        if account_id:
+            url = "{}/{}{}/{}".format(
+                self.base_url, account_id, URL.WEBHOOK, webhook_id
+            )
+            return self.patch_url(url, data, **kwargs)
 
         else:
-          url = '{}{}/{}'.format(URL.V1, URL.WEBHOOK, webhook_id)
-          return self.put_url(url, data, **kwargs)
+            url = "{}{}/{}".format(URL.V1, URL.WEBHOOK, webhook_id)
+            return self.put_url(url, data, **kwargs)
 
-    def delete(self, webhook_id, account_id,  data={}, **kwargs):
+    def delete(self, webhook_id, account_id, data={}, **kwargs):
         """
         delete webhook for given webhook id
 
@@ -82,5 +86,5 @@ class Webhook(Resource):
         Returns:
             The response is always be an empty array like this - []
         """
-        url = '{}/{}{}/{}'.format(self.base_url, account_id, URL.WEBHOOK, webhook_id)
-        return self.delete_url(url, data, **kwargs)   
+        url = "{}/{}{}/{}".format(self.base_url, account_id, URL.WEBHOOK, webhook_id)
+        return self.delete_url(url, data, **kwargs)

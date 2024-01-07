@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('cart', '0002_order_coupon_applied'),
+        ("cart", "0002_order_coupon_applied"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='cartitem',
-            name='price',
+            model_name="cartitem",
+            name="price",
             field=models.DecimalField(decimal_places=2, default=0, max_digits=10),
         ),
     ]
