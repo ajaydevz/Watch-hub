@@ -26,22 +26,13 @@
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
 
-        <div class="collapse navbar-collapse ml-5" id="navbarsFurni">
+        <div class="collapse navbar-collapse ml-5" id="navbarsFurni" style="padding-left:600px;">
           <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
             <li class="nav-item">
               <a class="nav-link" href="{% url 'home' %}">Home</a>
             </li>
             <li>
               <a class="nav-link" href="{% url 'shop_page' %}">Shop</a>
-            </li>
-            <li>
-              <a class="nav-link" href="#">About us</a>
-            </li>
-            <li>
-              <a class="nav-link" href="#">Services</a>
-            </li>
-            <li>
-              <a class="nav-link" href="#">Contact us</a>
             </li>
             {% if user.is_authenticated %}
               <li>
@@ -174,13 +165,13 @@
               <div class="col-6 col-sm-6 col-md-3">
                 <ul class="list-unstyled">
                   <li>
-                    <a href="#">Nordic Chair</a>
+                    <a href="#">Rolex Explorer</a>
                   </li>
                   <li>
-                    <a href="#">Kruzo Aero</a>
+                    <a href="#"> Milgauss</a>
                   </li>
                   <li>
-                    <a href="#">Ergonomic Chair</a>
+                    <a href="#">Rolex Daytona</a>
                   </li>
                 </ul>
               </div>
@@ -194,8 +185,7 @@
               <p class="mb-2 text-center text-lg-start">
                 Copyright &copy;<script>
                                   document.write(new Date().getFullYear())
-                                </script>. All Rights Reserved. &mdash; Designed with love by <a href="https://untree.co">Untree.co</a> Distributed By <a hreff="https://themewagon.com">ThemeWagon</a> <!-- License information: https://untree.co/license/ -->
-              </p>
+                                </script>. All Rights Reserved.
             </div>
 
             <div class="col-lg-6 text-center text-lg-end">

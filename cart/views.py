@@ -690,6 +690,13 @@ def ApplyCoupon(request):
         discount_amount = coupon.discount
         total = grand_totals - discount_amount
         request.session["grand_total"] = total
+        print(total)
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+        coupon.used = True
+        coupon.save()
+        print(coupon)
         return JsonResponse(
             {"total": f"{total}", "discount_amount": f"{discount_amount}"}
         )
+
+

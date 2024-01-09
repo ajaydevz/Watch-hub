@@ -76,18 +76,6 @@ def ProductDetails(request, variant_id):
     product_id = variants.product
     print(type(variants))
 
-    category_offer_percentage = float(variants.product.category.category_offer)
-
-    # Convert the selling price to a Decimal before performing the multiplication
-    selling_price = float(variants.selling_price)
-
-    # Calculate the discount amount based on the category offer percentage
-    discount_amount = selling_price * (category_offer_percentage / 100)
-
-    # Calculate the offer price by subtracting the discount amount from the selling price
-    offer_price = selling_price - discount_amount
-
-    # Calculate the offer price based on the category offer percentage
 
     available_variants = Variation.objects.filter(product=product_id, is_available=True)
 
@@ -97,7 +85,7 @@ def ProductDetails(request, variant_id):
         # 'product':product,
         "variant": variants,
         "available_variants": available_variants,
-        "offer_price": offer_price,
+
     }
 
     return render(request, "home\product_details.html", context)
@@ -179,3 +167,5 @@ def ProductSort(request):
     }
 
     return render(request, "home/shop.html", context)
+
+

@@ -18,6 +18,8 @@ from categories.models import Category, Sub_Category
 from django.utils import timezone
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import get_object_or_404
+from django.core.paginator import Paginator, EmptyPage
+
 
 
 # Create your views here.
@@ -90,9 +92,19 @@ def AdminLogout(request):
 # view function for going to user page
 @staff_member_required(login_url="admin_login")
 def Users(request):
-    user = CustomUser.objects.filter(is_superuser=False).order_by("id")
+    user_page = 10
 
-    context = {"users": user}
+    users = CustomUser.objects.filter(is_superuser=False).order_by("id")
+
+    paginator =Paginator(users,user_page)
+    page = request.GET.get('page',1)
+
+    try:
+        users = paginator.page(page)
+    except EmptyPage:
+        users = paginator.page(paginator.num_pages)
+
+    context = {"users": users}
     return render(request, "dashboard/users.html", context)
 
 

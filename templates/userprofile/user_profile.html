@@ -19,45 +19,58 @@
                 <div class="d-flex justify-content-center">
                     <h4 class="mt-4 ml-3" style="color: rgb(102, 0, 0); font-weight:1200;">Hi {{user.username}}</h4>
                 </div>
+                <div class="card mt-4 mx-2" style="border: none; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                    <div class="card-body p-0">
+                        <ul class="nav flex-column">
+                            <div class="itemsdiv mx-2 my-2">
+                                <li class="nav-item">
+                                    <a class="nav-link navitem" href="{% url 'user_profile'%}">
+                                        My Profile
+                                    </a>
+                                </li>
+                            </div>
+                            <div class="itemsdiv mx-2 my-2">
+                                <li class="nav-item">
+                                    <a class="nav-link navitem" href="{% url 'my_orders'%}">
+                                        My Orders
+                                    </a>
+                                </li>
+                            </div>
+                            
+                            <div class="itemsdiv mx-2 my-2">
+                                <li class="nav-item">
+                                    <a class="nav-link navitem" href="{% url 'wishlist_view'%}">
+                                        Wishlist
+                                    </a>
+                                </li>
+                            </div>
+                            <div class="itemsdiv mx-2 my-2">
+                                <li class="nav-item">
+                                    <a class="nav-link navitem" href="{% url 'change_password' %}">
+                                        change password
+                                    </a>
+                                </li>
+                            </div>
+                            <div class="itemsdiv mx-2 my-2">
+                                <li class="nav-item">
+                                    <a class="nav-link navitem" href="{% url 'user_wallet' %}">
+                                        Wallet
+                                    </a>
+                                </li>
+                            </div>
+                            
+                        </ul>
 
-                <ul class="nav flex-column">
-                    <div class="itemsdiv mx-2 my-2">
-                        <li class="nav-item">
-                            <a class="nav-link navitem" href="{% url 'user_profile'%}">
-                                My Profile
-                            </a>
-                        </li>
                     </div>
-                    <div class="itemsdiv mx-2 my-2">
-                        <li class="nav-item">
-                            <a class="nav-link navitem" href="{% url 'my_orders'%}">
-                                My Orders
-                            </a>
-                        </li>
-                    </div>
-                    
-                    <div class="itemsdiv mx-2 my-2">
-                        <li class="nav-item">
-                            <a class="nav-link navitem" href="{% url 'wishlist_view'%}">
-                                Wishlist
-                            </a>
-                        </li>
-                    </div>
-                    <div class="itemsdiv mx-2 my-2">
-                        <li class="nav-item">
-                            <a class="nav-link navitem" href="{% url 'change_password' %}">
-                                change password
-                            </a>
-                        </li>
-                    </div>
-                    <div class="itemsdiv mx-2 my-2">
-                        <li class="nav-item">
-                            <a class="nav-link navitem" href="{% url 'user_wallet' %}">
-                                Wallet
-                            </a>
-                        </li>
-                    </div>  
-                </ul>
+                </div>
+                <div class="text-center mt-3">
+                    <p>Referral Code: <span id="referral-code">{{ user.referral_code }}</span>
+                        <button id="k" type="button" onclick="ajay('{{ user.referral_code }}')"
+                            style="border: 0; background-color: rgb(206, 204, 202); border-radius: 10px;"
+                            class="p-1 copy-button">Copy</button>
+                    </p>
+                </div>
+
             </div>
         </nav>
 
@@ -106,13 +119,6 @@
 
                 </div>
                 <div class="col-lg-12">
-                    <div class="text-center mt-3">
-                        <p>Referral Code: <span id="referral-code">{{ user.referral_code }}</span>
-                            <button id="k" type="button" onclick="ajay('{{ user.referral_code }}')"
-                                style="border: 0; background-color: rgb(206, 204, 202); border-radius: 10px;"
-                                class="p-1 copy-button">Copy</button>
-                        </p>
-                    </div>
                 </div>
 
 
