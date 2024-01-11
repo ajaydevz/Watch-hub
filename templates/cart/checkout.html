@@ -207,6 +207,7 @@
 
     var couponApplied = false; // Flag to check if the coupon is already applied
 
+
     document.getElementById('ApplyCoupon').addEventListener('click', function () {
         if (couponApplied) {
             // Coupon already applied, do not proceed
@@ -218,11 +219,14 @@
 
         var coupon_code = document.getElementById('coupon').value;
         var grand_total = document.getElementById('grand_total').innerText;
+        var order_id = document.getElementById('order_id').value;  
+
         console.log(grand_total, "This is the total value to Checkout");
         var token = $("[name='csrfmiddlewaretoken']").val();
         var dataToSend = {
             key1: coupon_code,
             key2: grand_total,
+            key3: order_id,
             csrfmiddlewaretoken: token,
         };
 
@@ -231,11 +235,12 @@
             method: 'POST',
             data: dataToSend,
             success: function (response) {
-                
+                console.log(response); 
                 if (response.error){
                     document.getElementById("couponAppliedMessage").innerText = response.error;
                     return;
                 }
+                
                 // Handle the response from the server
                 console.log(document.getElementById('discounts').innerText);
                 document.getElementById('discounts').innerText = +response.discount_amount;
@@ -248,10 +253,13 @@
 
                 // Set the flag to indicate that the coupon has been applied
                 couponApplied = true;
+                
             },
             error: function (error) {
                 // Handle errors
                 console.error('Error:', error);
+
+                document.getElementById("couponAppliedMessage").innerText = "An error occurred while applying the coupon.";
             }
         });
     });

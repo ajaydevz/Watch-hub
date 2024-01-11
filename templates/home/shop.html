@@ -1,6 +1,7 @@
 {% extends 'layout/base.html' %} {% load static %}
 <!-- Start Header/Navigation -->
 {% block bootstraplink %}
+
 <link
   href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
   rel="stylesheet"
@@ -134,7 +135,26 @@
           </div>
         </div>
       </div>
-      {% endfor %} {% else %}
+      {% endfor %}
+      <div class="pagination">
+        <span class="step-links">
+            {% if variants.has_previous %}
+                <a href="?page=1">&laquo;</a>
+                <a href="?page={{ variants.previous_page_number }}">previous</a>
+            {% endif %}
+  
+            <span class="current">
+                Showing {{ variants.number }} of {{ variants.paginator.num_pages }}.
+            </span>
+  
+            {% if variants.has_next %}
+                <a href="?page={{ variants.next_page_number }}">next</a>
+                <a href="?page={{ variants.paginator.num_pages }}"> &raquo;</a>
+            {% endif %}
+        </span>
+      </div>
+
+       {% else %}
       <div class="d-flex justify-content-center">
         <h2 class="text-danger">
           ( No products with the data you have given. )

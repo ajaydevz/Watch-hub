@@ -69,6 +69,24 @@
                 <!-- Repeat this for each user -->
             </tbody>
         </table>
+        <div class="pagination">
+            <span class="step-links">
+                {% if subcategories.has_previous %}
+                    <a href="?page=1">&laquo;</a>
+                    <a href="?page={{ subcategories.previous_page_number }}">previous</a>
+                {% endif %}
+        
+                <span class="current">
+                    Showing {{ subcategories.number }} of {{ subcategories.paginator.num_pages }}.
+                </span>
+        
+                {% if subcategories.has_next %}
+                    <a href="?page={{ subcategories.next_page_number }}">next</a>
+                    <a href="?page={{ subcategories.paginator.num_pages }}"> &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+        
     </div>
 
     <!-- Modal for add subcategories-->
@@ -195,10 +213,7 @@
     </script>
 
 <script>
-    $(document).ready(function () {
-        $('#example').DataTable();
-
-    });
+    
 
 
     // Add validation script for Add SubCategory modal

@@ -54,15 +54,7 @@
                             <canvas id="imageCanvas"></canvas>
                             <div id="preview-container"></div>
                         </div>
-                
-                        
-                        <div class="form-group">
-                            <label class="form-label" for="offerCategory">Category Offer in %</label>
-                            <input type="number" id="offerCategory" class="form-control" min="0" name="category_offer"/>
-                        </div>
-                        
-                        
-                        
+                                    
                                               
                     </div>
                     <div class="modal-footer">
@@ -110,11 +102,6 @@
                             <div id="error-message"></div>
                             <canvas id="imageCanvas"></canvas>
                             <div id="preview-container"></div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="offerCategory">Category Offer in %</label>
-                            <input type="number" id="offerCategory" class="form-control" value="{{ category.category_offer }}" min="0" name="category_offer"/>
                         </div>
 
                     </div>
@@ -172,6 +159,23 @@
                 {% endfor %}
             </tbody>
         </table>
+        <div class="pagination">
+            <span class="step-links">
+                {% if categories.has_previous %}
+                    <a href="?page=1">&laquo;</a>
+                    <a href="?page={{ categories.previous_page_number }}">previous</a>
+                {% endif %}
+        
+                <span class="current">
+                    Showing {{ categories.number }} of {{ categories.paginator.num_pages }}.
+                </span>
+        
+                {% if categories.has_next %}
+                    <a href="?page={{ categories.next_page_number }}">next</a>
+                    <a href="?page={{ categories.paginator.num_pages }}"> &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
     </div>
 </main>
 {% endblock%}
@@ -179,16 +183,6 @@
 {% block script%}
 
 <script>
-    $(document).ready(function() {
-        $('#example').DataTable({
-            "columnDefs": [
-                { "targets": [0, 1, 2, 3], }, // Adjust the column indices based on your table structure
-            ]
-        });
-    });
-
-    
-
 
    
     function validateDescription(textarea) {

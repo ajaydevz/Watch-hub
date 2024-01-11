@@ -1,6 +1,9 @@
 from django.db import models
 from django.urls import reverse
 from categories.models import Category, Sub_Category
+from accounts.models import CustomUser
+from django.db import models
+from django.utils import timezone
 
 
 # Create your models here.
@@ -69,6 +72,7 @@ class Coupon(models.Model):
     is_expired = models.BooleanField(default=False)
     minimum_amount = models.IntegerField(default=500)
     is_available = models.BooleanField(default=True)
-
+    
     def __str__(self):
         return self.code
+

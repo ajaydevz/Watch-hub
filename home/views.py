@@ -7,6 +7,7 @@ from accounts.models import CustomUser
 from store.models import Product, Variation
 from dashboard.models import Banner
 from django.http import HttpResponse, JsonResponse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
 
@@ -32,6 +33,16 @@ def ViewShop(request):
         .order_by("product")
         .distinct("product")
     )
+
+    page = request.GET.get('page',1)
+    paginator = Paginator(active_variants,12)
+
+    try:
+        active_variants = paginator.page('page')
+    except PageNotAnInteger:
+        active_variants = paginator.page(1)
+    except EmptyPage:
+        active_variants = paginator.page(paginator.num_pages)
 
     available_colors = (
         Variation.objects.filter(is_available=True).values("color").distinct()

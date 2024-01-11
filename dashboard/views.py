@@ -18,7 +18,7 @@ from categories.models import Category, Sub_Category
 from django.utils import timezone
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import get_object_or_404
-from django.core.paginator import Paginator, EmptyPage
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 
@@ -130,9 +130,22 @@ def BlockUser(request, user_id):
 
 
 @staff_member_required(login_url="admin_login")
+
 def Categories(request):
+    category_page = 4
+
     category = Category.objects.all().order_by("id")
-    context = {"categories": category}
+    paginator = Paginator(category, category_page)
+
+    page = request.GET.get('page')
+    try:
+        categories = paginator.page(page)
+    except PageNotAnInteger:
+        categories = paginator.page(1)
+    except EmptyPage:
+        categories = paginator.page(paginator.num_pages) 
+
+    context = {"categories": categories}
 
     return render(request, "dashboard/category.html", context)
 
@@ -142,7 +155,6 @@ def AddCategories(request):
         category_name = request.POST.get("categoryName")
         category_desc = request.POST.get("categoryDescription")
         category_image = request.FILES.get("category_img")
-        category_offer = request.POST.get("category_offer")
 
         if Category.objects.filter(category_name=category_name).exists():
             messages.error(request, "Cannot Add An Existing Category !!")
@@ -152,10 +164,10 @@ def AddCategories(request):
                 category_name=category_name,
                 description=category_desc,
                 category_image=category_image,
-                category_offer=category_offer,
             )
             category.save()
             return redirect("categories")
+
 
 
 def EditCategories(request, category_id):
@@ -224,11 +236,25 @@ def DeleteCategories(request, category_id):
 
 @staff_member_required(login_url="admin_login")
 def SubCategories(request):
+
+    subcategory_page = 3
+
     # Fetch active categories from the database
     category = Category.objects.filter(is_activate=True)
     # Fetch all subcategories and order them by their ID
-    subcategory = Sub_Category.objects.all().order_by("id")
-    context = {"subcategories": subcategory, "categories": category}
+    subcategories = Sub_Category.objects.all().order_by("id")
+
+    paginator = Paginator(subcategories,subcategory_page)
+    page = request.GET.get('page')
+
+    try:
+        subcategories = paginator.page(page)
+    except PageNotAnInteger:
+        subcategories = paginator.page(1)
+    except EmptyPage:
+        subcategories = paginator.page(paginator.num_pages)
+
+    context = {"subcategories": subcategories, "categories": category}
     return render(request, "dashboard/subcategories.html", context)
 
 
