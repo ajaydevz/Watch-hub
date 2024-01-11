@@ -489,9 +489,16 @@ def add_address_checkout(request, user_id):
 
 
 def place_order(request):
+
+    print(request.POST)
     if request.method == "POST":
         email = request.session["useremail"]
         user = CustomUser.objects.get(email=email)
+
+        # the coupen id is taking from the dict request.POST.get or the request.POST['name']
+        coupen_id = request.POST.get("coupen_id")
+        # get the object
+        coupen_id = Coupon.objects.get(id=coupen_id)
 
         selected_address_id = request.POST.get("selected_address")
 
@@ -517,6 +524,7 @@ def place_order(request):
 
         order = Order()
         order.user = user
+        order.coupon_applied = coupen_id
         order.address = address
         print(address.id)
         cart = Cart.objects.get(user=user)
@@ -603,7 +611,6 @@ def place_order(request):
         return redirect("order_success")
 
 
-
 def RazorpayCheck(request):
     try:
         user = request.user
@@ -653,7 +660,6 @@ def RazorpayCheck(request):
         return JsonResponse({'error': 'Internal Server Error'}, status=500)
 
 
-
 # views.py
 
 
@@ -679,31 +685,38 @@ def OrderSuccess(request):
     return render(request, "cart/thankyou.html")
 
 
-
 def ApplyCoupon(request):
     
-    if request.method=='POST':
+    if request.method == 'POST':
         coupon_code = request.POST.get('key1')
-        
-        grand_total=request.POST.get('key2')
-        user = request.user
 
-        existing_order_with_coupon = Order.objects.filter(
-            user=user,
-            coupon_applied__code=coupon_code
-        ).exclude(id=request.POST.get('key3')).first()
-
-        if existing_order_with_coupon:
-            return JsonResponse({'error': 'Coupon already applied to another order.'})
-
-        grand_totals=float(grand_total)
         try:
-            coupon = Coupon.objects.get(code=coupon_code,is_available=True)
-            
-        except:
-            print("its working on except")
-        discount_amount=coupon.discount
-        total=grand_totals-discount_amount
-        request.session['grand_total'] = total
-        return JsonResponse({"total": f"{total}", "discount_amount": f"{discount_amount}"})
+            # Attempt to get the order with the specified coupon code
+            order_id = Order.objects.get(coupon_applied__code=coupon_code)
+            return JsonResponse({"Message": "The coupon is already used"})
+        except Order.DoesNotExist:
+            # The order does not exist, proceed with coupon application logic
+            pass
+        except Exception as e:
+            # Handle other exceptions (optional, for debugging purposes)
+            print(f"An error occurred: {e}")
 
+        grand_total = request.POST.get('key2')
+        grand_totals = float(grand_total)
+
+        try:
+            coupon = Coupon.objects.get(code=coupon_code, is_available=True)
+            coupen_id = coupon.id
+        except Coupon.DoesNotExist:
+            # Handle the case where the coupon does not exist
+            return JsonResponse({"error": "Invalid coupon code"})
+        except Exception as e:
+            # Handle other exceptions (optional, for debugging purposes)
+            print(f"An error occurred: {e}")
+            return JsonResponse({"error": "An error occurred while applying the coupon"})
+
+        discount_amount = coupon.discount
+        total = grand_totals - discount_amount
+        request.session['grand_total'] = total
+
+        return JsonResponse({"total": f"{total}", "discount_amount": f"{discount_amount}", "coupen_id": f"{coupen_id}"})

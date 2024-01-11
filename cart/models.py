@@ -39,6 +39,7 @@ class Order(models.Model):
     coupon_applied = models.ForeignKey(
         Coupon, blank=True, null=True, on_delete=models.CASCADE, default=None
     )
+   
     tracking_no = models.CharField(max_length=150, null=True)
     orderstatuses = (
         ("Order confirmed", "Order confirmed"),

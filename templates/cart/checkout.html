@@ -93,6 +93,7 @@
                 </p>
             </div>
             <input type="hidden" name="selected_address" value="{{ address.id }}">
+            <input type="hidden" name="coupen_id" id="coupen_id" value="">
         </div>
 
         <div class="col-lg-4 d-flex justify-content-end">
@@ -207,11 +208,10 @@
 
     var couponApplied = false; // Flag to check if the coupon is already applied
 
-
     document.getElementById('ApplyCoupon').addEventListener('click', function () {
         if (couponApplied) {
             // Coupon already applied, do not proceed
-            document.getElementById('couponAppliedMessage').innerText = "coupon already applied once";
+            console.log("Coupon already applied!");
             return;
         }
 
@@ -219,14 +219,11 @@
 
         var coupon_code = document.getElementById('coupon').value;
         var grand_total = document.getElementById('grand_total').innerText;
-        var order_id = document.getElementById('order_id').value;  
-
         console.log(grand_total, "This is the total value to Checkout");
         var token = $("[name='csrfmiddlewaretoken']").val();
         var dataToSend = {
             key1: coupon_code,
             key2: grand_total,
-            key3: order_id,
             csrfmiddlewaretoken: token,
         };
 
@@ -235,31 +232,33 @@
             method: 'POST',
             data: dataToSend,
             success: function (response) {
-                console.log(response); 
-                if (response.error){
-                    document.getElementById("couponAppliedMessage").innerText = response.error;
-                    return;
+                // Handle the response from the server
+                if (response.Message){
+                    console.log("The message is the ",response.Message)
+                    document.getElementById('couponAppliedMessage').innerText = response.Message;
+
+                    
                 }
                 
-                // Handle the response from the server
-                console.log(document.getElementById('discounts').innerText);
-                document.getElementById('discounts').innerText = +response.discount_amount;
+                document.getElementById('coupen_id').value = response.coupen_id;
+                if(response.discount_amount){
+                    console.log(document.getElementById('discounts').innerText);
+                    document.getElementById('discounts').innerText = +response.discount_amount;
+                    document.getElementById('grand_total').innerText = response.total;
 
-                console.log(response.total);
-                console.log("this is the discounted amount ", response.discount_amount);
-                console.log("this is the discounted amount1111 ", response.total);
+                }
 
-                document.getElementById('grand_total').innerText = response.total;
+                {% comment %} console.log(response.total); {% endcomment %}
+                {% comment %} console.log("this is the discounted amount ", response.discount_amount); {% endcomment %}
+                {% comment %} console.log("this is the discounted amount1111 ", response.total); {% endcomment %}
+
 
                 // Set the flag to indicate that the coupon has been applied
                 couponApplied = true;
-                
             },
             error: function (error) {
                 // Handle errors
                 console.error('Error:', error);
-
-                document.getElementById("couponAppliedMessage").innerText = "An error occurred while applying the coupon.";
             }
         });
     });

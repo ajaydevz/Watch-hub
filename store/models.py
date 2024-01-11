@@ -64,14 +64,14 @@ class Variation(models.Model):
 
 
 class Coupon(models.Model):
-    coupon_name = models.CharField(max_length=20, default="discount coupon")
-    code = models.CharField(max_length=10)
-    discount = models.IntegerField(default=100)
-    valid_from = models.DateField()
-    valid_to = models.DateField()
-    is_expired = models.BooleanField(default=False)
-    minimum_amount = models.IntegerField(default=500)
-    is_available = models.BooleanField(default=True)
+    coupon_name = models.CharField(max_length=20, default="discount coupon",null=True)
+    code = models.CharField(max_length=10,null=True)
+    discount = models.IntegerField(default=100,null=True)
+    valid_from = models.DateField(null=True)
+    valid_to = models.DateField(null=True)
+    is_expired = models.BooleanField(default=False,null=True)
+    minimum_amount = models.IntegerField(default=500,null=True)
+    is_available = models.BooleanField(default=True,null=True)
     
     def __str__(self):
         return self.code
