@@ -603,34 +603,35 @@ def place_order(request):
         return redirect("order_success")
 
 
+
 def RazorpayCheck(request):
     try:
         user = request.user
         print("User:", user)
-
+        
         try:
             user = CustomUser.objects.get(email=user)
         except ObjectDoesNotExist:
             # Handle the case where the user does not exist
-            return JsonResponse({"error": "User not found"}, status=400)
+            return JsonResponse({'error': 'User not found'}, status=400)
 
         try:
             cart = Cart.objects.get(user=user)
         except ObjectDoesNotExist:
             # Handle the case where the cart does not exist
-            return JsonResponse({"error": "Cart not found"}, status=400)
+            return JsonResponse({'error': 'Cart not found'}, status=400)
 
         cart_items = CartItem.objects.filter(cart=cart)
         total_price = 0
-
+        
         for item in cart_items:
             print("Selling Price:", item.product.selling_price)
             total_price += item.product.selling_price * item.quantity
-        tax = (2 * total_price) / 100
-
+        tax = (2*total_price)/100
+        
         try:
-            if request.session["grand_total"]:
-                coupon = float(request.session["grand_total"])
+            if request.session['grand_total']:
+                coupon = float(request.session['grand_total'])
                 total_price = coupon
             else:
                 coupon = 0
@@ -638,17 +639,19 @@ def RazorpayCheck(request):
         except:
             coupon = 0
             total_price = float(total_price) + float(tax)
+        
 
-        return JsonResponse(
-            {
-                "total_price": total_price,
-            }
-        )
+        return JsonResponse({
+            'total_price': total_price,
+            
+        
+        })
 
     except Exception as e:
         # Handle other unexpected exceptions
         print("Error:", e)
-        return JsonResponse({"error": "Internal Server Error"}, status=500)
+        return JsonResponse({'error': 'Internal Server Error'}, status=500)
+
 
 
 # views.py
@@ -676,27 +679,31 @@ def OrderSuccess(request):
     return render(request, "cart/thankyou.html")
 
 
+
 def ApplyCoupon(request):
-    if request.method == "POST":
-        coupon_code = request.POST.get("key1")
+    
+    if request.method=='POST':
+        coupon_code = request.POST.get('key1')
+        
+        grand_total=request.POST.get('key2')
+        user = request.user
 
-        grand_total = request.POST.get("key2")
-        grand_totals = float(grand_total)
+        existing_order_with_coupon = Order.objects.filter(
+            user=user,
+            coupon_applied__code=coupon_code
+        ).exclude(id=request.POST.get('key3')).first()
+
+        if existing_order_with_coupon:
+            return JsonResponse({'error': 'Coupon already applied to another order.'})
+
+        grand_totals=float(grand_total)
         try:
-            coupon = Coupon.objects.get(code=coupon_code, is_available=True)
-
+            coupon = Coupon.objects.get(code=coupon_code,is_available=True)
+            
         except:
             print("its working on except")
-        discount_amount = coupon.discount
-        total = grand_totals - discount_amount
-        request.session["grand_total"] = total
-        print(total)
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-        coupon.used = True
-        coupon.save()
-        print(coupon)
-        return JsonResponse(
-            {"total": f"{total}", "discount_amount": f"{discount_amount}"}
-        )
-
+        discount_amount=coupon.discount
+        total=grand_totals-discount_amount
+        request.session['grand_total'] = total
+        return JsonResponse({"total": f"{total}", "discount_amount": f"{discount_amount}"})
 
