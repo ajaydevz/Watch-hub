@@ -1,3 +1,0 @@
-Django==3.x
-# Add other dependencies here
-
