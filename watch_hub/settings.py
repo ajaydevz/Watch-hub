@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-&96l@9s=wc@i81*#%$xao2jg5coug)xo2^ytvrmxp_$2^b*a_)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -82,16 +82,36 @@ WSGI_APPLICATION = "watch_hub.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "watchhub1",
+#         "USER": "ajaydev",
+#         "PASSWORD": "superuser",
+#         "HOST": "localhost",
+#         "PORT": "",
+#     }
+# }
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "watchhub1",
-        "USER": "ajaydev",
-        "PASSWORD": "superuser",
-        "HOST": "localhost",
-        "PORT": "",
-    }
-}
+
+   					 'default': {
+
+       					 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+
+        				 'NAME': 'myproject',
+
+        				 'USER': 'myprojectuser',
+
+        				 'PASSWORD': 'password',
+
+       					 'HOST': 'localhost',
+
+        				 'PORT': '',
+
+    						}
+					}
+
 
 
 # Password validation
@@ -129,14 +149,25 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 
-STATIC_ROOT = BASE_DIR / "staticfiles"
+# STATIC_ROOT = BASE_DIR / "staticfiles"
 
-STATIC_URL = "static/"
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+# STATIC_URL = "static/"
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+# MEDIA_URL = "/media/"
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+STATIC_URL = 'static/'
+if DEBUG:
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+    STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
+else:
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
 
 AUTH_USER_MODEL = "accounts.CustomUser"
