@@ -20,7 +20,7 @@ def Home(request):
         "banners": banners,
     }
 
-    return render(request, "home\home.html", context)
+    return render(request, "home/home.html", context)
 
 
 def ViewShop(request):
@@ -54,7 +54,7 @@ def ViewShop(request):
         "color": available_colors,
     }
 
-    return render(request, "home\shop.html", context)
+    return render(request, "home/shop.html", context)
 
 
 def ViewSubcategory(request, category_id):
@@ -69,7 +69,7 @@ def ViewSubcategory(request, category_id):
 
     context = {"subcategory": subcategory, "base_variant": variants}
 
-    return render(request, "home\subcategory.html", context)
+    return render(request, "home/subcategory.html", context)
 
 
 def DisplayProducts(request, sub_category_id):
@@ -99,7 +99,7 @@ def ProductDetails(request, variant_id):
 
     }
 
-    return render(request, "home\product_details.html", context)
+    return render(request, "home/product_details.html", context)
 
 
 def VariantSelect(request, variant_id):
@@ -116,7 +116,7 @@ def VariantSelect(request, variant_id):
         "available_variants": available_variants,
     }
 
-    return render(request, "home\product_details.html", context)
+    return render(request, "home/product_details.html", context)
 
 
 def ProductSearch(request):
