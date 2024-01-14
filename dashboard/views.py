@@ -374,6 +374,7 @@ def OrderStatus(request):
                 if (
                     order.payment_mode == "Paid by Razorpay"
                     or order.payment_mode == "wallet"
+                    or order.payment_mode == "cod"
                 ):
                     email = order.user.email
                     user = CustomUser.objects.get(email=email)

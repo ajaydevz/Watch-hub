@@ -224,7 +224,7 @@ def OrderCancellation(request, order_id):
     order.status = "Cancelled"
     order.save()
 
-    if order.payment_mode == "Paid by Razorpay":
+    if order.payment_mode == "Paid by Razorpay" or order.payment_mode == "cod":
         user.wallet += order.total_price
         user_wallet.amount += order.total_price
 

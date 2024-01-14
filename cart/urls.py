@@ -29,6 +29,6 @@ urlpatterns = [
     path("checkout", views.checkout_page, name="checkout_page"),
     path("place-order/", views.place_order, name="place_order"),
     path("proceed-to-pay/", views.RazorpayCheck, name="proceed_to_pay"),
-    path("order-success", views.OrderSuccess, name="order_success"),
+    path("order-success/", views.OrderSuccess, name="order_success"),
     path("apply-coupon/", views.ApplyCoupon, name="apply_coupon"),
 ]

@@ -11,7 +11,7 @@ from userprofile.models import Address
 from store.models import Product, Variation, Coupon
 from cart.models import Cart, CartItem, Order, OrderItem
 from django.utils import timezone
-
+from django.http import HttpResponseBadRequest
 
 # Create your views here.
 def cart_page(request):
@@ -498,7 +498,18 @@ def place_order(request):
         # the coupen id is taking from the dict request.POST.get or the request.POST['name']
         coupen_id = request.POST.get("coupen_id")
         # get the object
-        coupen_id = Coupon.objects.get(id=coupen_id)
+        if coupen_id:
+            try:
+                # Try to get the Coupon object
+                coupen_id = Coupon.objects.get(id=coupen_id)
+            except Coupon.DoesNotExist:
+                # Handle the case where the Coupon object is not found
+                return HttpResponseBadRequest("Coupon not found")
+        else:
+            # Handle the case where coupen_id is not provided
+            coupen_id = None  # You can set it to None or any default value
+
+        
 
         selected_address_id = request.POST.get("selected_address")
 
@@ -579,7 +590,7 @@ def place_order(request):
             order.payment_mode = request.POST.get("payment_mode")
             order.payment_id = request.POST.get("payment_id")
         else:
-            order.payment_mode = "cod"
+            order.payment_mode = "cod" 
             order.payment_id = " "
         order.save()
 
@@ -598,7 +609,7 @@ def place_order(request):
             orderproduct.save()
         Cart.objects.filter(cart_id=item.cart.cart_id).delete()
         # messages.success(request, "Your order has been placed successfully")
-
+        
         payMode = request.POST.get("payment")
         if payMode == "Paid by Razorpay":
             return redirect("order_success")
@@ -692,7 +703,7 @@ def ApplyCoupon(request):
 
         try:
             # Attempt to get the order with the specified coupon code
-            order_id = Order.objects.get(coupon_applied__code=coupon_code)
+            order_id = Order.objects.get(user=request.user, coupon_applied__code=coupon_code)
             return JsonResponse({"Message": "The coupon is already used"})
         except Order.DoesNotExist:
             # The order does not exist, proceed with coupon application logic
