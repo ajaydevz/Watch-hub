@@ -289,7 +289,7 @@ def checkout_page(request):
             if selected_address_id is None:
                 # default_address=Address.objects.get(user_id=user_id,is_default=True)
                 # selected_address_id=default_address.id
-                messages.error(request, "please selecta a address")
+                messages.error(request, "Please select an address first!!")
                 return redirect("address_checkout")
 
             print(selected_address_id)
