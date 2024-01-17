@@ -4,7 +4,7 @@ Welcome to the watchhub – go-to  your destination for the source code behind a
 
 Key Features :
 
-- Implemented a responsive design with user authentication, 
+- Implemented a user-friendly design with user authentication, 
 - account management, 
 - robust search and filters, shopping cart, wishlist,
 - secure checkout (using Razorpay), email verification, 
