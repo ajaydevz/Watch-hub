@@ -93,6 +93,7 @@ WSGI_APPLICATION = "watch_hub.wsgi.application"
 #     }
 # }
 
+
 DATABASES = {
 
    					 'default': {
