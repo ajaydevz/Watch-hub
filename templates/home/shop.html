@@ -143,9 +143,9 @@
                 <a href="?page={{ variants.previous_page_number }}">previous</a>
             {% endif %}
   
-            <span class="current">
+            {% comment %} <span class="current">
                 Showing {{ variants.number }} of {{ variants.paginator.num_pages }}.
-            </span>
+            </span> {% endcomment %}
   
             {% if variants.has_next %}
                 <a href="?page={{ variants.next_page_number }}">next</a>
