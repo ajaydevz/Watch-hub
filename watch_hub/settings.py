@@ -80,38 +80,39 @@ WSGI_APPLICATION = "watch_hub.wsgi.application"
 
 
 # Database
+
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": "watchhub1",
-#         "USER": "ajaydev",
-#         "PASSWORD": "superuser",
-#         "HOST": "localhost",
-#         "PORT": "",
-#     }
-# }
-
-
 DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "watchhub1",
+        "USER": "ajaydev",
+        "PASSWORD": "superuser",
+        "HOST": "localhost",
+        "PORT": "",
+    }
+}
 
-   					 'default': {
 
-       					 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+# DATABASES = {
 
-        				 'NAME': 'myproject',
+#    					 'default': {
 
-        				 'USER': 'myprojectuser',
+#        					 'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        				 'PASSWORD': 'password',
+#         				 'NAME': 'myproject',
 
-       					 'HOST': 'localhost',
+#         				 'USER': 'myprojectuser',
 
-        				 'PORT': '',
+#         				 'PASSWORD': 'password',
 
-    						}
-					}
+#        					 'HOST': 'localhost',
+
+#         				 'PORT': '',
+
+#     						}
+# 					}
 
 
 
