@@ -1,6 +1,6 @@
-watch-hub ✨
+Time-wise ✨
 
-Welcome to the watchhub – go-to  your destination for the source code behind a stunning watch eCommerce website.
+Welcome to the Timewise – go-to  your destination for the source code behind a stunning watch eCommerce website.
 
 Key Features :
 
