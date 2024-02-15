@@ -1,10 +1,10 @@
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.views.decorators.cache import cache_control
 from django.contrib import messages
-from .models import CustomUser, CustomUserManager
+from .models import CustomUser
 import pyotp
 import random
 import json
@@ -16,23 +16,11 @@ from datetime import datetime, timedelta
 from accounts.models import UserWallet
 from datetime import datetime
 from django.views.decorators.cache import never_cache
-from django.contrib.auth.hashers import make_password
 
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @never_cache
 def UserLogin(request):
-    print("__________________________")
-    print("__________________________")
-    print("__________________________")
-    print("__________________________")
-
-    print("__________________________")
-    print("__________________________")
-    print("__________________________")
-    print("__________________________")
-    print("__________________________")
-
     # Check if a user or admin is already logged in
     if "useremail" in request.session:
         return redirect("home")
@@ -168,13 +156,6 @@ def SendOtp(request):
     subject = "verify your email to continue to create an account "
     message = otp
     from_email = settings.EMAIL_HOST_USER
-    
-   
-    print("__________________")
-    print("The email is the ", request.session["user-email"])
-    print("__________________")
-    
-
     recipient_list = [email]
     send_mail(subject, message, from_email, recipient_list)
 
