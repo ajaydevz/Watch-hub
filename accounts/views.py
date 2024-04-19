@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.views.decorators.cache import cache_control
+from django.contrib.sessions.models import Session
 from django.contrib import messages
 from .models import CustomUser
 import pyotp
@@ -52,6 +53,9 @@ def UserLogin(request):
                 if user.is_verified is True:
                     login(request, user)
                     request.session["useremail"] = user_email
+                    # clear otp related session
+                    if "user-email" in request.session:
+                        del request.session["user-email"]
                     return redirect("home")
                 else:
                     messages.error(request, "Please verify your OTP ")
@@ -139,7 +143,7 @@ def UserLogout(request):
         print("User has been logged out")
 
         # Flush the session to ensure the user is logged out and clear any stored session data.
-    request.session.flush()
+        request.session.flush()
 
     return redirect("home")
 
@@ -169,8 +173,15 @@ def SendOtp(request):
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @never_cache
 def OtpVerification(request):
+    # print(request.session['otp_secret_key'],'kkkk')
+    try:
+        otp_secret_key = request.session["otp_secret_key"]
+    except:
+         return redirect("home")
+        
     if "useremail" in request.session:
         return redirect("home")
+    
     if request.method == "POST":
         otp = request.POST.get("otp")
         print(otp)
@@ -180,7 +191,7 @@ def OtpVerification(request):
 
         user = CustomUser.objects.get(email=user_email)
         actual_otp = user.otp
-        otp_secret_key = request.session["otp_secret_key"]
+        
         otp_valid_date = request.session["otp_valid_date"]
 
         if otp_secret_key and otp_valid_date is not None:
