@@ -12,6 +12,8 @@ from store.models import Product, Variation, Coupon
 from cart.models import Cart, CartItem, Order, OrderItem
 from django.utils import timezone
 from django.http import HttpResponseBadRequest
+from django.views.decorators.cache import cache_control
+from django.views.decorators.cache import never_cache
 
 # Create your views here.
 def cart_page(request):
@@ -271,6 +273,8 @@ def remove_cart_item(request, product_id):
     return redirect("cart_page")
 
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@never_cache
 def checkout_page(request):
     if request.method == "POST":
         if "useremail" in request.session:
