@@ -90,7 +90,7 @@ DATABASES = {
         "USER": "ajaydev",
         "PASSWORD": "superuser",
         "HOST": "localhost",
-        "PORT": "",
+        "PORT": "5432",
     }
 }
 
