@@ -94,6 +94,17 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'watchhub1',
+#         'USER': 'watchhub1_user',
+#         'PASSWORD': 'superuser', 
+#         'HOST': 'dpg-cp3ejhgl6cac73f47c0g-a',
+#         'PORT': '5432',
+#     }
+# }
+
 
 # DATABASES = {
 

@@ -188,11 +188,13 @@
           <button class="btn btn-primary">Add to Cart</button>
         </a>
 
+        {% if user.is_authenticated %}
         <a href="{% url 'add_to_wishlist' product_id=variant.id %}">
           <button class="btn btn-secondary" id="wishlist">
             Add to wishlist
           </button>
-        </a>
+       </a>
+        {% endif %}
       </div>
       <!-- Add your "Add to Cart" button or any other relevant content here -->
       {% endif %}
