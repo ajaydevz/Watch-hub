@@ -1,0 +1,22 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.login-container {
+    max-width: 400px;
+    /* Adjust the width as needed */
+    margin: 0 auto;
+    margin-top:60px;
+    margin-bottom:60px;
+    padding: 20px;
+    border: 1px solid #f3fff3;
+    background-color: #dad9d943;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    /* Center vertically */
+}
+
+.login-form {
+    flex: 1;
+}

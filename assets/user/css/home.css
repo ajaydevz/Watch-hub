@@ -1,0 +1,25 @@
+.gallery-img img {
+    object-fit: cover;
+    width: 100%;
+    height: auto;
+    border: 2px solid red; /* For testing */
+}
+
+
+.gallery-area {
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+.row.g-3 > [class*='col-'] {
+    padding: 15px;
+}
+
+.single-gallery {
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+body {
+    background-color: yellow !important; /* Test style */
+}

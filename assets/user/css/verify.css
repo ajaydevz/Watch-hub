@@ -1,0 +1,75 @@
+/* Add your custom styles here */
+body {
+    background-color: #f0f0f0; /* Set the background color */
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    background-color: #ffffff; /* Set the container background color */
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h1 {
+    color: #333; /* Set the heading color */
+}
+
+p {
+    color: #777; /* Set the paragraph text color */
+}
+
+.alert {
+    background-color: #ff7f7f; /* Set the error message background color */
+    color: #fff; /* Set the error message text color */
+    border: none;
+}
+
+.otp-form {
+    max-width: 300px; /* Set the form max width */
+    margin: 0 auto; /* Center the form horizontally */
+}
+
+.form-group {
+    margin-bottom: 20px; /* Set spacing between form elements */
+}
+
+label {
+    font-weight: bold;
+}
+
+input {
+    border: 1px solid #ccc; /* Set the input border */
+    border-radius: 5px; /* Add some border radius */
+    padding: 10px; /* Add padding inside the input */
+    width: 100%;
+}
+
+.btn-info {
+    background-color: #007bff; /* Set the "Verify OTP" button background color */
+    color: #fff; /* Set the button text color */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-info:hover {
+    background-color: #0056b3; /* Change button color on hover */
+}
+
+.btn-dark {
+    background-color: #343a40; /* Set the "Resend OTP" button background color */
+    color: #fff; /* Set the button text color */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-dark:hover {
+    background-color: #1d2124; /* Change button color on hover */
+}

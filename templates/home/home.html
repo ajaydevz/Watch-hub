@@ -27,82 +27,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Single Slider -->
-            
-             <!-- ? New Product Start -->
-        {% comment %} <section class="new-product-area section-padding30">
-            <div class="container">
-                <!-- Section tittle -->
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="section-tittle mb-70">
-                            <h2>New Arrivals</h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
-                        <div class="single-new-pro mb-30 text-center">
-                            <div class="product-img">
-                                <img src="{% static "user/img/gallery/new_product1.png" %}" alt="">
-                            </div>
-                            <div class="product-caption">
-                                <h3><a href="{% url 'shop_page' %}">Thermo Ball Etip Gloves</a></h3>
-                                <span>$ 45,743</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
-                        <div class="single-new-pro mb-30 text-center">
-                            <div class="product-img">
-                                <img src="{% static "user/img/gallery/new_product2.png" %}" alt="">
-                            </div>
-                            <div class="product-caption">
-                                <h3><a href="{% url 'shop_page' %}">Thermo Ball Etip Gloves</a></h3>
-                                <span>$ 45,743</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
-                        <div class="single-new-pro mb-30 text-center">
-                            <div class="product-img">
-                                <img src="{% static "user/img/gallery/new_product3.png" %}" alt="">
-                            </div>
-                            <div class="product-caption">
-                                <h3><a href="{% url 'shop_page' %}">Thermo Ball Etip Gloves</a></h3>
-                                <span>$ 45,743</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section> {% endcomment %}
-        <!--  New Product End -->
+            </div> 
+        </div>
 
-
-        <!-- Gallery Area End -->
-        <!--? Video Area Start -->
-        {% comment %} <div class="video-area">
-            <div class="container-fluid">
-                <div class="row align-items-center">
-                    <div class="col-lg-12">
-                    <div class="video-wrap">
-                        <div class="play-btn "><a class="popup-video" href="https://www.youtube.com/watch?v=KMc6DyEJp04"><i class="fas fa-play"></i></a></div>
-                    </div>
-                    </div>
-                </div>
-                <!-- Arrow -->
-                <div class="thumb-content-box">
-                    <div class="thumb-content">
-                        <h3>Next Video</h3>
-                        <a href="#"> <i class="flaticon-arrow"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div> {% endcomment %}
-        <!-- Video Area End -->
         <!--? Watch Choice  Start-->
         <div style="margin-top: 144px; margin-bottom: 122px;">
             <!-- Your content goes here -->
@@ -145,76 +72,37 @@
                 </div>
             </div>
         </div>
-                 <!--? Gallery Area Start -->
-                 
-        
-        <!-- Watch Choice  End-->
-        <!--? Shop Method Start-->
-        {% comment %} <div class="shop-method-area">
-            <div class="container">
-                <div class="method-wrapper">
-                    <div class="row d-flex justify-content-between">
-                        <div class="col-xl-4 col-lg-4 col-md-6">
-                            <div class="single-method mb-40">
-                                <i class="ti-package"></i>
-                                <h6>Free Shipping Method</h6>
-                                <p>aorem ixpsacdolor sit ameasecur adipisicing elitsf edasd.</p>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-lg-4 col-md-6">
-                            <div class="single-method mb-40">
-                                <i class="ti-unlock"></i>
-                                <h6>Secure Payment System</h6>
-                                <p>aorem ixpsacdolor sit ameasecur adipisicing elitsf edasd.</p>
-                            </div>
-                        </div> 
-                        <div class="col-xl-4 col-lg-4 col-md-6">
-                            <div class="single-method mb-40">
-                                <i class="ti-reload"></i>
-                                <h6>Secure Payment System</h6>
-                                <p>aorem ixpsacdolor sit ameasecur adipisicing elitsf edasd.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> {% endcomment %}
         <!-- Shop Method End-->
-            <!--? Gallery Area Start -->
-            <div class="gallery-area">
+        <!--? Gallery Area Start -->
+        <div class="gallery-area">
             <div class="container-fluid p-0 fix">
-                <div class="row">
-                    <div class="">
+                <div class="row no-gutters">
+                    <!-- First Image -->
+                    <div class="col-xl-8 col-lg-6 col-md-12 col-sm-12">
                         <div class="single-gallery mb-30">
-                            <div class="gallery-img big-img"> <img src="{% static "user/img/gallery/gallery1.png" %}" ></div>
+                            <div class="gallery-img big-img">
+                                <img src="{% static 'user/img/gallery/gallery1.png' %}" 
+                                     style="width:100%; height:700px;" alt="First Image">
+                            </div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
+                    <!-- Second Image -->
+                    <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12">
                         <div class="single-gallery mb-30">
-                            <div class="gallery-img big-img"> <img src="{% static "user/img/gallery/gallery2.png" %}"style="width: 170%; height:690px" ></div>
+                            <div class="gallery-img big-img">
+                                <img src="{% static 'user/img/gallery/gallery2.png' %}" 
+                                     style="width:100%; height:700px;" alt="Second Image">
+                            </div>
                         </div>
                     </div>
                     
-                    {% comment %} <div class="col-xl-3 col-lg-4 col-md-12">
-                        <div class="row">
-                            <div class="col-xl-12 col-lg-12 col-md-6 col-sm-6">
-                                <div class="single-gallery mb-30">
-                                    <div class="gallery-img small-img"> <img src="{% static "user/img/gallery/gallery3.png" %}" ></div>
-                                </div>
-                            </div>
-                            <div class="col-xl-12 col-lg-12  col-md-6 col-sm-6">
-                                <div class="single-gallery mb-30">
-                                    <div class="gallery-img small-img"> <img src="{% static "user/img/gallery/gallery4.png" %}" ></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> {% endcomment %}
-
-
                 </div>
-                
             </div>
         </div>
+        
+           
+           
+        
     </main>
 
 {% endblock %}

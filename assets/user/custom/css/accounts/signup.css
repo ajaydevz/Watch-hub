@@ -1,0 +1,36 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.signup-container {
+    max-width: 1000px;
+    
+    margin-top: 20px;
+    margin-bottom: 400px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: #dad9d943;
+    border-radius: 5px;
+}
+.signup_button{
+
+    margin-left: 10px;
+}
+
+/* .form-group{
+    margin-bottom: 20px;
+}
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    font-size: 16px;
+    outline: none; /* Remove the input outline when clicked 
+ }  
+
+ .signup-form{
+
+    flex: 3;
+} */
+
