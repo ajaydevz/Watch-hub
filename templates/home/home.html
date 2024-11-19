@@ -4,25 +4,25 @@
 
 <main>
     <!--? slider Area Start -->
-    <div class="slider-area ">
+    <div class="slider-area">
         <div class="slider-active">
             <!-- Single Slider -->
-            <div class="single-slider slider-height d-flex align-items-center slide-bg">
+            <div class="single-slider slider-height d-flex align-items-center slide-bg full-page ">
                 <div class="container">
                     <div class="row justify-content-between align-items-center">
-                        <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8">
+                        <div class="col-12 col-xl-8 col-lg-8 col-md-8">
                             <div class="hero__caption">
-                                <h1 style="font-size: 6em; color: black;  font-family: 'Times New Roman', serif;" data-animation="fadeInLeft" data-delay=".4s" data-duration="2000ms">Explore Fine Timepieces</h1>
-                                <p data-animation="fadeInLeft" data-delay=".7s" data-duration="2000ms">Watch Hub is India's leading luxury watch store, with over 25 international brands. Shop watches for women and men online now!</p>
+                                <h1 class="responsive-heading" data-animation="fadeInLeft" data-delay=".4s" data-duration="2000ms">Explore Fine Timepieces</h1>
+                                <p class="responsive-text" data-animation="fadeInLeft" data-delay=".7s" data-duration="2000ms">Watch Hub is India's leading luxury watch store, with over 25 international brands. Shop watches for women and men online now!</p>
                                 <!-- Hero-btn -->
                                 <div class="hero__btn" data-animation="fadeInLeft" data-delay=".8s" data-duration="2000ms">
                                     <a href="{% url 'shop_page' %}" class="btn hero-btn">Shop Now</a>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-4 d-none d-sm-block">
-                            <div class="hero__img" data-animation="bounceIn" data-delay=".4s">
-                                <img src="{% static "user/img/hero/watch.png" %}" alt="" class=" heartbeat">
+                        <div class="col-xl-3 col-lg-3 col-md-4 d-none d-md-block">
+                            <div class="hero__img text-center" data-animation="bounceIn" data-delay=".4s">
+                                <img src="{% static "user/img/hero/watch.png" %}" alt="" class="img-fluid heartbeat">
                             </div>
                         </div>
                     </div>
@@ -30,79 +30,156 @@
             </div> 
         </div>
 
-        <!--? Watch Choice  Start-->
-        <div style="margin-top: 144px; margin-bottom: 122px;">
-            <!-- Your content goes here -->
-          </div>
-            <!-- Your content goes here -->
-          </div>
+        <div class="spacer my-5"></div>
 
+        <!-- Watch Choice Start-->
         <div class="watch-area section-padding30">
             <div class="container">
-                <div class="row align-items-center justify-content-between">
-                    <div class="col-lg-6 col-md-6 col-sm-10">
-                        <div class="choice-watch-img mb-40">
-                            <img src="{% static "user/img/gallery/choce_watch1.png" %}" alt="">
+                <!-- First Watch Section -->
+                <div class="row align-items-center justify-content-between flex-column-reverse flex-md-row">
+                    <div class="col-12 col-lg-6 col-md-6">
+                        <div class="choice-watch-img mb-4 mb-md-0">
+                            <img src="{% static "user/img/gallery/choce_watch1.png" %}" alt="" class="img-fluid">
                         </div>
                     </div>
-                    <div class="col-lg-5 col-md-6">
-                        <div class="watch-details mb-40">
-                            <h2>Watch of Choice</h2>
+                    <div class="col-12 col-lg-5 col-md-6">
+                        <div class="watch-details mb-4">
+                            <h2 class="responsive-title">Watch of Choice</h2>
                             <p>Explore our curated watch collection, a fusion of elegance and precision. From classic to contemporary, find the perfect timepiece to elevate your style and make a lasting impression.</p>
                             <a href="{% url 'shop_page' %}" class="btn">Show Watches</a>
                         </div>
                     </div>
                 </div>
-                <div style="margin-top: 144px; margin-bottom: 122px;">
-                    <!-- Your content goes here -->
-                </div>
-                <div class="row align-items-center justify-content-between padding-130">
-                    <div class="col-lg-5 col-md-6">
-                        <div class="watch-details mb-40">
-                            <h2>Watch of Choice</h2>
+
+                <div class="spacer my-5"></div>
+
+                <!-- Second Watch Section -->
+                <div class="row align-items-center justify-content-between">
+                    <div class="col-12 col-lg-5 col-md-6">
+                        <div class="watch-details mb-4">
+                            <h2 class="responsive-title">Watch of Choice</h2>
                             <p>Discover watches that blend artistry with reliability. These pieces are an investment in quality and a statement of your personality. Choose from our handpicked selection to adorn your wrist with elegance and grace.</p>
                             <a href="{% url 'shop_page' %}" class="btn">Show Watches</a>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-10">
-                        <div class="choice-watch-img mb-40">
-                            <img src="{% static "user/img/gallery/choce_watch2.png" %}" alt="">
+                    <div class="col-12 col-lg-6 col-md-6">
+                        <div class="choice-watch-img">
+                            <img src="{% static "user/img/gallery/choce_watch2.png" %}" alt="" class="img-fluid">
                         </div>
                     </div>
                 </div>
+                <div class="spacer my-5"></div>
             </div>
         </div>
-        <!-- Shop Method End-->
-        <!--? Gallery Area Start -->
-        <div class="gallery-area">
-            <div class="container-fluid p-0 fix">
-                <div class="row no-gutters">
-                    <!-- First Image -->
-                    <div class="col-xl-8 col-lg-6 col-md-12 col-sm-12">
-                        <div class="single-gallery mb-30">
-                            <div class="gallery-img big-img">
-                                <img src="{% static 'user/img/gallery/gallery1.png' %}" 
-                                     style="width:100%; height:700px;" alt="First Image">
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Second Image -->
-                    <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12">
-                        <div class="single-gallery mb-30">
-                            <div class="gallery-img big-img">
-                                <img src="{% static 'user/img/gallery/gallery2.png' %}" 
-                                     style="width:100%; height:700px;" alt="Second Image">
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-        </div>
-        
-           
-           
-        
-    </main>
 
+        <!-- Gallery Area Start -->
+        <div class="gallery-area">
+            <div class="container-fluid p-0">
+                <div class="row g-0">
+                    <div class="col-12 col-xl-8 col-lg-8 col-md-12">
+                        <div class="single-gallery mb-3 mb-md-4">
+                            <div class="gallery-img">
+                                <img src="{% static 'user/img/gallery/gallery1.png' %}" 
+                                     class="img-fluid w-100" style="max-height: 700px; object-fit: cover;" 
+                                     alt="First Image">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xl-4 col-lg-4 col-md-12">
+                        <div class="single-gallery">
+                            <div class="gallery-img">
+                                <img src="{% static 'user/img/gallery/gallery2.png' %}" 
+                                     class="img-fluid w-100" style="max-height: 700px; object-fit: cover;" 
+                                     alt="Second Image">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<style>
+/* Responsive styles */
+.responsive-heading {
+    font-size: 6em;
+    color: black;
+    font-family: 'Times New Roman', serif;
+}
+
+@media (max-width: 1200px) {
+    .responsive-heading {
+        font-size: 4em;
+    }
+}
+
+.img-fluid {
+    border-radius: 15px; /* Adjust the value as needed */
+}
+
+@media (max-width: 768px) {
+    .hero__img {
+        display: none;
+    }
+}
+
+
+
+/* Optional: Adjust slider height for responsiveness */
+
+
+
+@media (max-width: 768px) {
+    .responsive-heading {
+        font-size: 3em;
+    }
+    
+    .responsive-text {
+        font-size: 0.9em;
+    }
+    
+    .responsive-title {
+        font-size: 1.8em;
+    }
+    
+    .hero__caption {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .watch-details {
+        text-align: center;
+    }
+    
+    .spacer {
+        margin: 2rem 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .responsive-heading {
+        font-size: 2.5em;
+    }
+    
+    .slider-height {
+        min-height: auto;
+        padding: 3rem 0;
+    }
+    
+    .section-padding30 {
+        padding: 2rem 0;
+    }
+}
+
+/* General responsive improvements */
+.img-fluid {
+    max-width: 100%;
+    height: auto;
+}
+
+.spacer {
+    margin: 4rem 0;
+}
+</style>
 {% endblock %}
